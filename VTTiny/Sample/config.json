@@ -1,0 +1,55 @@
+{
+	"Dimensions": {
+		"X": 800,
+		"Y": 480
+	},
+	"ClearColor": {
+		"R": 0, 
+		"G": 255, 
+		"B": 0, 
+		"A": 255
+	},
+
+	"Actors": [
+		{
+			"Name": "VTTiny",
+			"Position": {
+				"X": 150,
+				"Y": 20
+			},
+
+			"Components": [
+				{
+					"Type": "TextureRendererComponent"
+				},
+				{
+					"Type": "SimpleCharacterAnimatorComponent",
+					"Parameters": {
+						"Idle": "1.png",
+						"Speaking": "2.png",
+						"Blinking": "3.png"
+					}
+				},
+				{
+					"Type": "AudioResponsiveMovementComponent",
+					"Parameters": {
+						"Microphone": "Zestaw mikrofonów"
+					}
+				}
+			]
+		},
+		{
+			"Name": "Test",
+			"ParentActorName": "VTTiny",
+
+			"Components": [
+				{
+					"Type": "TextRendererComponent",
+					"Parameters": {
+						"Text": "Hello VTubeTiny!"
+					}
+				}
+			]
+		}
+	]
+}
