@@ -31,10 +31,7 @@
 					}
 				},
 				{
-					"Type": "AudioResponsiveMovementComponent",
-					"Parameters": {
-						"Microphone": "Zestaw mikrofonów"
-					}
+					"Type": "AudioResponsiveMovementComponent"
 				}
 			]
 		},
