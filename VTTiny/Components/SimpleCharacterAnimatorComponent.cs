@@ -97,7 +97,7 @@ namespace VTTiny.Components
 
         internal override void InheritParametersFromConfig(JObject parameters)
         {
-            var config = parameters.ToObject<SimpleCharacterAnimatorConfig>();
+            var config = JsonObjectToConfig<SimpleCharacterAnimatorConfig>(parameters);
             config.LoadStates(this);
 
             BlinkEvery = config.BlinkEvery;

@@ -28,7 +28,7 @@ namespace VTTiny.Components
 
         internal override void InheritParametersFromConfig(JObject parameters)
         {
-            var config = parameters?.ToObject<TextRendererConfig>() ?? new TextRendererConfig();
+            var config = JsonObjectToConfig<TextRendererConfig>(parameters);
 
             Text = config.Text;
             FontSize = config.FontSize;

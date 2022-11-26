@@ -26,7 +26,7 @@ namespace VTTiny.Components
 
         internal override void InheritParametersFromConfig(JObject parameters)
         {
-            var config = parameters?.ToObject<TextureRendererConfig>() ?? new TextureRendererConfig();
+            var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
             if (!string.IsNullOrEmpty(config.Image))
                 Texture = Raylib.LoadTexture(config.Image);
 
