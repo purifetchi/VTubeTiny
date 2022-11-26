@@ -92,6 +92,7 @@ namespace VTTiny
             }
 
             ActiveStage.Destroy();
+            Editor?.Destroy();
 
             Raylib.CloseWindow();
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Raylib_cs;
+using ImGuiNET;
 using VTTiny.Data;
 
 namespace VTTiny.Scenery
@@ -150,8 +151,17 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void RenderEditorGUI()
         {
-            foreach (var actor in _actors)
-                actor.RenderEditorGUI();
+            if (ImGui.CollapsingHeader("Stage"))
+            {
+                ImGui.Text("Actors");
+
+                foreach (var actor in _actors)
+                {
+                    actor.RenderEditorGUI();
+
+                    ImGui.Separator();
+                }
+            }
         }
 
         /// <summary>

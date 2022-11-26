@@ -1,4 +1,7 @@
-﻿namespace VTTiny.Editor
+﻿using ImGuiNET;
+using rlImGui_cs;
+
+namespace VTTiny.Editor
 {
     internal class VTubeTinyEditor
     {
@@ -18,7 +21,7 @@
         /// </summary>
         public void Initialize()
         {
-            
+            rlImGui.Setup();
         }
 
         /// <summary>
@@ -26,7 +29,15 @@
         /// </summary>
         public void Render()
         {
+            rlImGui.Begin();
+
+            ImGui.Begin("VTubeTiny Editor");
+
             VTubeTiny.ActiveStage.RenderEditorGUI();
+
+            ImGui.End();
+
+            rlImGui.End();
         }
 
         /// <summary>
@@ -34,7 +45,7 @@
         /// </summary>
         public void Destroy()
         {
-
+            rlImGui.Shutdown();
         }
     }
 }

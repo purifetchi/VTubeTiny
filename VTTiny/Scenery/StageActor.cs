@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ImGuiNET;
 using VTTiny.Components;
 using VTTiny.Data;
 
@@ -91,8 +92,22 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void RenderEditorGUI()
         {
-            foreach (var component in _components)
-                component.RenderEditorGUI();
+            if (ImGui.TreeNode($"{Name}"))
+            {
+                ImGui.Text("Components");
+
+                foreach (var component in _components)
+                {
+                    if (ImGui.TreeNode($"{component.GetType().Name}"))
+                    {
+                        component.RenderEditorGUI();
+
+                        ImGui.TreePop();
+                    }
+                }
+
+                ImGui.TreePop();
+            }
         }
 
         /// <summary>
