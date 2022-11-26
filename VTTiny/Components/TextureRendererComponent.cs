@@ -1,4 +1,6 @@
-﻿using Raylib_cs;
+﻿using Newtonsoft.Json.Linq;
+using Raylib_cs;
+using VTTiny.Components.Data;
 
 namespace VTTiny.Components
 {
@@ -20,6 +22,15 @@ namespace VTTiny.Components
                 return;
 
             Raylib.DrawTexture(Texture.Value, Parent.Transform.Position.X, Parent.Transform.Position.Y, Tint);
+        }
+
+        internal override void InheritParametersFromConfig(JObject parameters)
+        {
+            var config = parameters?.ToObject<TextureRendererConfig>() ?? new TextureRendererConfig();
+            if (!string.IsNullOrEmpty(config.Image))
+                Texture = Raylib.LoadTexture(config.Image);
+
+            Tint = config.Tint;
         }
     }
 }
