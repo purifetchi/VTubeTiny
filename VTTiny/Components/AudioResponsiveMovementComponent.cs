@@ -61,6 +61,16 @@ namespace VTTiny.Components
             _capture.StartRecording();
         }
 
+        /// <summary>
+        /// Gets the default microphone's name.
+        /// </summary>
+        /// <returns>The default microphone's name.</returns>
+        private string GetDefaultMicrophone()
+        {
+            var deviceEnumerator = new MMDeviceEnumerator();
+            return deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications)?.FriendlyName;
+        }
+
         private int Level()
         {
             return (int)Math.Round(_microphone.AudioMeterInformation.MasterPeakValue * 100 * Multiplier);
@@ -122,7 +132,12 @@ namespace VTTiny.Components
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = parameters.ToObject<AudioResponsiveMovementConfig>();
-            SetMicrophoneByName(config.Microphone);
+            
+            if (string.IsNullOrEmpty(config.Microphone))
+                SetMicrophoneByName(GetDefaultMicrophone());
+
+            else
+                SetMicrophoneByName(config.Microphone);
         }
     }
 }
