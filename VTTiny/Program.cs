@@ -17,6 +17,6 @@ public class Program
             config = JsonConvert.DeserializeObject<Config>(configData);
         }
 
-        new VTubeTiny(config, parsed.Verbose).Run();
+        new VTubeTiny(config, parsed.Verbose, parsed.EditorMode).Run();
     }
 }

@@ -87,6 +87,15 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Renders this stage actor's editor GUI and all of the editor GUIs for the components within.
+        /// </summary>
+        internal void RenderEditorGUI()
+        {
+            foreach (var component in _components)
+                component.RenderEditorGUI();
+        }
+
+        /// <summary>
         /// Destroy this stage actor.
         /// </summary>
         internal void Destroy()

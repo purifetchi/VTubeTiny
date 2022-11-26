@@ -146,6 +146,15 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Renders the editor GUI for this scene and all the actors within this scene.
+        /// </summary>
+        internal void RenderEditorGUI()
+        {
+            foreach (var actor in _actors)
+                actor.RenderEditorGUI();
+        }
+
+        /// <summary>
         /// Render all the actors within this scene.
         /// </summary>
         internal void Destroy()

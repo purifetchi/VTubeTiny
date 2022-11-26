@@ -54,5 +54,10 @@ namespace VTTiny.Components
         /// </summary>
         /// <param name="parameters">The raw JObject containing the parameters.</param>
         internal virtual void InheritParametersFromConfig(JObject parameters) { }
+
+        /// <summary>
+        /// The method called whenever we're updating the editor GUI, called after the regular Update() when editor mode is on.
+        /// </summary>
+        internal virtual void RenderEditorGUI() { }
     }
 }

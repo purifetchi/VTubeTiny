@@ -1,6 +1,7 @@
 ﻿using System;
 using Raylib_cs;
 using VTTiny.Data;
+using VTTiny.Editor;
 using VTTiny.Scenery;
 
 namespace VTTiny
@@ -20,10 +21,26 @@ namespace VTTiny
         /// </summary>
         public Stage ActiveStage { get; private set; }
 
-        public VTubeTiny(Config config, bool verbose = false)
+        /// <summary>
+        /// The VTubeTiny editor instance.
+        /// </summary>
+        private VTubeTinyEditor Editor { get; set; }
+
+        public VTubeTiny(Config config, bool verbose = false, bool withEditor = false)
         {
             Config = config;
             SetVerbosity(verbose);
+
+            if (withEditor)
+                CreateEditor();
+        }
+
+        /// <summary>
+        /// Creates a new editor instance for this VTubeTiny instance.
+        /// </summary>
+        private void CreateEditor()
+        {
+            Editor = new VTubeTinyEditor(this);
         }
 
         /// <summary>
@@ -52,6 +69,8 @@ namespace VTTiny
             var stage = Stage.Blank()
                              .WithConfig(Config);
 
+            Editor?.Initialize();
+
             ActiveStage = stage;
             RenderLoop();
         }
@@ -66,6 +85,8 @@ namespace VTTiny
                 Raylib.ClearBackground(ActiveStage.ClearColor);
 
                 ActiveStage.Render();
+
+                Editor?.Render();
 
                 Raylib.EndDrawing();
             }
