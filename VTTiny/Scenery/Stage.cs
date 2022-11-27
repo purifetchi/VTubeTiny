@@ -153,14 +153,22 @@ namespace VTTiny.Scenery
         {
             if (ImGui.CollapsingHeader("Stage"))
             {
-                ImGui.Text("Actors");
+                ImGui.Indent();
 
+                ImGui.Text($"Scene Dimensions: {Dimensions}");
+                ImGui.Text("Actors");
+                
                 foreach (var actor in _actors)
                 {
                     actor.RenderEditorGUI();
 
                     ImGui.Separator();
                 }
+               
+                if (ImGui.Button("Add Actor"))
+                    CreateActor();
+
+                ImGui.Unindent();
             }
         }
 
