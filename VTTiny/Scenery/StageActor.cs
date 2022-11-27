@@ -94,6 +94,7 @@ namespace VTTiny.Scenery
         {
             if (ImGui.TreeNode($"{Name}"))
             {
+                ImGui.Text($"Parented to: {ParentActor?.Name}");
                 ImGui.Text("Components");
 
                 foreach (var component in _components)
