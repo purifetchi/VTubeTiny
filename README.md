@@ -66,8 +66,8 @@ namespace VTTiny.Components
     	// This is called every frame, after the Update() call.
         public override void Render()
         {
-        	// Parent is the owning actor.
-        	// Every actor also has a transform component auto attached to them.
+            // Parent is the owning actor.
+            // Every actor also has a transform component auto attached to them.
             Raylib.DrawRectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, 10, 10, Color.RED);
         }
     }
@@ -75,6 +75,38 @@ namespace VTTiny.Components
 ```
 
 Attaching this component to an actor will draw a red 10x10 square at the position of the actor. All of the currently existing components can be viewed in the *Components* subdirectory.
+
+Components can also be extended with the ability to be modified at runtime inside of the VTubeTiny editor. To implement that, a component must override the **RenderEditorGUI** function.
+
+For example, if we'd want the rectangle's dimensions to be editable, one could change the definition to look more like:
+
+```cs
+using Raylib_cs;
+using VTTiny.Editor;
+
+namespace VTTiny.Components
+{
+    public class RectangleRendererComponent : Component
+    {
+        public Vector2Int Dimensions { get; set; }
+
+    	// This is called every frame, after the Update() call.
+        public override void Render()
+        {
+            // Parent is the owning actor.
+            // Every actor also has a transform component auto attached to them.
+            Raylib.DrawRectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Dimensions.X, Dimensions.Y, Color.RED);
+        }
+
+        internal override void RenderEditorGUI()
+        {
+            Dimensions = EditorGUI.DragVector2("Dimensions", Dimensions);
+        }
+    }
+}
+```
+
+Now, if we were to attach this component to an actor and enter editor mode, the component's dimensions will be fully editable!
 
 ## Future Goals
 * An internal editor where you can instantiate actors and components at runtime and move them.
