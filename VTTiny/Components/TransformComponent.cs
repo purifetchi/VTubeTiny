@@ -1,4 +1,6 @@
-﻿namespace VTTiny.Components
+﻿using VTTiny.Editor;
+
+namespace VTTiny.Components
 {
     public class TransformComponent : Component
     {
@@ -22,6 +24,11 @@
 
             // If we have a parent, our position is the local position added to the parent transform position.
             Position = LocalPosition + Parent.ParentActor.Transform.Position;
+        }
+
+        internal override void RenderEditorGUI()
+        {
+            LocalPosition = EditorGUI.DragVector2("Local Position", LocalPosition);
         }
     }
 }

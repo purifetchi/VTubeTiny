@@ -9,6 +9,11 @@
             return new Vector2Int((int)vec.X, (int)vec.Y);
         }
 
+        public static implicit operator System.Numerics.Vector2(Vector2Int vec)
+        {
+            return new System.Numerics.Vector2(vec.X, vec.Y);
+        }
+
         public static Vector2Int operator-(Vector2Int left, Vector2Int right)
         {
             return new Vector2Int(left.X - right.X, left.Y - right.Y);

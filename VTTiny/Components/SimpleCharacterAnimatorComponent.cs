@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Raylib_cs;
 using VTTiny.Components.Data;
+using VTTiny.Editor;
 using VTTiny.Scenery;
 
 namespace VTTiny.Components
@@ -102,6 +103,12 @@ namespace VTTiny.Components
 
             BlinkEvery = config.BlinkEvery;
             BlinkLength = config.BlinkLength;
+        }
+
+        internal override void RenderEditorGUI()
+        {
+            BlinkEvery = EditorGUI.DragFloat("Blink every", BlinkEvery);
+            BlinkLength = EditorGUI.DragFloat("Blink length", BlinkLength);
         }
     }
 }
