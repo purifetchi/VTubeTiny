@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using Raylib_cs;
 
@@ -67,6 +68,80 @@ namespace VTTiny.Editor
             var vec = new Vector4(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
             ImGui.ColorEdit4(label, ref vec);
             return new Color((int)(vec.X * 255), (int)(vec.Y * 255), (int)(vec.Z * 255), (int)(vec.W * 255));
+        }
+
+        /// <summary>
+        /// Creates an image button.
+        /// </summary>
+        /// <param name="texture">The texture to be used as the image.</param>
+        /// <param name="x">The desired x size.</param>
+        /// <param name="y">The desired y size.</param>
+        /// <returns>Whether it was pressed or not.</returns>
+        public static bool ImageButton(Texture2D? texture, int x, int y)
+        {
+            if (!texture.HasValue)
+                return ImGui.Button("No Image", new Vector2(x, y));
+            return ImGui.ImageButton(new IntPtr(texture.Value.id), new Vector2(x, y));
+        }
+
+        /// <summary>
+        /// Creates a texture button that can be dropped onto.
+        /// </summary>
+        /// <param name="label">The label for the button.</param>
+        /// <param name="originalTexture">The original texture, or null.</param>
+        /// <param name="dimensions">The dimensions of the button.</param>
+        /// <param name="newTexture">The new texture, if one was dropped.</param>
+        /// <returns>Whether we had a new texture dropped.</returns>
+        public static bool DragAndDropTextureButton(string label, Texture2D? originalTexture, Vector2Int dimensions, out Texture2D newTexture)
+        {
+            Text(label);
+
+            ImageButton(originalTexture, dimensions.X, dimensions.Y);
+            if (AcceptFileDrop(out string path))
+            {
+                newTexture = Raylib.LoadTexture(path);
+                return true;
+            }
+
+            newTexture = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Creates a texture button that can be dropped onto.
+        /// </summary>
+        /// <param name="label">The label for the button.</param>
+        /// <param name="originalTexture">The original texture, or null.</param>
+        /// <param name="newTexture">The new texture, if one was dropped.</param>
+        /// <returns>Whether we had a new texture dropped.</returns>
+        public static bool DragAndDropTextureButton(string label, Texture2D? originalTexture, out Texture2D newTexture)
+        {
+            return DragAndDropTextureButton(label, originalTexture, new Vector2Int(100, 100), out newTexture);
+        }
+
+        /// <summary>
+        /// Accepts a file drop onto the last drawn gui component.
+        /// </summary>
+        /// <param name="path">The path of the file that was dropped.</param>
+        /// <returns>Whether the last gui component had a file dropped onto it.</returns>
+        public static bool AcceptFileDrop(out string path)
+        {
+            path = string.Empty;
+            if (!ImGui.IsItemHovered() || !Raylib.IsFileDropped())
+                return false;
+
+            path = Raylib.GetDroppedFiles()[0];
+            Raylib.ClearDroppedFiles();
+            return true;
+        }
+
+        /// <summary>
+        /// Creates a text label.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        public static void Text(string text)
+        {
+            ImGui.Text(text);
         }
     }
 }

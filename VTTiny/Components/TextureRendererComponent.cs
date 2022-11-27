@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Raylib_cs;
 using VTTiny.Components.Data;
+using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
@@ -31,6 +32,17 @@ namespace VTTiny.Components
                 Texture = Raylib.LoadTexture(config.Image);
 
             Tint = config.Tint;
+        }
+
+        internal override void RenderEditorGUI()
+        {
+            if (EditorGUI.DragAndDropTextureButton("Texture", Texture, out Texture2D newTexture))
+            {
+                if (Texture.HasValue)
+                    Raylib.UnloadTexture(Texture.Value);
+
+                Texture = newTexture;
+            }    
         }
     }
 }

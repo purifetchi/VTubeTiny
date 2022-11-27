@@ -109,6 +109,24 @@ namespace VTTiny.Components
         {
             BlinkEvery = EditorGUI.DragFloat("Blink every", BlinkEvery);
             BlinkLength = EditorGUI.DragFloat("Blink length", BlinkLength);
+
+            if (EditorGUI.DragAndDropTextureButton("Idle", _idle, out Texture2D newIdle))
+            {
+                Raylib.UnloadTexture(_idle);
+                _idle = newIdle;
+            }
+
+            if (EditorGUI.DragAndDropTextureButton("Blinking", _blinking, out Texture2D newBlinking))
+            {
+                Raylib.UnloadTexture(_blinking);
+                _blinking = newBlinking;
+            }
+
+            if (EditorGUI.DragAndDropTextureButton("Speaking", _speaking, out Texture2D newSpeaking))
+            {
+                Raylib.UnloadTexture(_speaking);
+                _speaking = newSpeaking;
+            }
         }
     }
 }
