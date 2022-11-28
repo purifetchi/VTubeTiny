@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Raylib_cs;
 using ImGuiNET;
 using VTTiny.Data;
+using VTTiny.Editor;
 
 namespace VTTiny.Scenery
 {
@@ -156,6 +157,8 @@ namespace VTTiny.Scenery
                 ImGui.Indent();
 
                 ImGui.Text($"Scene Dimensions: {Dimensions}");
+                ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
+
                 ImGui.Text("Actors");
                 
                 foreach (var actor in _actors)
