@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ImGuiNET;
 using VTTiny.Components;
 using VTTiny.Data;
+using VTTiny.Editor;
 
 namespace VTTiny.Scenery
 {
@@ -102,6 +103,9 @@ namespace VTTiny.Scenery
                         ImGui.TreePop();
                     }
                 }
+
+                if (EditorGUI.ComponentDropdown(out Type componentType))
+                    ConstructComponentFromType(componentType);
 
                 ImGui.TreePop();
             }

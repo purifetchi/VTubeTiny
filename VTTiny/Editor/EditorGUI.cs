@@ -1,12 +1,49 @@
 ﻿using System;
 using System.Numerics;
+using System.Reflection;
 using ImGuiNET;
 using Raylib_cs;
+using VTTiny.Components;
+using System.Linq;
 
 namespace VTTiny.Editor
 {
     public static class EditorGUI
     {
+        /// <summary>
+        /// This serves as a cache for the components, which we can then use in combo boxes for
+        /// component instantiation.
+        /// </summary>
+        private static string[] ComponentTypeCache { get; set; } = null;
+
+        /// <summary>
+        /// Stores the current component index for the combo box.
+        /// </summary>
+        private static int comboBoxComponentIndex = 0;
+
+        static EditorGUI()
+        {
+            CollectComponents();
+        }
+
+        /// <summary>
+        /// Collects all of the types that derive from Component and caches them for later use
+        /// in the component combo box.
+        /// 
+        /// TODO: This is insanely ugly, and won't work for external plugin components. I wish
+        /// we didn't have to rely on reflection in this way.
+        /// </summary>
+        private static void CollectComponents()
+        {
+            var components = Assembly.GetAssembly(typeof(Component))
+                                     .GetTypes()
+                                     .Where(type => type.IsSubclassOf(typeof(Component)) && !type.IsAbstract && type.IsClass)
+                                     .Select(type => type.FullName)
+                                     .ToArray();
+
+            ComponentTypeCache = components;
+        }
+
         /// <summary>
         /// Constructs a draggable gui component for a given vector value.
         /// </summary>
@@ -143,6 +180,26 @@ namespace VTTiny.Editor
         public static void Text(string text)
         {
             ImGui.Text(text);
+        }
+
+        /// <summary>
+        /// Creates a component dropdown with an add button.
+        /// </summary>
+        /// <param name="componentType">The type of the component (if it was added).</param>
+        /// <returns>True if the add button was clicked.</returns>
+        public static bool ComponentDropdown(out Type componentType)
+        {
+            ImGui.Combo(" ", ref comboBoxComponentIndex, ComponentTypeCache, ComponentTypeCache.Length);
+            ImGui.SameLine();
+
+            if (ImGui.Button("Add Component"))
+            {
+                componentType = Type.GetType(ComponentTypeCache[comboBoxComponentIndex]);
+                return true;
+            }
+
+            componentType = default;
+            return false;
         }
     }
 }
