@@ -60,11 +60,7 @@ namespace VTTiny.Scenery
                     continue;
                 }
 
-                // Get the constructor of the component from the type and instantiate the component.
-                var ctor = type.GetConstructor(Array.Empty<Type>());
-                var component = (Component)ctor.Invoke(Array.Empty<object>());
-                InitializeComponent(component);
-
+                var component = ConstructComponentFromType(type);
                 component.InheritParametersFromConfig(componentConfig.Parameters);
             }
         }
@@ -120,6 +116,21 @@ namespace VTTiny.Scenery
                 component.Destroy();
 
             _components.Clear();
+        }
+
+        /// <summary>
+        /// Constructs a component from a given type.
+        /// </summary>
+        /// <param name="type">The type to construct</param>
+        /// <returns>The component.</returns>
+        private Component ConstructComponentFromType(Type type)
+        {
+            // Get the constructor of the component from the type and instantiate the component.
+            var ctor = type.GetConstructor(Array.Empty<Type>());
+            var component = (Component)ctor.Invoke(Array.Empty<object>());
+            InitializeComponent(component);
+
+            return component;
         }
 
         /// <summary>
