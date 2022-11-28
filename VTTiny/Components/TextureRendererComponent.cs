@@ -42,7 +42,9 @@ namespace VTTiny.Components
                     Raylib.UnloadTexture(Texture.Value);
 
                 Texture = newTexture;
-            }    
+            }
+
+            Tint = EditorGUI.ColorEdit("Tint", Tint);
         }
     }
 }
