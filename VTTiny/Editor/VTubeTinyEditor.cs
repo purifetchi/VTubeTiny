@@ -57,10 +57,18 @@ namespace VTTiny.Editor
             var path = Raylib.GetDroppedFiles()[0];
             Raylib.ClearDroppedFiles();
 
-            var renderer = VTubeTiny.ActiveStage.CreateActor()
-                                                .AddComponent<TextureRendererComponent>();
+            var actor = VTubeTiny.ActiveStage.CreateActor();
+            var renderer = actor.AddComponent<TextureRendererComponent>();
 
-            renderer.Texture = Raylib.LoadTexture(path);
+            var texture = Raylib.LoadTexture(path);
+            renderer.Texture = texture;
+
+            // Offset the mouse cursor by half of the texture's size, putting the actor's center
+            // at the position of the mouse.
+            var mousePos = (Vector2Int)Raylib.GetMousePosition();
+            mousePos -= new Vector2Int(texture.width / 2, texture.height / 2);
+
+            actor.Transform.LocalPosition = mousePos;
         }
 
         /// <summary>
