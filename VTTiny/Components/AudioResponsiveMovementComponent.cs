@@ -131,13 +131,18 @@ namespace VTTiny.Components
 
         internal override void InheritParametersFromConfig(JObject parameters)
         {
-            var config = parameters?.ToObject<AudioResponsiveMovementConfig>() ?? new AudioResponsiveMovementConfig();
+            var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
             
             if (string.IsNullOrEmpty(config.Microphone))
                 SetMicrophoneByName(GetDefaultMicrophone());
 
             else
                 SetMicrophoneByName(config.Microphone);
+
+            Threshold = config.Threshold;
+            Multiplier = config.Multiplier;
+            JumpHeight = config.JumpHeight;
+            JumpSpeedMultiplier = config.JumpSpeedMultiplier;
         }
     }
 }
