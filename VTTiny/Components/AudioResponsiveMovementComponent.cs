@@ -3,6 +3,7 @@ using System.Linq;
 using NAudio.CoreAudioApi;
 using Newtonsoft.Json.Linq;
 using VTTiny.Components.Data;
+using VTTiny.Editor;
 using VTTiny.Scenery;
 
 namespace VTTiny.Components
@@ -143,6 +144,14 @@ namespace VTTiny.Components
             Multiplier = config.Multiplier;
             JumpHeight = config.JumpHeight;
             JumpSpeedMultiplier = config.JumpSpeedMultiplier;
+        }
+
+        internal override void RenderEditorGUI()
+        {
+            Threshold = EditorGUI.DragInt("Volume threshold", Threshold);
+            Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
+            JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
+            JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
         }
     }
 }
