@@ -50,10 +50,11 @@ namespace VTTiny.Editor
         /// </summary>
         /// <param name="label">The label to attach to the gui component.</param>
         /// <param name="value">The float value.</param>
+        /// <param name="step">The step value (what it should increment by).</param>
         /// <returns>The modified float value.</returns>
-        public static float DragFloat(string label, float value)
+        public static float DragFloat(string label, float value, float step = 1f)
         {
-            ImGui.DragFloat(label, ref value);
+            ImGui.DragFloat(label, ref value, step);
             return value;
         }
 
