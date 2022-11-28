@@ -17,12 +17,22 @@ namespace VTTiny.Components
         /// </summary>
         public Color Tint { get; set; } = Color.WHITE;
 
+        /// <summary>
+        /// Rotation (in degrees) of the texture.
+        /// </summary>
+        public float Rotation { get; set; } = 0;
+
+        /// <summary>
+        /// Scale of the texture.
+        /// </summary>
+        public float Scale { get; set; } = 1f;
+
         public override void Render()
         {
             if (!Texture.HasValue)
                 return;
 
-            Raylib.DrawTexture(Texture.Value, Parent.Transform.Position.X, Parent.Transform.Position.Y, Tint);
+            Raylib.DrawTextureEx(Texture.Value, Parent.Transform.Position, Rotation, Scale, Tint);
         }
 
         internal override void InheritParametersFromConfig(JObject parameters)
@@ -45,6 +55,8 @@ namespace VTTiny.Components
             }
 
             Tint = EditorGUI.ColorEdit("Tint", Tint);
+            Rotation = EditorGUI.DragFloat("Rotation", Rotation);
+            Scale = EditorGUI.DragFloat("Scale", Scale, 0.05f);
         }
     }
 }
