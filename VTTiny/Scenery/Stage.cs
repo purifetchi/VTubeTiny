@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Raylib_cs;
-using ImGuiNET;
 using VTTiny.Data;
-using VTTiny.Editor;
 
 namespace VTTiny.Scenery
 {
-    public class Stage
+    public partial class Stage
     {
         /// <summary>
         /// The dimensions of this stage.
@@ -156,35 +154,6 @@ namespace VTTiny.Scenery
         {
             foreach (var actor in _actors)
                 actor.Render();
-        }
-
-        /// <summary>
-        /// Renders the editor GUI for this scene and all the actors within this scene.
-        /// </summary>
-        internal void RenderEditorGUI()
-        {
-            if (ImGui.CollapsingHeader("Stage"))
-            {
-                ImGui.Indent();
-
-                ImGui.Text($"Scene Dimensions: {Dimensions}");
-                ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
-
-                ImGui.Text("Actors");
-                
-                foreach (var actor in _actors)
-                {
-                    if (actor.RenderEditorGUI())
-                        break;
-
-                    ImGui.Separator();
-                }
-               
-                if (ImGui.Button("Add Actor"))
-                    CreateActor();
-
-                ImGui.Unindent();
-            }
         }
 
         /// <summary>
