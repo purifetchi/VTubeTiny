@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using VTTiny.Data;
 using VTTiny.Scenery;
 
 namespace VTTiny.Components
@@ -34,6 +35,25 @@ namespace VTTiny.Components
         }
 
         /// <summary>
+        /// Packages this component into its config class for exporting.
+        /// </summary>
+        /// <returns>The component config.</returns>
+        internal ComponentConfig PackageComponentIntoConfig()
+        {
+            var config = new ComponentConfig
+            {
+                Type = GetType().Name,
+                Namespace = GetType().Namespace
+            };
+
+            var parameters = PackageParametersIntoConfig();
+            if (parameters != null)
+                config.Parameters = JObject.FromObject(parameters);
+
+            return config;
+        }
+
+        /// <summary>
         /// Set the parent actor of this component.
         /// </summary>
         /// <param name="parent">The parent actor.</param>
@@ -61,6 +81,12 @@ namespace VTTiny.Components
         /// The destroy method, called at the end of an actor's lifetime.
         /// </summary>
         public virtual void Destroy() { }
+
+        /// <summary>
+        /// Packages this component's parameters into a config class for exporting.
+        /// </summary>
+        /// <returns>The config class (or none).</returns>
+        protected virtual object PackageParametersIntoConfig() { return null; }
 
         /// <summary>
         /// Inherits parameters from the config file.
