@@ -1,17 +1,19 @@
-﻿namespace VTTiny
+﻿using System.Numerics;
+
+namespace VTTiny
 {
     public struct Vector2Int
     {
         public int X, Y;
 
-        public static implicit operator Vector2Int(System.Numerics.Vector2 vec)
+        public static implicit operator Vector2Int(Vector2 vec)
         {
             return new Vector2Int((int)vec.X, (int)vec.Y);
         }
 
-        public static implicit operator System.Numerics.Vector2(Vector2Int vec)
+        public static implicit operator Vector2(Vector2Int vec)
         {
-            return new System.Numerics.Vector2(vec.X, vec.Y);
+            return new Vector2(vec.X, vec.Y);
         }
 
         public static Vector2Int operator-(Vector2Int left, Vector2Int right)
