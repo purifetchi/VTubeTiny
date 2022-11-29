@@ -35,6 +35,14 @@ namespace VTTiny.Components
             Raylib.DrawTextureEx(Texture.Value, Parent.Transform.Position, Rotation, Scale, Tint);
         }
 
+        public override void Destroy()
+        {
+            if (!Texture.HasValue)
+                return;
+
+            Raylib.UnloadTexture(Texture.Value);
+        }
+
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
