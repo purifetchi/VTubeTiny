@@ -142,6 +142,16 @@ namespace VTTiny.Scenery
         public bool RemoveActor(StageActor actor)
         {
             actor.Destroy();
+
+            // Check if any other actor is parented to this one. If so, unlink the parent.
+            foreach (var stageActor in _actors)
+            {
+                if (stageActor.ParentActor != actor)
+                    continue;
+
+                stageActor.ParentActor = null;
+            }
+
             return _actors.Remove(actor);
         }
 
