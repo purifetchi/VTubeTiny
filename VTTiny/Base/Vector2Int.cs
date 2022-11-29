@@ -31,10 +31,32 @@ namespace VTTiny
             return new Vector2Int((int)(vec.X * scalar), (int)(vec.Y * scalar));
         }
 
+        public static bool operator ==(Vector2Int left, Vector2Int right)
+        {
+            return left.X == right.X && 
+                   left.Y == right.Y;
+        }
+
+        public static bool operator !=(Vector2Int left, Vector2Int right)
+        {
+            return !(left == right);
+        }
+
         public Vector2Int(int x, int y)
         {
             X = x;
             Y = y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Vector2Int vec && 
+                   this == vec;
+        }
+
+        public override int GetHashCode()
+        {
+            return System.HashCode.Combine(X, Y);
         }
 
         public override string ToString()
