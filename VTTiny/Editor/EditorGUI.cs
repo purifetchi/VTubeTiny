@@ -135,6 +135,9 @@ namespace VTTiny.Editor
             Text(label);
 
             ImageButton(originalTexture, dimensions.X, dimensions.Y);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("Drag and drop an image onto this button!");
+
             if (AcceptFileDrop(out string path))
             {
                 newTexture = Raylib.LoadTexture(path);
