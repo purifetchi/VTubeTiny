@@ -15,7 +15,7 @@ namespace VTTiny.Scenery
         /// </returns>
         internal bool RenderEditorGUI()
         {
-            if (ImGui.TreeNode($"{Name}"))
+            if (ImGui.TreeNode($"{Name}##{GetHashCode()}"))
             {
                 if (ImGui.Button("Remove Actor"))
                 {
