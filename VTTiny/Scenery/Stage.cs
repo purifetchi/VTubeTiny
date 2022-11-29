@@ -60,15 +60,24 @@ namespace VTTiny.Scenery
             if (config == null)
                 return this;
 
-            Dimensions = config.Dimensions;
-            ClearColor = config.ClearColor;
+            ResizeStage(config.Dimensions);
 
-            Raylib.SetWindowSize(Dimensions.X, Dimensions.Y);
+            ClearColor = config.ClearColor;
             Raylib.SetTargetFPS(config.FPSLimit);
 
             CreateActorsFromConfigList(config.Actors);
 
             return this;
+        }
+
+        /// <summary>
+        /// Resizes the stage.
+        /// </summary>
+        /// <param name="dimensions">The new dimensions</param>
+        private void ResizeStage(Vector2Int dimensions)
+        {
+            Dimensions = dimensions;
+            Raylib.SetWindowSize(Dimensions.X, Dimensions.Y);
         }
 
         /// <summary>

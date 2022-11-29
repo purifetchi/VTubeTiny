@@ -14,7 +14,10 @@ namespace VTTiny.Scenery
             {
                 ImGui.Indent();
 
-                ImGui.Text($"Scene Dimensions: {Dimensions}");
+                var newDimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
+                if (newDimensions != Dimensions)
+                    ResizeStage(newDimensions);
+
                 ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
 
                 ImGui.Text("Actors");
