@@ -128,6 +128,17 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Removes an actor from the stage.
+        /// </summary>
+        /// <param name="actor">The StageActor to be removed.</param>
+        /// <returns>Whether removing the actor was successful.</returns>
+        public bool RemoveActor(StageActor actor)
+        {
+            actor.Destroy();
+            return _actors.Remove(actor);
+        }
+
+        /// <summary>
         /// Update all the actors within this scene.
         /// </summary>
         internal void Update()
@@ -163,7 +174,8 @@ namespace VTTiny.Scenery
                 
                 foreach (var actor in _actors)
                 {
-                    actor.RenderEditorGUI();
+                    if (actor.RenderEditorGUI())
+                        break;
 
                     ImGui.Separator();
                 }
