@@ -28,7 +28,7 @@ namespace VTTiny.Scenery
 
                 foreach (var component in _components)
                 {
-                    if (ImGui.TreeNode($"{component.GetType().Name}"))
+                    if (ImGui.TreeNode($"{component.GetType().Name}##{component.GetHashCode()}"))
                     {
                         component.RenderEditorGUI();
 
