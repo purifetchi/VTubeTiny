@@ -96,6 +96,13 @@ namespace VTTiny.Components
                 _renderer.Texture = _isBlinking ? _blinking : _idle;
         }
 
+        public override void Destroy()
+        {
+            Raylib.UnloadTexture(_idle);
+            Raylib.UnloadTexture(_blinking);
+            Raylib.UnloadTexture(_speaking);
+        }
+
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<SimpleCharacterAnimatorConfig>(parameters);
