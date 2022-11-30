@@ -156,7 +156,7 @@ namespace VTTiny.Scenery
             }
 
             // We need to walk the chain of the parents of this actor, to ensure that
-            // we aren't causing a cycling reparent somewhere down the line.
+            // we aren't causing a cyclic reparent somewhere down the line.
             var actor = newParent;
             do
             {
