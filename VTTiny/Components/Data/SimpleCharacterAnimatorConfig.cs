@@ -18,13 +18,13 @@ namespace VTTiny.Components.Data
         public void LoadStates(SimpleCharacterAnimatorComponent animator)
         {
             if (!string.IsNullOrEmpty(Idle))
-                animator.SetTextureForState(Raylib.LoadTexture(Idle), SimpleCharacterAnimatorComponent.State.Idle);
+                animator.SetTextureForState(new Texture(Idle), SimpleCharacterAnimatorComponent.State.Idle);
 
             if (!string.IsNullOrEmpty(Speaking))
-                animator.SetTextureForState(Raylib.LoadTexture(Speaking), SimpleCharacterAnimatorComponent.State.Speaking);
+                animator.SetTextureForState(new Texture(Speaking), SimpleCharacterAnimatorComponent.State.Speaking);
 
             if (!string.IsNullOrEmpty(Blinking))
-                animator.SetTextureForState(Raylib.LoadTexture(Blinking), SimpleCharacterAnimatorComponent.State.Blinking);
+                animator.SetTextureForState(new Texture(Blinking), SimpleCharacterAnimatorComponent.State.Blinking);
         }
     }
 }

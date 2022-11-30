@@ -60,13 +60,13 @@ namespace VTTiny.Editor
             var actor = VTubeTiny.ActiveStage.CreateActor();
             var renderer = actor.AddComponent<TextureRendererComponent>();
 
-            var texture = Raylib.LoadTexture(path);
+            var texture = new Texture(path);
             renderer.Texture = texture;
 
             // Offset the mouse cursor by half of the texture's size, putting the actor's center
             // at the position of the mouse.
             var mousePos = (Vector2Int)Raylib.GetMousePosition();
-            mousePos -= new Vector2Int(texture.width / 2, texture.height / 2);
+            mousePos -= new Vector2Int(texture.Width / 2, texture.Height / 2);
 
             actor.Transform.LocalPosition = mousePos;
         }

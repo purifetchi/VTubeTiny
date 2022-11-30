@@ -33,9 +33,9 @@ namespace VTTiny.Components
         /// </summary>
         public bool IsSpeaking { get; set; } = false;
 
-        private Texture2D _idle;
-        private Texture2D _blinking;
-        private Texture2D _speaking;
+        private Texture _idle;
+        private Texture _blinking;
+        private Texture _speaking;
 
         private StageTimer _blinkTimer;
         private StageTimer _blinkStartTimer;
@@ -49,7 +49,7 @@ namespace VTTiny.Components
         /// </summary>
         /// <param name="texture">Handle to the texture.</param>
         /// <param name="state">The state.</param>
-        public void SetTextureForState(Texture2D texture, State state)
+        public void SetTextureForState(Texture texture, State state)
         {
             switch (state)
             {
@@ -98,9 +98,9 @@ namespace VTTiny.Components
 
         public override void Destroy()
         {
-            Raylib.UnloadTexture(_idle);
-            Raylib.UnloadTexture(_blinking);
-            Raylib.UnloadTexture(_speaking);
+            _idle?.Dispose();
+            _blinking?.Dispose();
+            _speaking?.Dispose();
 
             if (_renderer != null)
                 _renderer.Texture = null;
@@ -120,21 +120,21 @@ namespace VTTiny.Components
             BlinkEvery = EditorGUI.DragFloat("Blink every", BlinkEvery);
             BlinkLength = EditorGUI.DragFloat("Blink length", BlinkLength);
 
-            if (EditorGUI.DragAndDropTextureButton("Idle", _idle, out Texture2D newIdle))
+            if (EditorGUI.DragAndDropTextureButton("Idle", _idle, out Texture newIdle))
             {
-                Raylib.UnloadTexture(_idle);
+                _idle?.Dispose();
                 _idle = newIdle;
             }
 
-            if (EditorGUI.DragAndDropTextureButton("Blinking", _blinking, out Texture2D newBlinking))
+            if (EditorGUI.DragAndDropTextureButton("Blinking", _blinking, out Texture newBlinking))
             {
-                Raylib.UnloadTexture(_blinking);
+                _blinking?.Dispose();
                 _blinking = newBlinking;
             }
 
-            if (EditorGUI.DragAndDropTextureButton("Speaking", _speaking, out Texture2D newSpeaking))
+            if (EditorGUI.DragAndDropTextureButton("Speaking", _speaking, out Texture newSpeaking))
             {
-                Raylib.UnloadTexture(_speaking);
+                _speaking?.Dispose();
                 _speaking = newSpeaking;
             }
         }

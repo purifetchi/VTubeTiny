@@ -10,7 +10,7 @@ namespace VTTiny.Components
         /// <summary>
         /// The texture to be drawn. (Null by default.)
         /// </summary>
-        public Texture2D? Texture { get; set; }
+        public Texture Texture { get; set; }
 
         /// <summary>
         /// The tint of this texture. (White by default).
@@ -29,36 +29,34 @@ namespace VTTiny.Components
 
         public override void Render()
         {
-            if (!Texture.HasValue)
+            if (Texture == null)
                 return;
 
-            Raylib.DrawTextureEx(Texture.Value, Parent.Transform.Position, Rotation, Scale, Tint);
+            Raylib.DrawTextureEx(Texture.BackingTexture, Parent.Transform.Position, Rotation, Scale, Tint);
         }
 
         public override void Destroy()
         {
-            if (!Texture.HasValue)
+            if (Texture == null)
                 return;
 
-            Raylib.UnloadTexture(Texture.Value);
+            Texture.Dispose();
         }
 
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
             if (!string.IsNullOrEmpty(config.Image))
-                Texture = Raylib.LoadTexture(config.Image);
+                Texture = new Texture(config.Image);
 
             Tint = config.Tint;
         }
 
         internal override void RenderEditorGUI()
         {
-            if (EditorGUI.DragAndDropTextureButton("Texture", Texture, out Texture2D newTexture))
+            if (EditorGUI.DragAndDropTextureButton("Texture", Texture, out Texture newTexture))
             {
-                if (Texture.HasValue)
-                    Raylib.UnloadTexture(Texture.Value);
-
+                Texture?.Dispose();
                 Texture = newTexture;
             }
 

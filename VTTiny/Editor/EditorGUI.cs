@@ -115,11 +115,11 @@ namespace VTTiny.Editor
         /// <param name="x">The desired x size.</param>
         /// <param name="y">The desired y size.</param>
         /// <returns>Whether it was pressed or not.</returns>
-        public static bool ImageButton(Texture2D? texture, int x, int y)
+        public static bool ImageButton(Texture texture, int x, int y)
         {
-            if (!texture.HasValue)
+            if (texture == null)
                 return ImGui.Button("No Image", new Vector2(x, y));
-            return ImGui.ImageButton(new IntPtr(texture.Value.id), new Vector2(x, y));
+            return ImGui.ImageButton(new IntPtr(texture.Id), new Vector2(x, y));
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace VTTiny.Editor
         /// <param name="dimensions">The dimensions of the button.</param>
         /// <param name="newTexture">The new texture, if one was dropped.</param>
         /// <returns>Whether we had a new texture dropped.</returns>
-        public static bool DragAndDropTextureButton(string label, Texture2D? originalTexture, Vector2Int dimensions, out Texture2D newTexture)
+        public static bool DragAndDropTextureButton(string label, Texture originalTexture, Vector2Int dimensions, out Texture newTexture)
         {
             Text(label);
 
@@ -140,11 +140,11 @@ namespace VTTiny.Editor
 
             if (AcceptFileDrop(out string path))
             {
-                newTexture = Raylib.LoadTexture(path);
+                newTexture = new Texture(path);
                 return true;
             }
 
-            newTexture = default;
+            newTexture = null;
             return false;
         }
 
@@ -155,7 +155,7 @@ namespace VTTiny.Editor
         /// <param name="originalTexture">The original texture, or null.</param>
         /// <param name="newTexture">The new texture, if one was dropped.</param>
         /// <returns>Whether we had a new texture dropped.</returns>
-        public static bool DragAndDropTextureButton(string label, Texture2D? originalTexture, out Texture2D newTexture)
+        public static bool DragAndDropTextureButton(string label, Texture originalTexture, out Texture newTexture)
         {
             return DragAndDropTextureButton(label, originalTexture, new Vector2Int(100, 100), out newTexture);
         }
