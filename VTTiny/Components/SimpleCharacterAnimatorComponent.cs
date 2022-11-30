@@ -138,5 +138,18 @@ namespace VTTiny.Components
                 _speaking = newSpeaking;
             }
         }
+
+        protected override object PackageParametersIntoConfig()
+        {
+            return new SimpleCharacterAnimatorConfig
+            {
+                BlinkEvery = BlinkEvery,
+                BlinkLength = BlinkLength,
+
+                Idle = _idle?.Path,
+                Blinking = _blinking?.Path,
+                Speaking = _speaking?.Path
+            };
+        }
     }
 }

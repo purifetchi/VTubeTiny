@@ -66,5 +66,16 @@ namespace VTTiny.Components
             Rotation = EditorGUI.DragFloat("Rotation", Rotation);
             Scale = EditorGUI.DragFloat("Scale", Scale, 0.05f);
         }
+
+        protected override object PackageParametersIntoConfig()
+        {
+            return new TextureRendererConfig
+            {
+                Image = Texture?.Path,
+                Tint = Tint,
+                Rotation = Rotation,
+                Scale = Scale
+            };
+        }
     }
 }

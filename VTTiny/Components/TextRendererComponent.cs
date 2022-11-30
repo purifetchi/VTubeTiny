@@ -42,5 +42,15 @@ namespace VTTiny.Components
             Color = EditorGUI.ColorEdit("Color", Color);
             FontSize = EditorGUI.DragInt("Font size", FontSize);
         }
+
+        protected override object PackageParametersIntoConfig()
+        {
+            return new TextRendererConfig
+            {
+                Color = Color,
+                Text = Text,
+                FontSize = FontSize
+            };
+        }
     }
 }

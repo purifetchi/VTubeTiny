@@ -153,5 +153,17 @@ namespace VTTiny.Components
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
         }
+
+        protected override object PackageParametersIntoConfig()
+        {
+            return new AudioResponsiveMovementConfig
+            {
+                Threshold = Threshold,
+                Multiplier = Multiplier,
+                JumpSpeedMultiplier = JumpSpeedMultiplier,
+                JumpHeight = JumpHeight,
+                Microphone = _microphone?.FriendlyName
+            };
+        }
     }
 }
