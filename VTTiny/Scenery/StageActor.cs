@@ -15,7 +15,7 @@ namespace VTTiny.Scenery
         /// <summary>
         /// The parent actor of this stage actor.
         /// </summary>
-        public StageActor ParentActor { get; set; }
+        public StageActor ParentActor { get; private set; }
 
         /// <summary>
         /// The name of this actor.
@@ -147,6 +147,34 @@ namespace VTTiny.Scenery
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Tries reparenting an actor to a different actor.
+        /// </summary>
+        /// <param name="newParent">The new parent actor.</param>
+        /// <returns>True if reparenting succeeded, false otherwise.</returns>
+        public bool TryReparent(StageActor newParent)
+        {
+            if (newParent == null)
+            {
+                ParentActor = null;
+                return true;
+            }
+
+            // We need to walk the chain of the parents of this actor, to ensure that
+            // we aren't causing a cycling reparent somewhere down the line.
+            var actor = newParent;
+            do
+            {
+                if (actor == this)
+                    return false;
+
+                actor = actor.ParentActor;
+            } while (actor != null);
+
+            ParentActor = newParent;
+            return true;
         }
     }
 }

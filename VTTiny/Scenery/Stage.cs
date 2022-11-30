@@ -98,11 +98,8 @@ namespace VTTiny.Scenery
                 if (!string.IsNullOrEmpty(config.ParentActorName))
                 {
                     var parent = FindActor(config.ParentActorName);
-                    if (parent == null)
-                        System.Console.WriteLine($"Couldn't find parent {config.ParentActorName} for actor {actor.Name}!");
-
-                    else
-                        actor.ParentActor = parent;
+                    if (!actor.TryReparent(parent))
+                        System.Console.WriteLine($"Reparenting actor '{actor.Name}' to actor '{parent?.Name}' failed. (Is there a cyclic reparent somewhere?");
                 }
 
                 actor.BuildComponentsFromConfig(config.Components);
@@ -158,7 +155,7 @@ namespace VTTiny.Scenery
                 if (stageActor.ParentActor != actor)
                     continue;
 
-                stageActor.ParentActor = null;
+                stageActor.TryReparent(null);
             }
 
             return _actors.Remove(actor);

@@ -27,7 +27,7 @@ namespace VTTiny.Scenery
                 ImGui.SameLine();
 
                 if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
-                    ParentActor = newParent;
+                    TryReparent(newParent);
 
                 ImGui.Text("Components");
                 foreach (var component in _components)
