@@ -81,34 +81,6 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
-        /// Creates actors from the actor config list.
-        /// </summary>
-        /// <param name="actorConfigs">The actor config list.</param>
-        private void CreateActorsFromConfigList(IList<ActorConfig> actorConfigs)
-        {
-            if (actorConfigs == null)
-                return;
-
-            foreach (var config in actorConfigs)
-            {
-                var actor = CreateActor(config.Name);
-                actor.Transform.LocalPosition = config.Position;
-
-                // Try to set the parent of this actor
-                if (!string.IsNullOrEmpty(config.ParentActorName))
-                {
-                    var parent = FindActor(config.ParentActorName);
-                    if (!actor.TryReparent(parent))
-                        System.Console.WriteLine($"Reparenting actor '{actor.Name}' to actor '{parent?.Name}' failed. (Is there a cyclic reparent somewhere?");
-                }
-
-                actor.BuildComponentsFromConfig(config.Components);
-
-                System.Console.WriteLine($"Actor {actor.Name} instantiated.");
-            }
-        }
-
-        /// <summary>
         /// Add an actor to the stage.
         /// </summary>
         /// <param name="name">(OPTIONAL) The name of this actor. 'StageActor' by default.</param>
