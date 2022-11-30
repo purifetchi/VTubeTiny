@@ -43,6 +43,14 @@ namespace VTTiny.Components
             Texture.Dispose();
         }
 
+        public override Rectangle GetBoundingBox()
+        {
+            if (Texture == null)
+                return new Rectangle();
+
+            return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Texture.Width, Texture.Height);
+        }
+
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);

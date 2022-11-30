@@ -27,6 +27,11 @@ namespace VTTiny.Components
             Raylib.DrawText(Text, Parent.Transform.Position.X, Parent.Transform.Position.Y, FontSize, Color);
         }
 
+        public override Rectangle GetBoundingBox()
+        {
+            return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Raylib.MeasureText(Text, FontSize), FontSize);
+        }
+
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<TextRendererConfig>(parameters);
