@@ -14,9 +14,9 @@ namespace VTTiny.Scenery
             {
                 ImGui.Indent();
 
-                var newDimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
-                if (newDimensions != Dimensions)
-                    ResizeStage(newDimensions);
+                Dimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
+                if (ImGui.IsItemDeactivatedAfterEdit())
+                    ResizeStage(Dimensions);
 
                 ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
 
