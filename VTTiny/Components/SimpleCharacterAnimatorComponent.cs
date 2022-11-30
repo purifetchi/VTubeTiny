@@ -101,6 +101,9 @@ namespace VTTiny.Components
             Raylib.UnloadTexture(_idle);
             Raylib.UnloadTexture(_blinking);
             Raylib.UnloadTexture(_speaking);
+
+            if (_renderer != null)
+                _renderer.Texture = null;
         }
 
         internal override void InheritParametersFromConfig(JObject parameters)
