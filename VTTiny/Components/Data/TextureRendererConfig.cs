@@ -6,5 +6,7 @@ namespace VTTiny.Components.Data
     {
         public string Image { get; set; }
         public Color Tint { get; set; } = Color.WHITE;
+        public float Rotation { get; set; } = 0f;
+        public float Scale { get; set; } = 1f;
     }
 }

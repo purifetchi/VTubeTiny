@@ -50,6 +50,8 @@ namespace VTTiny.Components
                 Texture = new Texture(config.Image);
 
             Tint = config.Tint;
+            Rotation = config.Rotation;
+            Scale = config.Scale;
         }
 
         internal override void RenderEditorGUI()
