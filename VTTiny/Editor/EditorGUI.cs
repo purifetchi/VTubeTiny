@@ -204,5 +204,36 @@ namespace VTTiny.Editor
             componentType = default;
             return false;
         }
+
+        /// <summary>
+        /// Creates an actor dropdown.
+        /// </summary>
+        /// <param name="stage">The stage to iterate the actors of.</param>
+        /// <param name="currentSelectedActor">The currently selected actor.</param>
+        /// <param name="newSelectedActor">The newly selected actor (if it was changed).</param>
+        /// <returns>True if we've switched the actor.</returns>
+        public static bool ActorDropdown(Scenery.Stage stage, Scenery.StageActor currentSelectedActor, out Scenery.StageActor newSelectedActor)
+        {
+            newSelectedActor = null;
+
+            if (ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
+            {
+                if (ImGui.Selectable("None", currentSelectedActor == null))
+                    return true;
+
+                foreach (var actor in stage.GetActors())
+                {
+                    if (ImGui.Selectable(actor.Name, actor == currentSelectedActor))
+                    {
+                        newSelectedActor = actor;
+                        return true;
+                    }
+                }
+
+                ImGui.EndCombo();
+            }
+
+            return false;
+        }
     }
 }

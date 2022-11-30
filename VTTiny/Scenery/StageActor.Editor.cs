@@ -23,9 +23,13 @@ namespace VTTiny.Scenery
                     return true;
                 }
 
-                ImGui.Text($"Parented to: {ParentActor?.Name}");
-                ImGui.Text("Components");
+                ImGui.Text($"Parented to:");
+                ImGui.SameLine();
 
+                if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
+                    ParentActor = newParent;
+
+                ImGui.Text("Components");
                 foreach (var component in _components)
                 {
                     if (ImGui.TreeNode($"{component.GetType().Name}##{component.GetHashCode()}"))

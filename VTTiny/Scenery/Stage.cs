@@ -135,6 +135,15 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Returns an enumerable containing all of the actors.
+        /// </summary>
+        /// <returns>An enumerable containing all actors.</returns>
+        public IEnumerable<StageActor> GetActors()
+        {
+            return _actors;
+        }
+
+        /// <summary>
         /// Removes an actor from the stage.
         /// </summary>
         /// <param name="actor">The StageActor to be removed.</param>
