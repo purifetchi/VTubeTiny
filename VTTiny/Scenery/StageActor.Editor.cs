@@ -29,16 +29,7 @@ namespace VTTiny.Scenery
                 if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
                     TryReparent(newParent);
 
-                ImGui.Text("Components");
-                foreach (var component in _components)
-                {
-                    if (ImGui.TreeNode($"{component.GetType().Name}##{component.GetHashCode()}"))
-                    {
-                        component.RenderEditorGUI();
-
-                        ImGui.TreePop();
-                    }
-                }
+                DrawComponents();
 
                 if (EditorGUI.ComponentDropdown(out Type componentType))
                     ConstructComponentFromType(componentType);
@@ -47,6 +38,31 @@ namespace VTTiny.Scenery
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Draws the component list.
+        /// </summary>
+        private void DrawComponents()
+        {
+            ImGui.Text("Components");
+            foreach (var component in _components)
+            {
+                if (ImGui.SmallButton($"X##{component.GetHashCode()}"))
+                {
+                    RemoveComponent(component);
+                    break;
+                }
+
+                ImGui.SameLine();
+                if (ImGui.TreeNode($"{component.GetType().Name}##{component.GetHashCode()}"))
+                {
+                    component.RenderEditorGUI();
+                    ImGui.TreePop();
+                }
+            }
+
+            return;
         }
     }
 }

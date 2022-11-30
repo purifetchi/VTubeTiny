@@ -150,6 +150,24 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Removes a component from an actor.
+        /// </summary>
+        /// <param name="component">The component to remove.</param>
+        /// <returns>True if the component was removed, false otherwise.</returns>
+        public bool RemoveComponent(Component component)
+        {
+            // Every actor MUST have a transform.
+            if (component == Transform)
+                return false;
+
+            if (!_components.Contains(component))
+                return false;
+
+            component.Destroy();
+            return _components.Remove(component);
+        }
+
+        /// <summary>
         /// Tries reparenting an actor to a different actor.
         /// </summary>
         /// <param name="newParent">The new parent actor.</param>
