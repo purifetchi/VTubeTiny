@@ -2,12 +2,16 @@
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Components;
+using VTTiny.Scenery;
 
 namespace VTTiny.Editor
 {
     internal class VTubeTinyEditor
     {
         private VTubeTiny VTubeTiny { get; set; }
+
+        private StageActor _heldActor = null;
+        private Vector2Int _lastMousePosition;
 
         /// <summary>
         /// Instantiates a new VTubeTiny editor instance from a given VTubeTiny instance.
@@ -37,6 +41,7 @@ namespace VTTiny.Editor
 
             VTubeTiny.ActiveStage.RenderEditorGUI();
             HandleDragAndDropImages();
+            HandleActorDragging();
 
             ImGui.End();
 
@@ -69,6 +74,52 @@ namespace VTTiny.Editor
             mousePos -= new Vector2Int(texture.Width / 2, texture.Height / 2);
 
             actor.Transform.LocalPosition = mousePos;
+        }
+
+        /// <summary>
+        /// Handles dragging actors around with the mouse.
+        /// </summary>
+        private void HandleActorDragging()
+        {
+            var mousePos = (Vector2Int)Raylib.GetMousePosition();
+
+            if (_heldActor == null)
+            {
+                if (!TryFindNewActorForDragging(mousePos))
+                    return;
+            }
+
+            if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
+            {
+                _heldActor.RenderBoundingBox();
+
+                var delta = mousePos - _lastMousePosition;
+                _heldActor.Transform.LocalPosition = _heldActor.Transform.LocalPosition + delta;
+
+                _lastMousePosition = mousePos;
+                return;
+            }
+
+            _heldActor = null;
+        }
+
+        /// <summary>
+        /// Tries to get a new actor for dragging.
+        /// </summary>
+        /// <param name="position">The position to hit test from.</param>
+        /// <returns>True if found, false otherwise.</returns>
+        private bool TryFindNewActorForDragging(Vector2Int position)
+        {
+            if (!Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+                return false;
+
+            var actor = VTubeTiny.ActiveStage.HitTest(position);
+            if (actor == null)
+                return false;
+
+            _heldActor = actor;
+            _lastMousePosition = position;
+            return true;
         }
 
         /// <summary>
