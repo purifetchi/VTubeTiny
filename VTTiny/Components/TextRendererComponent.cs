@@ -5,7 +5,7 @@ using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
-    public class TextRendererComponent : Component
+    public class TextRendererComponent : RendererComponent
     {
         /// <summary>
         /// The text.

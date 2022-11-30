@@ -27,6 +27,7 @@ namespace VTTiny.Scenery
         public TransformComponent Transform { get; private set; }
 
         private readonly List<Component> _components;
+        private readonly List<RendererComponent> _renderables;
 
         public StageActor(Stage stage, string name)
         {
@@ -34,6 +35,7 @@ namespace VTTiny.Scenery
             Name = name;
 
             _components = new();
+            _renderables = new();
 
             // Create a transform, as all stage actors have one.
             Transform = AddComponent<TransformComponent>();
@@ -53,7 +55,10 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Render()
         {
-            foreach (var component in _components)
+            if (_renderables.Count < 1)
+                return;
+
+            foreach (var component in _renderables)
                 component.Render();
         }
 
@@ -66,6 +71,7 @@ namespace VTTiny.Scenery
                 component.Destroy();
 
             _components.Clear();
+            _renderables.Clear();
         }
 
         /// <summary>
@@ -105,6 +111,8 @@ namespace VTTiny.Scenery
             component.SetParent(this);
             component.Start();
 
+            if (component is RendererComponent renderable)
+                _renderables.Add(renderable);
             _components.Add(component);
         }
 
@@ -139,6 +147,9 @@ namespace VTTiny.Scenery
                 return false;
 
             component.Destroy();
+
+            if (component is RendererComponent renderable)
+                _renderables.Remove(renderable);
             return _components.Remove(component);
         }
 

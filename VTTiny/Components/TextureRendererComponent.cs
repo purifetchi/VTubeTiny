@@ -5,7 +5,7 @@ using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
-    public class TextureRendererComponent : Component
+    public class TextureRendererComponent : RendererComponent
     {
         /// <summary>
         /// The texture to be drawn. (Null by default.)

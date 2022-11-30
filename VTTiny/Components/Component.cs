@@ -73,11 +73,6 @@ namespace VTTiny.Components
         public virtual void Update() { }
 
         /// <summary>
-        /// The rendering method, called after Update.
-        /// </summary>
-        public virtual void Render() { }
-
-        /// <summary>
         /// The destroy method, called at the end of an actor's lifetime.
         /// </summary>
         public virtual void Destroy() { }
