@@ -19,7 +19,7 @@ namespace VTTiny.Editor
         /// <summary>
         /// Stores the current component index for the combo box.
         /// </summary>
-        private static int comboBoxComponentIndex = 0;
+        private static int _comboBoxComponentIndex = 0;
 
         static EditorGUI()
         {
@@ -192,12 +192,12 @@ namespace VTTiny.Editor
         /// <returns>True if the add button was clicked.</returns>
         public static bool ComponentDropdown(out Type componentType)
         {
-            ImGui.Combo(" ", ref comboBoxComponentIndex, ComponentTypeCache, ComponentTypeCache.Length);
+            ImGui.Combo(" ", ref _comboBoxComponentIndex, ComponentTypeCache, ComponentTypeCache.Length);
             ImGui.SameLine();
 
             if (ImGui.Button("Add Component"))
             {
-                componentType = Type.GetType(ComponentTypeCache[comboBoxComponentIndex]);
+                componentType = Type.GetType(ComponentTypeCache[_comboBoxComponentIndex]);
                 return true;
             }
 
