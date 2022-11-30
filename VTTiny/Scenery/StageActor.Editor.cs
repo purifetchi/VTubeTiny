@@ -48,18 +48,25 @@ namespace VTTiny.Scenery
             ImGui.Text("Components");
             foreach (var component in _components)
             {
-                if (ImGui.SmallButton($"X##{component.GetHashCode()}"))
+                ImGui.PushID(component.GetHashCode().ToString());
+
+                if (ImGui.SmallButton($"X"))
                 {
                     if (RemoveComponent(component))
+                    {
+                        ImGui.PopID();
                         break;
+                    }
                 }
 
                 ImGui.SameLine();
-                if (ImGui.TreeNode($"{component.GetType().Name}##{component.GetHashCode()}"))
+                if (ImGui.TreeNode($"{component.GetType().Name}"))
                 {
                     component.RenderEditorGUI();
                     ImGui.TreePop();
                 }
+
+                ImGui.PopID();
             }
 
             return;
