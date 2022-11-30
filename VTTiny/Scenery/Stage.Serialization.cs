@@ -21,12 +21,9 @@ namespace VTTiny.Scenery
                 actor.Transform.LocalPosition = config.Position;
 
                 // Try to set the parent of this actor
-                if (!string.IsNullOrEmpty(config.ParentActorName))
-                {
-                    var parent = FindActor(config.ParentActorName);
-                    if (!actor.TryReparent(parent))
-                        Console.WriteLine($"Reparenting actor '{actor.Name}' to actor '{parent?.Name}' failed. (Is there a cyclic reparent somewhere?");
-                }
+                var parent = FindActor(config.ParentActorName);
+                if (!actor.TryReparent(parent))
+                    Console.WriteLine($"Reparenting actor '{actor.Name}' to actor '{parent?.Name}' failed. (Is there a cyclic reparent somewhere?");
 
                 actor.BuildComponentsFromConfig(config.Components);
 
