@@ -48,7 +48,7 @@ namespace VTTiny.Components
             if (Texture == null)
                 return new Rectangle();
 
-            return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Texture.Width, Texture.Height);
+            return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Texture.Width * Scale, Texture.Height * Scale);
         }
 
         internal override void InheritParametersFromConfig(JObject parameters)
