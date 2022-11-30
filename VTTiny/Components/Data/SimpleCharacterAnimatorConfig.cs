@@ -1,6 +1,4 @@
-﻿using Raylib_cs;
-
-namespace VTTiny.Components.Data
+﻿namespace VTTiny.Components.Data
 {
     internal class SimpleCharacterAnimatorConfig
     {
