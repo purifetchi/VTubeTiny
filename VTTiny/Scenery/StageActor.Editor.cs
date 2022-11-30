@@ -50,8 +50,8 @@ namespace VTTiny.Scenery
             {
                 if (ImGui.SmallButton($"X##{component.GetHashCode()}"))
                 {
-                    RemoveComponent(component);
-                    break;
+                    if (RemoveComponent(component))
+                        break;
                 }
 
                 ImGui.SameLine();
