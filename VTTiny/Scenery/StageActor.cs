@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Raylib_cs;
 using VTTiny.Components;
 
 namespace VTTiny.Scenery
@@ -60,6 +61,18 @@ namespace VTTiny.Scenery
 
             foreach (var component in _renderables)
                 component.Render();
+        }
+
+        /// <summary>
+        /// Renders the bounding box of this actor (if one exists).
+        /// </summary>
+        internal void RenderBoundingBox()
+        {
+            if (_renderables.Count < 1)
+                return;
+
+            foreach (var component in _renderables)
+                component.DrawBoundingBox();
         }
 
         /// <summary>
@@ -179,6 +192,22 @@ namespace VTTiny.Scenery
 
             ParentActor = newParent;
             return true;
+        }
+
+        /// <summary>
+        /// Checks if the given position overlaps any of the renderables of this actor.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>Whether the position overlapped any of the renderables.</returns>
+        public bool HitTest(Vector2Int position)
+        {
+            foreach (var renderable in _renderables)
+            {
+                if (Raylib.CheckCollisionPointRec(position, renderable.GetBoundingBox()))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

@@ -134,6 +134,23 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Tries to get the actor that overlaps with the given position.
+        /// </summary>
+        /// <param name="position">The position to test with.</param>
+        /// <returns>Either the first actor that overlapped with the position, or null.</returns>
+        public StageActor HitTest(Vector2Int position)
+        {
+            for (var i = _actors.Count - 1; i >= 0; i--)
+            {
+                var actor = _actors[i];
+                if (actor.HitTest(position))
+                    return actor;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Update all the actors within this scene.
         /// </summary>
         internal void Update()
