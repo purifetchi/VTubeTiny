@@ -10,7 +10,7 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void RenderEditorGUI()
         {
-            if (ImGui.CollapsingHeader("Stage"))
+            if (ImGui.CollapsingHeader("Stage", ImGuiTreeNodeFlags.DefaultOpen))
             {
                 ImGui.Indent();
 
