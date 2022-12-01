@@ -113,6 +113,9 @@ namespace VTTiny.Editor
             if (!Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
                 return false;
 
+            if (ImGui.IsWindowHovered() || ImGui.IsAnyItemHovered())
+                return false;
+
             var actor = VTubeTiny.ActiveStage.HitTest(position);
             if (actor == null)
                 return false;
