@@ -1,5 +1,8 @@
 ﻿namespace VTTiny.Scenery
 {
+    /// <summary>
+    /// A timer that counts how much time has passed in a stage ever since a set point in time.
+    /// </summary>
     public class StageTimer
     {
         private Stage _stage;

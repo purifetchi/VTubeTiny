@@ -2,6 +2,9 @@
 
 namespace VTTiny.Data
 {
+    /// <summary>
+    /// Component configuration data.
+    /// </summary>
     public class ComponentConfig
     {
         public string Namespace { get; set; } = "VTTiny.Components";

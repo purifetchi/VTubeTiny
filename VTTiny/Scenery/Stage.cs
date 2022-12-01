@@ -5,6 +5,9 @@ using VTTiny.Data;
 
 namespace VTTiny.Scenery
 {
+    /// <summary>
+    /// The class responsible for managing and drawing all of the actors.
+    /// </summary>
     public partial class Stage
     {
         /// <summary>

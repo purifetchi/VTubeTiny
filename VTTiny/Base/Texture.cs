@@ -3,6 +3,9 @@ using Raylib_cs;
 
 namespace VTTiny
 {
+    /// <summary>
+    /// A wrapper around Raylib's Texture2D class that can auto-manage its lifetime.
+    /// </summary>
     public class Texture : IDisposable
     {
         /// <summary>

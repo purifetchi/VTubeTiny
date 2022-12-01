@@ -2,6 +2,9 @@
 
 namespace VTTiny
 {
+    /// <summary>
+    /// The command line options for VTubeTiny.
+    /// </summary>
     public class VTubeTinyCommandOptions
     {
         [Option('v', "Verbose", Required = false, HelpText = "Show Raylib logging.")]

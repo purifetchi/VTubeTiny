@@ -3,6 +3,9 @@ using Raylib_cs;
 
 namespace VTTiny.Data
 {
+    /// <summary>
+    /// Stage configuration data.
+    /// </summary>
     public class Config
     {
         public Vector2Int Dimensions { get; set; } = new Vector2Int(800, 480);

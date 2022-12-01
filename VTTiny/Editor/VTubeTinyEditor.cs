@@ -6,6 +6,9 @@ using VTTiny.Scenery;
 
 namespace VTTiny.Editor
 {
+    /// <summary>
+    /// The VTubeTiny editor.
+    /// </summary>
     internal class VTubeTinyEditor
     {
         private VTubeTiny VTubeTiny { get; set; }

@@ -8,6 +8,9 @@ using VTTiny.Components;
 
 namespace VTTiny.Editor
 {
+    /// <summary>
+    /// Various helpers for drawing the editor GUI.
+    /// </summary>
     public static class EditorGUI
     {
         /// <summary>

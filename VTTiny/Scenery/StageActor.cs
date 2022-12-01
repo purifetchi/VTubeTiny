@@ -5,6 +5,9 @@ using VTTiny.Components;
 
 namespace VTTiny.Scenery
 {
+    /// <summary>
+    /// An object in a stage, can contain components that modify what it does.
+    /// </summary>
     public partial class StageActor
     {
         /// <summary>

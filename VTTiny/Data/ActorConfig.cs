@@ -2,6 +2,9 @@
 
 namespace VTTiny.Data
 {
+    /// <summary>
+    /// Actor configuration data.
+    /// </summary>
     public class ActorConfig
     {
         public string Name { get; set; } = "StageActor";

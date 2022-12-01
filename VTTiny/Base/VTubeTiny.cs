@@ -26,6 +26,12 @@ namespace VTTiny
         /// </summary>
         private VTubeTinyEditor Editor { get; set; }
 
+        /// <summary>
+        /// Instantiates a new instance of VTubeTiny.
+        /// </summary>
+        /// <param name="config">The stage configuration data.</param>
+        /// <param name="verbose">Should the console output be verbose? (Show Raylib specific messages)</param>
+        /// <param name="withEditor">Should we also instantiate an instance of the editor?</param>
         public VTubeTiny(Config config, bool verbose = false, bool withEditor = false)
         {
             Config = config;

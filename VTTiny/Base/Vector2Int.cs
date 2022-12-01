@@ -2,6 +2,9 @@
 
 namespace VTTiny
 {
+    /// <summary>
+    /// A 2D vector that contains two integer values.
+    /// </summary>
     public struct Vector2Int
     {
         public int X, Y;
