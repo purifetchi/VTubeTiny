@@ -27,6 +27,11 @@ namespace VTTiny.Scenery
         /// </summary>
         public double DeltaTime { get => Time - _lastUpdateTime; }
 
+        /// <summary>
+        /// Should the scene render the bounding boxes of its actors?
+        /// </summary>
+        public bool RenderBoundingBoxes { get; set; } = false;
+
         private List<StageActor> _actors;
         private Stopwatch _timer;
 
@@ -167,7 +172,12 @@ namespace VTTiny.Scenery
         internal void Render()
         {
             foreach (var actor in _actors)
+            {
                 actor.Render();
+
+                if (RenderBoundingBoxes)
+                    actor.RenderBoundingBox();
+            }
         }
 
         /// <summary>

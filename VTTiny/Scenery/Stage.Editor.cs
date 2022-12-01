@@ -18,6 +18,7 @@ namespace VTTiny.Scenery
                 if (ImGui.IsItemDeactivatedAfterEdit())
                     ResizeStage(Dimensions);
 
+                RenderBoundingBoxes = EditorGUI.Checkbox("Render bounding boxes", RenderBoundingBoxes);
                 ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
 
                 ImGui.Text("Actors");

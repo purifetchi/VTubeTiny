@@ -96,6 +96,18 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
+        /// Constructs a checkbox with the given value as a starting value.
+        /// </summary>
+        /// <param name="label">The label to attach to the gui component.</param>
+        /// <param name="value">The bool value.</param>
+        /// <returns>The modified bool value.</returns>
+        public static bool Checkbox(string label, bool value)
+        {
+            ImGui.Checkbox(label, ref value);
+            return value;
+        }
+
+        /// <summary>
         /// Constructs a color editor gui component for a given color value.
         /// </summary>
         /// <param name="label">The label to attach to the gui component.</param>
