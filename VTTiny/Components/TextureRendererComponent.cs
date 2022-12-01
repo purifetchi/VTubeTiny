@@ -72,7 +72,7 @@ namespace VTTiny.Components
 
             Tint = EditorGUI.ColorEdit("Tint", Tint);
             Rotation = EditorGUI.DragFloat("Rotation", Rotation);
-            Scale = EditorGUI.DragFloat("Scale", Scale, 0.05f);
+            Scale = EditorGUI.DragFloat("Scale", Scale, 0.005f);
         }
 
         protected override object PackageParametersIntoConfig()
