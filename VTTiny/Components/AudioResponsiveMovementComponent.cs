@@ -46,6 +46,8 @@ namespace VTTiny.Components
         /// <param name="name">The microphone name.</param>
         public void SetMicrophoneByName(string name)
         {
+            DestroyWasapiContexts();
+
             var deviceEnumerator = new MMDeviceEnumerator();
 
             var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
@@ -72,15 +74,42 @@ namespace VTTiny.Components
             return deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications)?.FriendlyName;
         }
 
+        /// <summary>
+        /// Gets the current master peak level of the microphone.
+        /// </summary>
+        /// <returns>The peak level.</returns>
         private int Level()
         {
             return (int)Math.Round(_microphone.AudioMeterInformation.MasterPeakValue * 100 * Multiplier);
+        }
+
+        /// <summary>
+        /// Destroys all WASAPI related contexts (WasapiCapture, Microphone).
+        /// </summary>
+        private void DestroyWasapiContexts()
+        {
+            if (_capture != null)
+            {
+                _capture.StopRecording();
+                _capture.Dispose();
+
+                _capture = null;
+            }
+
+            if (_microphone != null)
+            {
+                _microphone.Dispose();
+
+                _microphone = null;
+            }
         }
 
         public override void Start()
         {
             _character = GetComponent<SimpleCharacterAnimatorComponent>();
             _jumpTimer = new StageTimer(Parent.OwnerStage);
+
+            SetMicrophoneByName(GetDefaultMicrophone());
         }
 
         public override void Update()
@@ -113,21 +142,13 @@ namespace VTTiny.Components
                     _jump = false;
             }
 
-            _character.IsSpeaking = _talking;
+            if (_character != null)
+                _character.IsSpeaking = _talking;
         }
 
         public override void Destroy()
         {
-            if (_capture != null)
-            {
-                _capture.StopRecording();
-                _capture.Dispose();
-            }
-
-            if (_microphone != null)
-            {
-                _microphone.Dispose();
-            }
+            DestroyWasapiContexts();
         }
 
         internal override void InheritParametersFromConfig(JObject parameters)
