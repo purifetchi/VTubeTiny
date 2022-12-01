@@ -80,8 +80,6 @@ namespace VTTiny.Components
         public override void Start()
         {
             _character = GetComponent<SimpleCharacterAnimatorComponent>();
-            _basePos = Parent.Transform.LocalPosition;
-
             _jumpTimer = new StageTimer(Parent.OwnerStage);
         }
 
@@ -99,6 +97,8 @@ namespace VTTiny.Components
                 !_jump)
             {
                 _jumpTimer.SetNow();
+
+                _basePos = Parent.Transform.LocalPosition;
                 _jump = true;
             }
 
