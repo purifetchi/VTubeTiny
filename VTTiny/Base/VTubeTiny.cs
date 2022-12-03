@@ -50,6 +50,18 @@ namespace VTTiny
         }
 
         /// <summary>
+        /// Set a new stage.
+        /// </summary>
+        /// <param name="stage">The stage to set.</param>
+        public void SetActiveStage(Stage stage)
+        {
+            if (ActiveStage != null)
+                ActiveStage.Destroy();
+
+            ActiveStage = stage;
+        }
+
+        /// <summary>
         /// Set whether we should show Raylib output.
         /// </summary>
         /// <param name="verbose">Whether we should show the Raylib output.</param>
