@@ -86,6 +86,14 @@ namespace VTTiny.Editor
                     ImGui.EndMenu();
                 }
 
+                if (ImGui.BeginMenu("View"))
+                {
+                    if (ImGui.MenuItem("Reset UI"))
+                        LayoutDockWindows(ImGui.DockSpaceOverViewport());
+
+                    ImGui.EndMenu();
+                }
+
                 if (ImGui.BeginMenu("About"))
                 {
                     ImGui.MenuItem("About VTubeTiny");
