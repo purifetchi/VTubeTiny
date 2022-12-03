@@ -75,9 +75,10 @@ namespace VTTiny
             var stage = Stage.Blank()
                              .WithConfig(Config);
 
+            ActiveStage = stage;
+
             Editor?.Initialize();
 
-            ActiveStage = stage;
             RenderLoop();
         }
 
