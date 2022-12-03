@@ -19,6 +19,7 @@ namespace VTTiny.Editor
 
         private StageActor _heldActor = null;
         private Vector2Int _lastMousePosition;
+        private bool _didLayoutEditorDocks = false;
 
         /// <summary>
         /// Instantiates a new VTubeTiny editor instance from a given VTubeTiny instance.
@@ -63,7 +64,8 @@ namespace VTTiny.Editor
             DrawEditorView();
             DrawStageView();
 
-            LayoutDockWindows(dockId);
+            if (!_didLayoutEditorDocks)
+                LayoutDockWindows(dockId);
 
             rlImGui.End();
 
@@ -151,6 +153,8 @@ namespace VTTiny.Editor
             ImGuiDockBuilder.DockWindow("VTubeTiny Editor", dockId);
             ImGuiDockBuilder.DockWindow("Stage View", editorDockId);
             ImGuiDockBuilder.Finish(dockId);
+
+            _didLayoutEditorDocks = true;
         }
 
         /// <summary>
