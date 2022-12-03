@@ -2,6 +2,7 @@
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Components;
+using VTTiny.Native;
 using VTTiny.Rendering;
 using VTTiny.Scenery;
 
@@ -56,12 +57,13 @@ namespace VTTiny.Editor
 
             rlImGui.Begin();
 
-            ImGui.DockSpaceOverViewport();
+            var dockId = ImGui.DockSpaceOverViewport();
 
             DrawMainMenuBar();
-
             DrawEditorView();
             DrawStageView();
+
+            LayoutDockWindows(dockId);
 
             rlImGui.End();
 
@@ -138,6 +140,17 @@ namespace VTTiny.Editor
 
                 ImGui.End();
             }
+        }
+
+        /// <summary>
+        /// Lays out the docked windows.
+        /// </summary>
+        private void LayoutDockWindows(uint dockId)
+        {
+            var editorDockId = ImGuiDockBuilder.SplitNode(dockId, ImGuiDir.Left, 0.8f, out uint _, out uint _);
+            ImGuiDockBuilder.DockWindow("VTubeTiny Editor", dockId);
+            ImGuiDockBuilder.DockWindow("Stage View", editorDockId);
+            ImGuiDockBuilder.Finish(dockId);
         }
 
         /// <summary>
