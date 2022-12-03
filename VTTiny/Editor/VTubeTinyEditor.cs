@@ -2,7 +2,7 @@
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Components;
-using VTTiny.Native;
+using VTTiny.Editor.Native;
 using VTTiny.Rendering;
 using VTTiny.Scenery;
 

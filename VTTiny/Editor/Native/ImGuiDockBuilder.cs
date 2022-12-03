@@ -1,14 +1,14 @@
 ﻿using System.Runtime.InteropServices;
 using ImGuiNET;
 
-namespace VTTiny.Native
+namespace VTTiny.Editor.Native
 {
     /// <summary>
     /// This class exposes some of the (yet unexposed in ImGui.NET) dock building functionality of ImGui for convenience.
     /// 
     /// The best course of action would be to remove it as soon as Imgui.NET actually starts generating bindings for the imgui_internal.h header.
     /// </summary>
-    public static class ImGuiDockBuilder
+    internal static class ImGuiDockBuilder
     {
         [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern void igDockBuilderDockWindow([MarshalAs(UnmanagedType.LPStr)] string title, uint id);
