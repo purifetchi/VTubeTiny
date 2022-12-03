@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Raylib_cs;
 using VTTiny.Data;
+using VTTiny.Rendering;
 
 namespace VTTiny.Scenery
 {
@@ -35,6 +36,11 @@ namespace VTTiny.Scenery
         /// </summary>
         public bool RenderBoundingBoxes { get; set; } = false;
 
+        /// <summary>
+        /// The rendering context for this scene.
+        /// </summary>
+        public IRenderingContext RenderingContext { get; set; }
+
         private List<StageActor> _actors;
         private Stopwatch _timer;
 
@@ -49,12 +55,13 @@ namespace VTTiny.Scenery
             var timer = new Stopwatch();
             timer.Start();
 
-            return new Stage 
-            { 
+            return new Stage
+            {
                 _actors = new(),
                 _timer = timer,
                 ClearColor = new Color(0, 255, 0, 255),
-                Dimensions = new Vector2Int { X = 800, Y = 480 }
+                Dimensions = new Vector2Int { X = 800, Y = 480 },
+                RenderingContext = new GenericRaylibRenderingContext()
             };
         }
 
@@ -85,7 +92,7 @@ namespace VTTiny.Scenery
         private void ResizeStage(Vector2Int dimensions)
         {
             Dimensions = dimensions;
-            Raylib.SetWindowSize(Dimensions.X, Dimensions.Y);
+            RenderingContext.Resize(dimensions);
         }
 
         /// <summary>
@@ -174,6 +181,9 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Render()
         {
+            RenderingContext.Begin();
+            Raylib.ClearBackground(ClearColor);
+
             foreach (var actor in _actors)
             {
                 actor.Render();
@@ -181,6 +191,8 @@ namespace VTTiny.Scenery
                 if (RenderBoundingBoxes)
                     actor.RenderBoundingBox();
             }
+
+            RenderingContext.End();
         }
 
         /// <summary>

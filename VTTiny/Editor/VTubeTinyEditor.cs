@@ -2,6 +2,7 @@
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Components;
+using VTTiny.Rendering;
 using VTTiny.Scenery;
 
 namespace VTTiny.Editor
@@ -13,6 +14,8 @@ namespace VTTiny.Editor
     {
         private VTubeTiny VTubeTiny { get; set; }
 
+        private IRenderingContext RenderingContext { get; set; }
+
         private StageActor _heldActor = null;
         private Vector2Int _lastMousePosition;
 
@@ -23,6 +26,7 @@ namespace VTTiny.Editor
         public VTubeTinyEditor(VTubeTiny instance)
         {
             VTubeTiny = instance;
+            RenderingContext = new GenericRaylibRenderingContext();
         }
 
         /// <summary>
@@ -31,6 +35,15 @@ namespace VTTiny.Editor
         public void Initialize()
         {
             rlImGui.Setup();
+            ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+
+            Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+            Raylib.MaximizeWindow();
+
+            // Switch the stage to running in framebuffer mode, so we can draw it as a window.
+            VTubeTiny.ActiveStage.RenderingContext = new FramebufferRenderingContext();
+            VTubeTiny.ActiveStage.RenderingContext.Resize(VTubeTiny.ActiveStage.Dimensions);
         }
 
         /// <summary>
@@ -38,17 +51,116 @@ namespace VTTiny.Editor
         /// </summary>
         public void Render()
         {
+            RenderingContext.Begin();
+            Raylib.ClearBackground(Color.BLANK);
+
             rlImGui.Begin();
 
-            ImGui.Begin("VTubeTiny Editor");
+            ImGui.DockSpaceOverViewport();
 
-            VTubeTiny.ActiveStage.RenderEditorGUI();
-            HandleDragAndDropImages();
-            HandleActorDragging();
+            DrawMainMenuBar();
 
-            ImGui.End();
+            DrawEditorView();
+            DrawStageView();
 
             rlImGui.End();
+
+            RenderingContext.End();
+        }
+
+        /// <summary>
+        /// Draws the main menu bar.
+        /// </summary>
+        private void DrawMainMenuBar()
+        {
+            if (ImGui.BeginMainMenuBar())
+            {
+                if (ImGui.BeginMenu("File"))
+                {
+                    ImGui.MenuItem("Load stage");
+                    ImGui.MenuItem("Save stage");
+                    ImGui.EndMenu();
+                }
+
+                if (ImGui.BeginMenu("About"))
+                {
+                    ImGui.MenuItem("About VTubeTiny");
+                    ImGui.EndMenu();
+                }
+                ImGui.EndMainMenuBar();
+            }
+        }
+
+        /// <summary>
+        /// Draws the stage view.
+        /// </summary>
+        private void DrawStageView()
+        {
+            var frameBuffer = VTubeTiny.ActiveStage.RenderingContext.GetFramebuffer().Value;
+            var size = new Vector2Int(frameBuffer.width, frameBuffer.height);
+
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2Int(0, 0));
+
+            ImGui.SetNextWindowSizeConstraints(size, size);
+            if (ImGui.Begin("Stage View", ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar))
+            {
+                // Transform the render texture, since it's drawn upside down.
+                var viewRect = new Rectangle
+                {
+                    x = frameBuffer.width / 2 - size.X / 2,
+                    y = frameBuffer.height / 2 - size.Y / 2,
+                    width = size.X,
+                    height = -size.Y
+                };
+
+                // Draw the buffer in the center of the screen
+                var center = (Vector2Int)((ImGui.GetWindowSize() - (System.Numerics.Vector2)size) * 0.5f);
+                ImGui.SetCursorPos(center);
+                rlImGui.ImageRect(frameBuffer, size.X, size.Y, viewRect);
+
+                HandleDragAndDropImages();
+                HandleActorDragging();
+
+                ImGui.End();
+            }
+
+            ImGui.PopStyleVar();
+        }
+
+        /// <summary>
+        /// Draws the editor view.
+        /// </summary>
+        private void DrawEditorView()
+        {
+            if (ImGui.Begin("VTubeTiny Editor"))
+            {
+                VTubeTiny.ActiveStage.RenderEditorGUI();
+
+                ImGui.End();
+            }
+        }
+
+        /// <summary>
+        /// Tries to get the position of a mouse within a stage.
+        /// </summary>
+        /// <param name="absolute">The absolute position of the mouse.</param>
+        /// <param name="relative">The relative position within the stage view.</param>
+        /// <returns>Whether the mouse even was in the stage.</returns>
+        private bool TryGetPositionWithinStage(Vector2Int absolute, out Vector2Int relative)
+        {
+            var pos = ImGui.GetItemRectMin();
+            var size = ImGui.GetItemRectSize();
+
+            var rect = new Rectangle
+            {
+                x = pos.X,
+                y = pos.Y,
+                height = size.Y,
+                width = size.X
+            };
+
+            relative = absolute - (Vector2Int)pos;
+            return Raylib.CheckCollisionPointRec(absolute, rect);
         }
 
         /// <summary>
@@ -59,7 +171,7 @@ namespace VTTiny.Editor
         /// </summary>
         private void HandleDragAndDropImages()
         {
-            if (!Raylib.IsFileDropped())
+            if (!Raylib.IsFileDropped() || !TryGetPositionWithinStage(Raylib.GetMousePosition(), out Vector2Int mousePos))
                 return;
 
             var path = Raylib.GetDroppedFiles()[0];
@@ -73,7 +185,6 @@ namespace VTTiny.Editor
 
             // Offset the mouse cursor by half of the texture's size, putting the actor's center
             // at the position of the mouse.
-            var mousePos = (Vector2Int)Raylib.GetMousePosition();
             mousePos -= new Vector2Int(texture.Width / 2, texture.Height / 2);
 
             actor.Transform.LocalPosition = mousePos;
@@ -84,11 +195,13 @@ namespace VTTiny.Editor
         /// </summary>
         private void HandleActorDragging()
         {
-            var mousePos = (Vector2Int)Raylib.GetMousePosition();
+            var absolutePos = (Vector2Int)Raylib.GetMousePosition();
+            if (!TryGetPositionWithinStage(absolutePos, out Vector2Int relativePos))
+                return;
 
             if (_heldActor == null)
             {
-                if (!TryFindNewActorForDragging(mousePos))
+                if (!TryFindNewActorForDragging(relativePos))
                     return;
             }
 
@@ -96,10 +209,10 @@ namespace VTTiny.Editor
             {
                 _heldActor.RenderBoundingBox();
 
-                var delta = mousePos - _lastMousePosition;
+                var delta = relativePos - _lastMousePosition;
                 _heldActor.Transform.LocalPosition = _heldActor.Transform.LocalPosition + delta;
 
-                _lastMousePosition = mousePos;
+                _lastMousePosition = relativePos;
                 return;
             }
 
@@ -114,9 +227,6 @@ namespace VTTiny.Editor
         private bool TryFindNewActorForDragging(Vector2Int position)
         {
             if (!Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
-                return false;
-
-            if (ImGui.IsWindowHovered() || ImGui.IsAnyItemHovered())
                 return false;
 
             var actor = VTubeTiny.ActiveStage.HitTest(position);
@@ -134,6 +244,7 @@ namespace VTTiny.Editor
         public void Destroy()
         {
             rlImGui.Shutdown();
+            Raylib.ClearWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
         }
     }
 }

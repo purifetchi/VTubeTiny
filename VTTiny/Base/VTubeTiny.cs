@@ -87,15 +87,8 @@ namespace VTTiny
             while (!Raylib.WindowShouldClose())
             {
                 ActiveStage.Update();
-
-                Raylib.BeginDrawing();
-                Raylib.ClearBackground(ActiveStage.ClearColor);
-
                 ActiveStage.Render();
-
                 Editor?.Render();
-
-                Raylib.EndDrawing();
             }
 
             ActiveStage.Destroy();
