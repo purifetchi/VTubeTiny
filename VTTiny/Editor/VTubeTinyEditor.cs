@@ -81,6 +81,15 @@ namespace VTTiny.Editor
             {
                 if (ImGui.BeginMenu("File"))
                 {
+                    if (ImGui.MenuItem("New stage"))
+                    {
+                        var stage = Stage.Blank();
+                        stage.RenderingContext = new FramebufferRenderingContext();
+                        stage.RenderingContext.Resize(stage.Dimensions);
+
+                        VTubeTiny.SetActiveStage(stage);
+                    }
+
                     ImGui.MenuItem("Load stage");
                     ImGui.MenuItem("Save stage");
                     ImGui.EndMenu();
@@ -99,6 +108,7 @@ namespace VTTiny.Editor
                     ImGui.MenuItem("About VTubeTiny");
                     ImGui.EndMenu();
                 }
+
                 ImGui.EndMainMenuBar();
             }
         }
