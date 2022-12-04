@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Newtonsoft.Json;
 using Raylib_cs;
 using VTTiny.Data;
 using VTTiny.Editor;
@@ -29,16 +31,39 @@ namespace VTTiny
         /// <summary>
         /// Instantiates a new instance of VTubeTiny.
         /// </summary>
-        /// <param name="config">The stage configuration data.</param>
-        /// <param name="verbose">Should the console output be verbose? (Show Raylib specific messages)</param>
-        /// <param name="withEditor">Should we also instantiate an instance of the editor?</param>
-        public VTubeTiny(Config config, bool verbose = false, bool withEditor = false)
+        /// <param name="options">The VTubeTiny options.</param>
+        public VTubeTiny(VTubeTinyCommandOptions options)
         {
-            Config = config;
-            SetVerbosity(verbose);
+            LoadConfigFromFile(options.ConfigFile);
+            SetVerbosity(options.Verbose);
 
-            if (withEditor)
+            if (options.EditorMode)
                 CreateEditor();
+        }
+
+        /// <summary>
+        /// Loads a config from a path.
+        /// </summary>
+        /// <param name="path">The path to the VTTiny config.</param>
+        public void LoadConfigFromFile(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            var data = File.ReadAllText(path);
+            var config = JsonConvert.DeserializeObject<Config>(data);
+            Config = config;
+        }
+
+        /// <summary>
+        /// Reloads the stage from a config.
+        /// </summary>
+        public void ReloadStage()
+        {
+            var stage = Stage.Blank()
+                             .WithConfig(Config);
+
+            SetActiveStage(stage);
         }
 
         /// <summary>
@@ -84,11 +109,7 @@ namespace VTTiny
             Raylib.InitWindow(800, 600, "VTubeTiny");
             Raylib.SetTargetFPS(60);
 
-            var stage = Stage.Blank()
-                             .WithConfig(Config);
-
-            SetActiveStage(stage);
-
+            ReloadStage();
             Editor?.Initialize();
 
             RenderLoop();

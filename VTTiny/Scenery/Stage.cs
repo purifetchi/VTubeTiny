@@ -86,6 +86,16 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Replaces the current active rendering context.
+        /// </summary>
+        /// <param name="context">The new rendering context.</param>
+        internal void ReplaceRenderingContext(IRenderingContext context)
+        {
+            RenderingContext = context;
+            ResizeStage(Dimensions);
+        }
+
+        /// <summary>
         /// Resizes the stage.
         /// </summary>
         /// <param name="dimensions">The new dimensions</param>

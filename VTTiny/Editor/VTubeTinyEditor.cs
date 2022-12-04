@@ -5,6 +5,7 @@ using VTTiny.Components;
 using VTTiny.Editor.Native;
 using VTTiny.Rendering;
 using VTTiny.Scenery;
+using VTTiny.Editor.Native.Win32;
 
 namespace VTTiny.Editor
 {
@@ -44,8 +45,7 @@ namespace VTTiny.Editor
             Raylib.MaximizeWindow();
 
             // Switch the stage to running in framebuffer mode, so we can draw it as a window.
-            VTubeTiny.ActiveStage.RenderingContext = new FramebufferRenderingContext();
-            VTubeTiny.ActiveStage.RenderingContext.Resize(VTubeTiny.ActiveStage.Dimensions);
+            VTubeTiny.ActiveStage.ReplaceRenderingContext(new FramebufferRenderingContext());
         }
 
         /// <summary>
@@ -84,14 +84,31 @@ namespace VTTiny.Editor
                     if (ImGui.MenuItem("New stage"))
                     {
                         var stage = Stage.Blank();
-                        stage.RenderingContext = new FramebufferRenderingContext();
-                        stage.RenderingContext.Resize(stage.Dimensions);
+                        stage.ReplaceRenderingContext(new FramebufferRenderingContext());
 
                         VTubeTiny.SetActiveStage(stage);
                     }
 
-                    ImGui.MenuItem("Load stage");
-                    ImGui.MenuItem("Save stage");
+                    if (ImGui.MenuItem("Load stage"))
+                    {
+                        var path = FileDialog.OpenFile();
+                        if (string.IsNullOrEmpty(path))
+                            return;
+
+                        VTubeTiny.LoadConfigFromFile(path);
+                        VTubeTiny.ReloadStage();
+                        VTubeTiny.ActiveStage.ReplaceRenderingContext(new FramebufferRenderingContext());
+                    }
+
+                    if (ImGui.MenuItem("Save stage"))
+                    {
+                        var path = FileDialog.SaveFile();
+                        if (string.IsNullOrEmpty(path))
+                            return;
+
+                        VTubeTiny.ActiveStage.ExportStageToFile(path);
+                    }
+
                     ImGui.EndMenu();
                 }
 
