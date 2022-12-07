@@ -16,8 +16,8 @@ namespace VTTiny.Editor.UI
         /// Creates a new stage properties window with a given stage.
         /// </summary>
         /// <param name="stage">The stage to set.</param>
-        public StagePropertiesWindow(Stage stage) :
-            base("Stage Properties")
+        public StagePropertiesWindow(Stage stage) 
+            : base("Stage Properties")
         {
             Stage = stage;
         }
