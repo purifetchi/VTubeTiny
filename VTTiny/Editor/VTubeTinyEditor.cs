@@ -28,6 +28,7 @@ namespace VTTiny.Editor
 
         private readonly List<EditorWindow> _windows;
         private bool _didLayoutEditorDocks = false;
+        private bool _wasEditorListModified = false;
 
         /// <summary>
         /// Instantiates a new VTubeTiny editor instance from a given VTubeTiny instance.
@@ -44,9 +45,11 @@ namespace VTTiny.Editor
         /// Adds a new window to the window list.
         /// </summary>
         /// <param name="window">The window.</param>
-        private void AddWindow(EditorWindow window)
+        internal void AddWindow(EditorWindow window)
         {
             _windows.Add(window);
+
+            _wasEditorListModified = true;
         }
 
         /// <summary>
@@ -54,7 +57,7 @@ namespace VTTiny.Editor
         /// </summary>
         /// <typeparam name="T">The type of the window (must derive from `VTTiny.Editor.UI.EditorWindow`.</typeparam>
         /// <returns>Either the window or null.</returns>
-        private T GetWindow<T>() where T: EditorWindow
+        internal T GetWindow<T>() where T: EditorWindow
         {
             foreach (var window in _windows)
             {
@@ -63,6 +66,20 @@ namespace VTTiny.Editor
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Removes a window from the window list.
+        /// </summary>
+        /// <param name="window">The window to remove.</param>
+        /// <returns>Whether the removing was successful.</returns>
+        internal bool RemoveWindow(EditorWindow window)
+        {
+            if (!_windows.Contains(window))
+                return false;
+
+            _wasEditorListModified = true;
+            return _windows.Remove(window);
         }
 
         /// <summary>
@@ -93,6 +110,8 @@ namespace VTTiny.Editor
 
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
+
+            _wasEditorListModified = false;
         }
 
         /// <summary>
@@ -110,7 +129,15 @@ namespace VTTiny.Editor
             DrawMainMenuBar();
 
             foreach (var window in _windows)
+            {
                 window.Render();
+                
+                if (_wasEditorListModified)
+                {
+                    _wasEditorListModified = false;
+                    break;
+                }
+            }
 
             if (!_didLayoutEditorDocks)
                 LayoutDockWindows(dockId);
@@ -171,7 +198,12 @@ namespace VTTiny.Editor
 
                 if (ImGui.BeginMenu("About"))
                 {
-                    ImGui.MenuItem("About VTubeTiny");
+                    if (ImGui.MenuItem("About VTubeTiny"))
+                    {
+                        if (GetWindow<AboutWindow>() == null)
+                            AddWindow(new AboutWindow(this));
+                    }
+
                     ImGui.EndMenu();
                 }
 
