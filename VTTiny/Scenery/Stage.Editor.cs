@@ -10,32 +10,25 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void RenderEditorGUI()
         {
-            if (ImGui.CollapsingHeader("Stage", ImGuiTreeNodeFlags.DefaultOpen))
+            Dimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
+            if (ImGui.IsItemDeactivatedAfterEdit())
+                ResizeStage(Dimensions);
+
+            ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
+            RenderBoundingBoxes = EditorGUI.Checkbox("Render bounding boxes", RenderBoundingBoxes);
+
+            ImGui.Text("Actors");
+
+            foreach (var actor in _actors)
             {
-                ImGui.Indent();
+                if (actor.RenderEditorGUI())
+                    break;
 
-                Dimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
-                if (ImGui.IsItemDeactivatedAfterEdit())
-                    ResizeStage(Dimensions);
-
-                ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
-                RenderBoundingBoxes = EditorGUI.Checkbox("Render bounding boxes", RenderBoundingBoxes);
-
-                ImGui.Text("Actors");
-
-                foreach (var actor in _actors)
-                {
-                    if (actor.RenderEditorGUI())
-                        break;
-
-                    ImGui.Separator();
-                }
-
-                if (ImGui.Button("Add Actor"))
-                    CreateActor();
-
-                ImGui.Unindent();
+                ImGui.Separator();
             }
+
+            if (ImGui.Button("Add Actor"))
+                CreateActor();
         }
     }
 }
