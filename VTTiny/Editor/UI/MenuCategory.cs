@@ -31,9 +31,9 @@ namespace VTTiny.Editor.UI
         public string Name { get; set; }
 
         /// <summary>
-        /// The editor.
+        /// The parent menu.
         /// </summary>
-        public VTubeTinyEditor Editor { get; set; }
+        public MenuBar ParentMenu { get; set; }
 
         /// <summary>
         /// The list of actions within this menu.
@@ -44,11 +44,14 @@ namespace VTTiny.Editor.UI
         /// Creates a new menu category.
         /// </summary>
         /// <param name="name">The name of the category.</param>
-        public MenuCategory(string name, VTubeTinyEditor editor)
+        /// <param name="menuBar">The menu bar we should be attached to.</param>
+        public MenuCategory(string name, MenuBar menuBar)
         {
             Name = name;
-            Editor = editor;
+            ParentMenu = menuBar;
             _actions = new();
+
+            InitializeBaseActions();
         }
 
         /// <summary>
@@ -76,10 +79,15 @@ namespace VTTiny.Editor.UI
             foreach (var action in _actions)
             {
                 if (ImGui.MenuItem(action.Name))
-                    action.Callback?.Invoke(Editor);
+                    action.Callback?.Invoke(ParentMenu.Editor);
             }
 
             ImGui.EndMenu();
         }
+
+        /// <summary>
+        /// Initializes all the base actions for this menu category.
+        /// </summary>
+        protected virtual void InitializeBaseActions() { }
     }
 }

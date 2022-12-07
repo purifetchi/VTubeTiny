@@ -4,10 +4,8 @@ using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Editor.Native;
-using VTTiny.Editor.Native.Win32;
 using VTTiny.Editor.UI;
 using VTTiny.Rendering;
-using VTTiny.Scenery;
 
 namespace VTTiny.Editor
 {
@@ -19,14 +17,23 @@ namespace VTTiny.Editor
         /// <summary>
         /// The current instance of VTubeTiny this editor is working with.
         /// </summary>
-        private VTubeTiny VTubeTiny { get; set; }
+        internal VTubeTiny VTubeTiny { get; set; }
 
         /// <summary>
         /// The rendering context of the window.
         /// </summary>
         private IRenderingContext RenderingContext { get; set; }
 
+        /// <summary>
+        /// The main menu bar.
+        /// </summary>
+        private readonly MenuBar _menuBar;
+
+        /// <summary>
+        /// The windows list.
+        /// </summary>
         private readonly List<EditorWindow> _windows;
+
         private bool _didLayoutEditorDocks = false;
         private bool _wasEditorListModified = false;
 
@@ -39,6 +46,7 @@ namespace VTTiny.Editor
             VTubeTiny = instance;
             RenderingContext = new GenericRaylibRenderingContext();
             _windows = new List<EditorWindow>();
+            _menuBar = new MenuBar(this);
         }
 
         /// <summary>
@@ -48,7 +56,6 @@ namespace VTTiny.Editor
         internal void AddWindow(EditorWindow window)
         {
             _windows.Add(window);
-
             _wasEditorListModified = true;
         }
 
@@ -87,7 +94,7 @@ namespace VTTiny.Editor
         /// </summary>
         /// <typeparam name="T">The type the window should derive from.</typeparam>
         /// <param name="callback">The callback.</param>
-        private void ForEachWindowOfType<T>(Action<T> callback)
+        internal void ForEachWindowOfType<T>(Action<T> callback)
         {
             foreach (var window in _windows)
             {
@@ -110,8 +117,19 @@ namespace VTTiny.Editor
 
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
+            InitializeMainMenuBar();
 
             _wasEditorListModified = false;
+        }
+
+        /// <summary>
+        /// Initializes the main menu bar.
+        /// </summary>
+        private void InitializeMainMenuBar()
+        {
+            _menuBar.AddCategory(new FileMenuCategory(_menuBar));
+            _menuBar.AddCategory(new ViewMenuCategory(_menuBar));
+            _menuBar.AddCategory(new AboutMenuCategory(_menuBar));
         }
 
         /// <summary>
@@ -120,14 +138,12 @@ namespace VTTiny.Editor
         public void Render()
         {
             RenderingContext.Begin();
-            Raylib.ClearBackground(Color.BLANK);
-
             rlImGui.Begin();
+            Raylib.ClearBackground(Color.BLANK);
 
             var dockId = ImGui.DockSpaceOverViewport();
 
-            DrawMainMenuBar();
-
+            _menuBar.Render();
             foreach (var window in _windows)
             {
                 window.Render();
@@ -143,78 +159,13 @@ namespace VTTiny.Editor
                 LayoutDockWindows(dockId);
 
             rlImGui.End();
-
             RenderingContext.End();
-        }
-
-        /// <summary>
-        /// Draws the main menu bar.
-        /// </summary>
-        private void DrawMainMenuBar()
-        {
-            if (ImGui.BeginMainMenuBar())
-            {
-                if (ImGui.BeginMenu("File"))
-                {
-                    if (ImGui.MenuItem("New stage"))
-                    {
-                        var stage = Stage.Blank();
-                        VTubeTiny.SetActiveStage(stage);
-
-                        ForEachWindowOfType<IStageAwareWindow>(window => window.OnStageChange(VTubeTiny.ActiveStage));
-                    }
-
-                    if (ImGui.MenuItem("Load stage"))
-                    {
-                        var path = FileDialog.OpenFile();
-                        if (string.IsNullOrEmpty(path))
-                            return;
-
-                        VTubeTiny.LoadConfigFromFile(path);
-                        VTubeTiny.ReloadStage();
-
-                        ForEachWindowOfType<IStageAwareWindow>(window => window.OnStageChange(VTubeTiny.ActiveStage));
-                    }
-
-                    if (ImGui.MenuItem("Save stage"))
-                    {
-                        var path = FileDialog.SaveFile();
-                        if (string.IsNullOrEmpty(path))
-                            return;
-
-                        VTubeTiny.ActiveStage.ExportStageToFile(path);
-                    }
-
-                    ImGui.EndMenu();
-                }
-
-                if (ImGui.BeginMenu("View"))
-                {
-                    if (ImGui.MenuItem("Reset UI"))
-                        LayoutDockWindows(ImGui.DockSpaceOverViewport());
-
-                    ImGui.EndMenu();
-                }
-
-                if (ImGui.BeginMenu("About"))
-                {
-                    if (ImGui.MenuItem("About VTubeTiny"))
-                    {
-                        if (GetWindow<AboutWindow>() == null)
-                            AddWindow(new AboutWindow(this));
-                    }
-
-                    ImGui.EndMenu();
-                }
-
-                ImGui.EndMainMenuBar();
-            }
         }
 
         /// <summary>
         /// Lays out the docked windows.
         /// </summary>
-        private void LayoutDockWindows(uint dockId)
+        public void LayoutDockWindows(uint dockId)
         {
             var editorDockId = ImGuiDockBuilder.SplitNode(dockId, ImGuiDir.Left, 0.8f, out uint _, out uint _);
             GetWindow<StagePropertiesWindow>().Dock(dockId);
