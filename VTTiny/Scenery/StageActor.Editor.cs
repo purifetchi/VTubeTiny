@@ -29,6 +29,9 @@ namespace VTTiny.Scenery
                 if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
                     TryReparent(newParent);
 
+                ImGui.Text($"Allows rendering: {AllowRendering}");
+                ImGui.NewLine();
+
                 DrawComponents();
 
                 if (EditorGUI.ComponentDropdown(out Type componentType))
