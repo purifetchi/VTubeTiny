@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VTTiny.Components;
 using VTTiny.Data;
 
 namespace VTTiny.Scenery
@@ -24,6 +25,10 @@ namespace VTTiny.Scenery
                     Console.WriteLine($"Couldn't instantiate component {componentConfig.Namespace}.{componentConfig.Type} in actor {Name}.");
                     continue;
                 }
+
+                // We should not instantiate the transform from the parameters, there's only one transform per actor.
+                if (type == typeof(TransformComponent))
+                    continue;
 
                 var component = ConstructComponentFromType(type);
                 component.InheritParametersFromConfig(componentConfig.Parameters);
