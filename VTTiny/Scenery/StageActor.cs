@@ -26,6 +26,11 @@ namespace VTTiny.Scenery
         public string Name { get; private set; }
 
         /// <summary>
+        /// Allow/disable rendering of this component.
+        /// </summary>
+        public bool AllowRendering { get; set; } = true;
+
+        /// <summary>
         /// The transform component attached to this actor.
         /// </summary>
         public TransformComponent Transform { get; private set; }
@@ -59,7 +64,7 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Render()
         {
-            if (_renderables.Count < 1)
+            if (_renderables.Count < 1 || !AllowRendering)
                 return;
 
             foreach (var component in _renderables)
