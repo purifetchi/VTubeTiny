@@ -20,6 +20,16 @@ namespace VTTiny.Editor
         private static string[] ComponentTypeCache { get; set; } = null;
 
         /// <summary>
+        /// This serves as a cache for all of the keycode names that Raylib can use.
+        /// </summary>
+        private static string[] KeyNameCache { get; set; } = null;
+
+        /// <summary>
+        /// This serves as a cache for all of the keycodes that Raylib can use.
+        /// </summary>
+        private static KeyboardKey[] KeyCache { get; set; } = null;
+
+        /// <summary>
         /// Stores the current component index for the combo box.
         /// </summary>
         private static int _comboBoxComponentIndex = 0;
@@ -27,6 +37,19 @@ namespace VTTiny.Editor
         static EditorGUI()
         {
             CollectComponents();
+            CollectKeyCodes();
+        }
+
+        /// <summary>
+        /// Collects all of the keycodes into the cache.
+        /// </summary>
+        private static void CollectKeyCodes()
+        {
+            KeyCache = Enum.GetValues<KeyboardKey>()
+                           .ToArray();
+
+            KeyNameCache = KeyCache.Select(key => key.ToString())
+                                   .ToArray();
         }
 
         /// <summary>
@@ -249,6 +272,20 @@ namespace VTTiny.Editor
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Creates a keycode dropdown gui element.
+        /// </summary>
+        /// <param name="key">The previous key.</param>
+        /// <returns>The new key.</returns>
+        public static KeyboardKey KeycodeDropdown(KeyboardKey key)
+        {
+            // Cast the current key into the index for the cache.
+            var index = Array.IndexOf(KeyCache, key);
+            ImGui.Combo(" ", ref index, KeyNameCache, KeyNameCache.Length);
+
+            return KeyCache[index];
         }
     }
 }
