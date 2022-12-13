@@ -4,11 +4,8 @@ namespace VTTiny.Editor.Native.Win32
 {
     /// <summary>
     /// This class wraps the Win32 methods for opening open/save file dialog boxes.
-    /// 
-    /// NOTE: So far this is the only FileDialog implementation we have, it'd be nice to have more cross platform solutions.
-    ///       PRs welcome.
     /// </summary>
-    public static class FileDialog
+    internal static class FileDialog
     {
         private const string COMDLG_LIBRARY_NAME = "comdlg32";
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using VTTiny.Editor.Native.Win32;
+using VTTiny.Editor.Native;
 using VTTiny.Scenery;
 
 namespace VTTiny.Editor.UI
