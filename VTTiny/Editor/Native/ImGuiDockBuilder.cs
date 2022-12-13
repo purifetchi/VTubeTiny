@@ -10,7 +10,9 @@ namespace VTTiny.Editor.Native
     /// </summary>
     internal static class ImGuiDockBuilder
     {
-        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+        private const string IMGUI_LIBRARY_NAME = "cimgui";
+
+        [DllImport(IMGUI_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern void igDockBuilderDockWindow([MarshalAs(UnmanagedType.LPStr)] string title, uint id);
 
         /// <summary>
@@ -23,7 +25,7 @@ namespace VTTiny.Editor.Native
             igDockBuilderDockWindow(title, id);
         }
 
-        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+        [DllImport(IMGUI_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern uint igDockBuilderSplitNode(uint nodeId, ImGuiDir dir, float ratio, out uint outIdAtDir, out uint outIdAtOpposite);
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace VTTiny.Editor.Native
             return igDockBuilderSplitNode(nodeId, dir, ratio, out idAtDir, out idAtOpposite);
         }
 
-        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+        [DllImport(IMGUI_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern void igDockBuilderFinish(uint nodeId);
 
         /// <summary>

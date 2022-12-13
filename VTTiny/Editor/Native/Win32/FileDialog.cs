@@ -10,7 +10,9 @@ namespace VTTiny.Editor.Native.Win32
     /// </summary>
     public static class FileDialog
     {
-        [DllImport("comdlg32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        private const string COMDLG_LIBRARY_NAME = "comdlg32";
+
+        [DllImport(COMDLG_LIBRARY_NAME, SetLastError = true, CharSet = CharSet.Auto)]
         private static extern bool GetOpenFileName(ref OpenFileName ofn);
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace VTTiny.Editor.Native.Win32
             return string.Empty;
         }
 
-        [DllImport("Comdlg32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport(COMDLG_LIBRARY_NAME, SetLastError = true, CharSet = CharSet.Auto)]
         private static extern bool GetSaveFileName(ref OpenFileName ofn);
 
         /// <summary>
