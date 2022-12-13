@@ -87,9 +87,7 @@ namespace VTTiny
         /// <param name="stage">The stage to set.</param>
         public void SetActiveStage(Stage stage)
         {
-            if (ActiveStage != null)
-                ActiveStage.Destroy();
-
+            ActiveStage?.Destroy();
             ActiveStage = stage;
         }
 
