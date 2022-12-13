@@ -11,7 +11,7 @@ VTubeTiny is a small VTuber/PNGTuber suite (written in C# and utilizing Raylib) 
 
 ## Requirements
 
-* .NET 5
+* .NET 6
 * Windows 7+ (64-bit)
 * A GPU that supports OpenGL ES 3.
 
