@@ -19,7 +19,7 @@ namespace VTTiny
             return new Vector2(vec.X, vec.Y);
         }
 
-        public static Vector2Int operator-(Vector2Int left, Vector2Int right)
+        public static Vector2Int operator -(Vector2Int left, Vector2Int right)
         {
             return new Vector2Int(left.X - right.X, left.Y - right.Y);
         }
@@ -36,7 +36,7 @@ namespace VTTiny
 
         public static bool operator ==(Vector2Int left, Vector2Int right)
         {
-            return left.X == right.X && 
+            return left.X == right.X &&
                    left.Y == right.Y;
         }
 
@@ -53,7 +53,7 @@ namespace VTTiny
 
         public override bool Equals(object obj)
         {
-            return obj is Vector2Int vec && 
+            return obj is Vector2Int vec &&
                    this == vec;
         }
 

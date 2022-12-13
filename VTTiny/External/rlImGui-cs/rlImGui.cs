@@ -11,13 +11,12 @@
 *
 ********************************************************************************************/
 
+using ImGuiNET;
+using Raylib_cs;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
-
-using Raylib_cs;
-using ImGuiNET;
 
 namespace rlImGui_cs
 {
@@ -135,7 +134,7 @@ namespace rlImGui_cs
             {
                 io.DisplaySize = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
             }
-            
+
             io.DisplayFramebufferScale = new Vector2(1, 1);
             io.DeltaTime = Raylib.GetFrameTime();
 
@@ -225,7 +224,7 @@ namespace rlImGui_cs
         private static void TriangleVert(ImDrawVertPtr idx_vert)
         {
             Vector4 color = ImGui.ColorConvertU32ToFloat4(idx_vert.col);
-            
+
             Rlgl.rlColor4f(color.X, color.Y, color.Z, color.W);
             Rlgl.rlTexCoord2f(idx_vert.uv.X, idx_vert.uv.Y);
             Rlgl.rlVertex2f(idx_vert.pos.X, idx_vert.pos.Y);

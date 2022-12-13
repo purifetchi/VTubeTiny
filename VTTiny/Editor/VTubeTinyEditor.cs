@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
+using System;
+using System.Collections.Generic;
 using VTTiny.Editor.Native;
 using VTTiny.Editor.UI;
 using VTTiny.Rendering;
@@ -64,7 +64,7 @@ namespace VTTiny.Editor
         /// </summary>
         /// <typeparam name="T">The type of the window (must derive from `VTTiny.Editor.UI.EditorWindow`.</typeparam>
         /// <returns>Either the window or null.</returns>
-        internal T GetWindow<T>() where T: EditorWindow
+        internal T GetWindow<T>() where T : EditorWindow
         {
             foreach (var window in _windows)
             {
@@ -101,7 +101,7 @@ namespace VTTiny.Editor
                 if (window is T type)
                     callback(type);
             }
-        } 
+        }
 
         /// <summary>
         /// Initializes the editor and all of the systems it needs.
@@ -147,7 +147,7 @@ namespace VTTiny.Editor
             foreach (var window in _windows)
             {
                 window.Render();
-                
+
                 if (_wasEditorListModified)
                 {
                     _wasEditorListModified = false;

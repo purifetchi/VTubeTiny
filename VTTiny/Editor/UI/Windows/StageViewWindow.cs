@@ -31,7 +31,7 @@ namespace VTTiny.Editor.UI
         /// Creates a new stage view for a given stage.
         /// </summary>
         /// <param name="stage">The stage to show.</param>
-        public StageViewWindow(Stage stage) 
+        public StageViewWindow(Stage stage)
             : base("Stage View", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize)
         {
             SetStage(stage);

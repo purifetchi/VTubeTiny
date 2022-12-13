@@ -27,7 +27,7 @@ namespace VTTiny.Components
         /// <typeparam name="T">The type of the config.</typeparam>
         /// <param name="parameters">The parameters JObject (supplied inside of InheritParametersFromConfig)</param>
         /// <returns>Either a blank default config if parameters was null, or the decoded config.</returns>
-        internal T JsonObjectToConfig<T>(JObject parameters) where T: new()
+        internal T JsonObjectToConfig<T>(JObject parameters) where T : new()
         {
             if (parameters != null)
                 return parameters.ToObject<T>();

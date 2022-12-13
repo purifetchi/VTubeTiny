@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using NAudio.CoreAudioApi;
+﻿using NAudio.CoreAudioApi;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
@@ -154,7 +154,7 @@ namespace VTTiny.Components
         internal override void InheritParametersFromConfig(JObject parameters)
         {
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
-            
+
             if (string.IsNullOrEmpty(config.Microphone))
                 SetMicrophoneByName(GetDefaultMicrophone());
 

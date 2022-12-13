@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Raylib_cs;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Raylib_cs;
 using VTTiny.Data;
 using VTTiny.Rendering;
 

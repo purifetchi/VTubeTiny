@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Raylib_cs;
+using System;
 using System.Collections.Generic;
-using Raylib_cs;
 using VTTiny.Components;
 
 namespace VTTiny.Scenery
@@ -115,7 +115,7 @@ namespace VTTiny.Scenery
         /// </summary>
         /// <typeparam name="T">The type of the component (Must derive from VTTiny.Components.Component).</typeparam>
         /// <returns>The new component.</returns>
-        public T AddComponent<T>() where T: Component, new()
+        public T AddComponent<T>() where T : Component, new()
         {
             var component = new T();
             InitializeComponent(component);
@@ -142,7 +142,7 @@ namespace VTTiny.Scenery
         /// </summary>
         /// <typeparam name="T">The type of the component (Must derive from VTTiny.Components.Component).</typeparam>
         /// <returns>Either null if not found, or the component.</returns>
-        public T GetComponent<T>() where T: Component
+        public T GetComponent<T>() where T : Component
         {
             foreach (var component in _components)
             {

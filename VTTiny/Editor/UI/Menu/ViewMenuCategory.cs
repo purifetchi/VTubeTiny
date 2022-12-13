@@ -16,7 +16,7 @@ namespace VTTiny.Editor.UI
         {
 
         }
-        
+
         protected override void InitializeBaseActions()
         {
             AddAction("Reset UI", editor =>
