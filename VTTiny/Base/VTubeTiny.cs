@@ -50,9 +50,16 @@ namespace VTTiny
             if (string.IsNullOrEmpty(path))
                 return;
 
-            var data = File.ReadAllText(path);
-            var config = JsonConvert.DeserializeObject<Config>(data);
-            Config = config;
+            try
+            {
+                var data = File.ReadAllText(path);
+                var config = JsonConvert.DeserializeObject<Config>(data);
+                Config = config;
+            }
+            catch
+            {
+                Console.WriteLine($"Couldn't load stage file {path}!");
+            }
         }
 
         /// <summary>
