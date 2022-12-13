@@ -45,8 +45,8 @@ namespace VTTiny.Editor
         {
             VTubeTiny = instance;
             RenderingContext = new GenericRaylibRenderingContext();
-            _windows = new List<EditorWindow>();
-            _menuBar = new MenuBar(this);
+            _windows = new();
+            _menuBar = new(this);
         }
 
         /// <summary>

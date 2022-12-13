@@ -59,8 +59,8 @@ namespace VTTiny.Scenery
             {
                 _actors = new(),
                 _timer = timer,
-                ClearColor = new Color(0, 255, 0, 255),
-                Dimensions = new Vector2Int { X = 800, Y = 480 },
+                ClearColor = new(0, 255, 0, 255),
+                Dimensions = new(800, 400),
                 RenderingContext = new GenericRaylibRenderingContext()
             };
         }

@@ -23,10 +23,10 @@ namespace VTTiny.Editor.Native.Win32
             };
 
 
-            ofn.file = new string(new char[256]);
+            ofn.file = new(new char[256]);
             ofn.maxFile = ofn.file.Length;
 
-            ofn.fileTitle = new string(new char[64]);
+            ofn.fileTitle = new(new char[64]);
             ofn.maxFileTitle = ofn.fileTitle.Length;
 
             return ofn;
