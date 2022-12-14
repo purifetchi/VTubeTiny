@@ -1,6 +1,7 @@
 ﻿using System;
 using VTTiny.Editor.Native;
 using VTTiny.Scenery;
+using VTTiny.Serialization;
 
 namespace VTTiny.Editor.UI
 {
@@ -46,7 +47,7 @@ namespace VTTiny.Editor.UI
                 if (string.IsNullOrEmpty(path))
                     return;
 
-                editor.VTubeTiny.ActiveStage.ExportStageToFile(path);
+                JsonSerializationHelper.ExportStageToFile(path, editor.VTubeTiny.ActiveStage);
             });
 
             AddAction("Quit", editor =>

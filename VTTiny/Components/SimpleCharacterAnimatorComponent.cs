@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
@@ -105,7 +105,7 @@ namespace VTTiny.Components
                 _renderer.Texture = null;
         }
 
-        internal override void InheritParametersFromConfig(JObject parameters)
+        internal override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<SimpleCharacterAnimatorConfig>(parameters);
             config.LoadStates(this);

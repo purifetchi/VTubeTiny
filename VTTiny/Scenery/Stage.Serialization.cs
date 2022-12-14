@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using VTTiny.Data;
 
 namespace VTTiny.Scenery
@@ -52,16 +50,6 @@ namespace VTTiny.Scenery
             config.Actors = actorList;
 
             return config;
-        }
-
-        /// <summary>
-        /// Exports this stage into a json file.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        internal void ExportStageToFile(string path)
-        {
-            var config = PackageStageIntoConfig();
-            File.WriteAllText(path, JsonConvert.SerializeObject(config));
         }
     }
 }

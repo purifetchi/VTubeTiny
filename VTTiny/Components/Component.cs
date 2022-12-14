@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 using VTTiny.Data;
 using VTTiny.Scenery;
+using VTTiny.Serialization;
 
 namespace VTTiny.Components
 {
@@ -27,10 +28,10 @@ namespace VTTiny.Components
         /// <typeparam name="T">The type of the config.</typeparam>
         /// <param name="parameters">The parameters JObject (supplied inside of InheritParametersFromConfig)</param>
         /// <returns>Either a blank default config if parameters was null, or the decoded config.</returns>
-        internal T JsonObjectToConfig<T>(JObject parameters) where T : new()
+        internal T JsonObjectToConfig<T>(JsonElement? parameters) where T : new()
         {
-            if (parameters != null)
-                return parameters.ToObject<T>();
+            if (parameters.HasValue)
+                return JsonSerializationHelper.JsonElementToType<T>(parameters.Value);
             return new T();
         }
 
@@ -48,7 +49,7 @@ namespace VTTiny.Components
 
             var parameters = PackageParametersIntoConfig();
             if (parameters != null)
-                config.Parameters = JObject.FromObject(parameters);
+                config.Parameters = JsonSerializationHelper.ObjectToJsonElement(parameters);
 
             return config;
         }
@@ -87,7 +88,7 @@ namespace VTTiny.Components
         /// Inherits parameters from the config file.
         /// </summary>
         /// <param name="parameters">The raw JObject containing the parameters.</param>
-        internal virtual void InheritParametersFromConfig(JObject parameters) { }
+        internal virtual void InheritParametersFromConfig(JsonElement? parameters) { }
 
         /// <summary>
         /// The method called whenever we're updating the editor GUI, called after the regular Update() when editor mode is on.

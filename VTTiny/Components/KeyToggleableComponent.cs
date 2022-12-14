@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 using Raylib_cs;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
@@ -18,7 +18,7 @@ namespace VTTiny.Components
                 Parent.AllowRendering = !Parent.AllowRendering;
         }
 
-        internal override void InheritParametersFromConfig(JObject parameters)
+        internal override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<KeyToggleableConfig>(parameters);
             ToggleKey = config.ToggleKey;

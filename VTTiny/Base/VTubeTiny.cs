@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using Raylib_cs;
-using System;
-using System.IO;
 using VTTiny.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
+using VTTiny.Serialization;
 
 namespace VTTiny
 {
@@ -52,8 +51,7 @@ namespace VTTiny
 
             try
             {
-                var data = File.ReadAllText(path);
-                var config = JsonConvert.DeserializeObject<Config>(data);
+                var config = JsonSerializationHelper.LoadConfigFromFile(path);
                 Config = config;
             }
             catch

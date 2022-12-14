@@ -1,7 +1,7 @@
-﻿using NAudio.CoreAudioApi;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
+using System.Text.Json;
+using NAudio.CoreAudioApi;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
@@ -151,7 +151,7 @@ namespace VTTiny.Components
             DestroyWasapiContexts();
         }
 
-        internal override void InheritParametersFromConfig(JObject parameters)
+        internal override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
 

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 
 namespace VTTiny.Data
 {
@@ -9,6 +9,6 @@ namespace VTTiny.Data
     {
         public string Namespace { get; set; } = "VTTiny.Components";
         public string Type { get; set; }
-        public JObject Parameters { get; set; }
+        public JsonElement? Parameters { get; set; }
     }
 }
