@@ -84,7 +84,7 @@ using Raylib_cs;
 
 namespace VTTiny.Components
 {
-    public class RectangleRendererComponent : Component
+    public class RectangleRendererComponent : RendererComponent
     {
     	// This is called every frame, after the Update() call.
         public override void Render()
@@ -109,7 +109,7 @@ using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
-    public class RectangleRendererComponent : Component
+    public class RectangleRendererComponent : RendererComponent
     {
         public Vector2Int Dimensions { get; set; }
 
