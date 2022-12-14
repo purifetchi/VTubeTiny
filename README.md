@@ -133,7 +133,6 @@ Now, if we were to attach this component to an actor and enter editor mode, the 
 
 ## Future Goals
 * Proper cross-platform support.
-* Getting rid of Newtonsoft.JSON to reduce RAM usage.
 * More components!
 
 ## Contributing Guide
