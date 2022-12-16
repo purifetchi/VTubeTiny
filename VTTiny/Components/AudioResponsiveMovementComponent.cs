@@ -139,7 +139,10 @@ namespace VTTiny.Components
                 Parent.Transform.LocalPosition = clone;
 
                 if (_jumpTimer.TimeElapsed >= Math.PI / JumpSpeedMultiplier)
+                {
+                    Parent.Transform.LocalPosition = _basePos;
                     _jump = false;
+                }
             }
 
             if (_character != null)
