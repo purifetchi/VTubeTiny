@@ -33,6 +33,11 @@ namespace VTTiny
         /// </summary>
         public uint Id => BackingTexture.id;
 
+        /// <summary>
+        /// The current filtering mode for this texture.
+        /// </summary>
+        public TextureFilter FilteringMode { get; private set; } = TextureFilter.TEXTURE_FILTER_POINT;
+
         private bool _disposedValue;
 
         /// <summary>
@@ -60,6 +65,19 @@ namespace VTTiny
         {
             BackingTexture = Raylib.LoadTexture(path);
             Path = path;
+        }
+
+        /// <summary>
+        /// Sets the filtering mode for this texture.
+        /// </summary>
+        /// <param name="filter">The filtering mode for this texture.</param>
+        public void SetTextureFilterMode(TextureFilter filter)
+        {
+            if (FilteringMode == filter)
+                return;
+
+            Raylib.SetTextureFilter(BackingTexture, filter);
+            FilteringMode = filter;
         }
 
         protected virtual void Dispose(bool disposing)
