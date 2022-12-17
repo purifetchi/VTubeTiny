@@ -90,7 +90,7 @@ namespace VTTiny.Editor.UI
             var renderer = actor.AddComponent<TextureRendererComponent>();
 
             var texture = new Texture(path);
-            renderer.Texture = texture;
+            renderer.SetTexture(texture);
 
             // Offset the mouse cursor by half of the texture's size, putting the actor's center
             // at the position of the mouse.

@@ -89,10 +89,10 @@ namespace VTTiny.Components
             }
 
             if (IsSpeaking && !_isBlinking)
-                _renderer.Texture = _speaking;
+                _renderer.SetTexture(_speaking);
 
             else
-                _renderer.Texture = _isBlinking ? _blinking : _idle;
+                _renderer.SetTexture(_isBlinking ? _blinking : _idle);
         }
 
         public override void Destroy()
@@ -102,7 +102,7 @@ namespace VTTiny.Components
             _speaking?.Dispose();
 
             if (_renderer != null)
-                _renderer.Texture = null;
+                _renderer.SetTexture(null);
         }
 
         internal override void InheritParametersFromConfig(JsonElement? parameters)

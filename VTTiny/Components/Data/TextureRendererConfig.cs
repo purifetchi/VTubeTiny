@@ -8,5 +8,6 @@ namespace VTTiny.Components.Data
         public Color Tint { get; set; } = Color.WHITE;
         public float Rotation { get; set; } = 0f;
         public float Scale { get; set; } = 1f;
+        public bool ForceBilinearFiltering { get; set; } = false;
     }
 }
