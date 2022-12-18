@@ -1,4 +1,5 @@
-﻿using VTTiny.Serialization;
+﻿using VTTiny.Assets.Management;
+using VTTiny.Serialization;
 
 namespace VTTiny.Assets
 {
@@ -16,6 +17,21 @@ namespace VTTiny.Assets
         /// The name of this asset.
         /// </summary>
         public string Name { get; internal set; }
+
+        /// <summary>
+        /// Constructs a reference to this asset.
+        /// </summary>
+        /// <typeparam name="T">The type of the asset.</typeparam>
+        /// <returns>The reference.</returns>
+        public AssetReference<T> ToAssetReference<T>() where T : Asset
+        {
+            var reference = new AssetReference<T>
+            {
+                Id = Id
+            };
+
+            return reference;
+        }
 
         /// <summary>
         /// Renders the editor gui for this asset.
