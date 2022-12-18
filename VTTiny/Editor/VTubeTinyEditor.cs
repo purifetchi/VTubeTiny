@@ -117,6 +117,7 @@ namespace VTTiny.Editor
 
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
+            AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;
@@ -167,10 +168,12 @@ namespace VTTiny.Editor
         /// </summary>
         public void LayoutDockWindows(uint dockId)
         {
-            var editorDockId = ImGuiDockBuilder.SplitNode(dockId, ImGuiDir.Left, 0.8f, out uint _, out uint _);
-            GetWindow<StagePropertiesWindow>().Dock(dockId);
+            ImGuiDockBuilder.SplitNode(dockId, ImGuiDir.Left, 0.8f, out uint editorDockId, out uint settingsDockId);
+            ImGuiDockBuilder.SplitNode(settingsDockId, ImGuiDir.Down, 0.4f, out uint assetBrowserDockId, out uint propsDockId);
+
+            GetWindow<StagePropertiesWindow>().Dock(propsDockId);
             GetWindow<StageViewWindow>().Dock(editorDockId);
-            ImGuiDockBuilder.Finish(dockId);
+            GetWindow<AssetBrowserWindow>().Dock(assetBrowserDockId);
 
             _didLayoutEditorDocks = true;
         }
