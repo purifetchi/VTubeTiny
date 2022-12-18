@@ -1,5 +1,7 @@
 ﻿using System;
 using VTTiny.Data;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace VTTiny.Assets.Management
 {
@@ -36,7 +38,16 @@ namespace VTTiny.Assets.Management
         /// <returns>The asset database config.</returns>
         public AssetDatabaseConfig PackageIntoConfig()
         {
-            return new AssetDatabaseConfig();
+            var config = new AssetDatabaseConfig
+            {
+                LastId = _assets.Count > 0 ? _assets.Keys.Max() : -1,
+                Assets = new Dictionary<int, TypedObjectConfig>()
+            };
+
+            foreach (var asset in GetAssets())
+                config.Assets.Add(asset.Id, asset.PackageIntoConfig());
+
+            return config;
         }
     }
 }

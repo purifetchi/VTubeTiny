@@ -48,6 +48,7 @@ namespace VTTiny.Scenery
                 actorList.Add(actor.PackageActorIntoConfig());
 
             config.Actors = actorList;
+            config.AssetDatabase = AssetDatabase.PackageIntoConfig();
 
             return config;
         }
