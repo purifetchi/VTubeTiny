@@ -30,7 +30,8 @@ namespace VTTiny.Serialization
             var config = new TypedObjectConfig
             {
                 Type = GetType().Name,
-                Namespace = GetType().Namespace
+                Namespace = GetType().Namespace,
+                Name = GetNameForSerialization()
             };
 
             var parameters = PackageParametersIntoConfig();
@@ -39,6 +40,12 @@ namespace VTTiny.Serialization
 
             return config;
         }
+
+        /// <summary>
+        /// Gets the name for the serialization.
+        /// </summary>
+        /// <returns>The name.</returns>
+        protected virtual string GetNameForSerialization() { return null; }
 
         /// <summary>
         /// Packages this component's parameters into a config class for exporting.

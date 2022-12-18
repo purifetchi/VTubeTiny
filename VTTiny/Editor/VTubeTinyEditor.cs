@@ -115,9 +115,10 @@ namespace VTTiny.Editor
             Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
             Raylib.MaximizeWindow();
 
+            AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
-            AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
+            
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;

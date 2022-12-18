@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VTTiny.Data;
 
 namespace VTTiny.Assets.Management
@@ -9,6 +10,11 @@ namespace VTTiny.Assets.Management
     /// </summary>
     public partial class AssetDatabase
     {
+        /// <summary>
+        /// The amount of assets.
+        /// </summary>
+        public int AssetCount => _assets.Count;
+
         /// <summary>
         /// The config.
         /// </summary>
@@ -123,6 +129,18 @@ namespace VTTiny.Assets.Management
         public IEnumerable<Asset> GetAssets()
         {
             return _assets.Values;
+        }
+
+        /// <summary>
+        /// Gets all assets of a specific type.
+        /// </summary>
+        /// <typeparam name="T">The type of the assets.</typeparam>
+        /// <returns>All of the assets of a specific type.</returns>
+        public IEnumerable<T> GetAllAssetsOfType<T>() where T : Asset
+        {
+            return _assets.Where(pair => pair.Value is T)
+                          .OrderBy(pair => pair.Key)
+                          .Select(pair => pair.Value as T);
         }
 
         /// <summary>

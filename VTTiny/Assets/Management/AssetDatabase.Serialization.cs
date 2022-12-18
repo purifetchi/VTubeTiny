@@ -28,6 +28,8 @@ namespace VTTiny.Assets.Management
                 }
 
                 var asset = CreateAssetFromType(assetType, item.Key);
+                asset.Name = assetConfig.Name;
+
                 asset.InheritParametersFromConfig(assetConfig.Parameters);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using VTTiny.Assets;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
@@ -97,12 +98,7 @@ namespace VTTiny.Components
 
         public override void Destroy()
         {
-            _idle?.Dispose();
-            _blinking?.Dispose();
-            _speaking?.Dispose();
-
-            if (_renderer != null)
-                _renderer.SetTexture(null);
+            _renderer?.SetTexture(null);
         }
 
         internal override void InheritParametersFromConfig(JsonElement? parameters)
@@ -119,23 +115,14 @@ namespace VTTiny.Components
             BlinkEvery = EditorGUI.DragFloat("Blink every", BlinkEvery);
             BlinkLength = EditorGUI.DragFloat("Blink length", BlinkLength);
 
-            if (EditorGUI.DragAndDropTextureButton("Idle", _idle, out Texture newIdle))
-            {
-                _idle?.Dispose();
+            if (EditorGUI.AssetDropdown("Idle", Parent.OwnerStage.AssetDatabase, _idle, out Texture newIdle))
                 _idle = newIdle;
-            }
 
-            if (EditorGUI.DragAndDropTextureButton("Blinking", _blinking, out Texture newBlinking))
-            {
-                _blinking?.Dispose();
+            if (EditorGUI.AssetDropdown("Blinking", Parent.OwnerStage.AssetDatabase, _blinking, out Texture newBlinking))
                 _blinking = newBlinking;
-            }
 
-            if (EditorGUI.DragAndDropTextureButton("Speaking", _speaking, out Texture newSpeaking))
-            {
-                _speaking?.Dispose();
+            if (EditorGUI.AssetDropdown("Speaking", Parent.OwnerStage.AssetDatabase, _speaking, out Texture newSpeaking))
                 _speaking = newSpeaking;
-            }
         }
 
         protected override object PackageParametersIntoConfig()
@@ -145,9 +132,9 @@ namespace VTTiny.Components
                 BlinkEvery = BlinkEvery,
                 BlinkLength = BlinkLength,
 
-                Idle = _idle?.Path,
-                Blinking = _blinking?.Path,
-                Speaking = _speaking?.Path
+                Idle = _idle?.ToAssetReference<Texture>(),
+                Blinking = _blinking?.ToAssetReference<Texture>(),
+                Speaking = _speaking?.ToAssetReference<Texture>()
             };
         }
     }

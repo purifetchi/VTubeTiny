@@ -1,12 +1,15 @@
 ﻿using Raylib_cs;
 using System;
+using System.Text.Json;
+using VTTiny.Assets.Data;
+using VTTiny.Editor;
 
-namespace VTTiny
+namespace VTTiny.Assets
 {
     /// <summary>
     /// A wrapper around Raylib's Texture2D class that can auto-manage its lifetime.
     /// </summary>
-    public class Texture : IDisposable
+    public class Texture : Asset, IDisposable
     {
         /// <summary>
         /// The actual Raylib texture.
@@ -31,7 +34,7 @@ namespace VTTiny
         /// <summary>
         /// The internal id of this texture.
         /// </summary>
-        public uint Id => BackingTexture.id;
+        public uint TextureId => BackingTexture.id;
 
         /// <summary>
         /// The current filtering mode for this texture.
@@ -39,15 +42,6 @@ namespace VTTiny
         public TextureFilter FilteringMode { get; private set; } = TextureFilter.TEXTURE_FILTER_POINT;
 
         private bool _disposedValue;
-
-        /// <summary>
-        /// Constructs a texture loading it from a path.
-        /// </summary>
-        /// <param name="path">The path to the texture.</param>
-        public Texture(string path)
-        {
-            LoadTexture(path);
-        }
 
         /// <summary>
         /// The destructor, automatically frees the texture.
@@ -61,7 +55,7 @@ namespace VTTiny
         /// Loads a texture from a given path.
         /// </summary>
         /// <param name="path">The path to the texture.</param>
-        private void LoadTexture(string path)
+        public void LoadTextureFromFile(string path)
         {
             BackingTexture = Raylib.LoadTexture(path);
             Path = path;
@@ -93,6 +87,36 @@ namespace VTTiny
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public override void Destroy()
+        {
+            Dispose();
+        }
+
+        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        {
+            var config = JsonObjectToConfig<TextureConfig>(parameters);
+            LoadTextureFromFile(config.Path);
+        }
+
+        protected override object PackageParametersIntoConfig()
+        {
+            return new TextureConfig
+            {
+                Path = Path
+            };
+        }
+
+        public override void RenderAssetPreview()
+        {
+            EditorGUI.ImageButton(this, 100, 100);
+        }
+
+        protected override void InternalRenderEditorGUI()
+        {
+            var isBilinear = EditorGUI.Checkbox("Bilinear Filtering", FilteringMode == TextureFilter.TEXTURE_FILTER_BILINEAR);
+            SetTextureFilterMode(isBilinear ? TextureFilter.TEXTURE_FILTER_BILINEAR : TextureFilter.TEXTURE_FILTER_POINT);
         }
     }
 }

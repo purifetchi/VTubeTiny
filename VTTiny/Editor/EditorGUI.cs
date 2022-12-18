@@ -1,9 +1,11 @@
-﻿using ImGuiNET;
-using Raylib_cs;
-using System;
+﻿using System;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using ImGuiNET;
+using Raylib_cs;
+using VTTiny.Assets;
+using VTTiny.Assets.Management;
 using VTTiny.Components;
 
 namespace VTTiny.Editor
@@ -157,45 +159,7 @@ namespace VTTiny.Editor
         {
             if (texture == null)
                 return ImGui.Button("No Image", new Vector2(x, y));
-            return ImGui.ImageButton(new IntPtr(texture.Id), new Vector2(x, y));
-        }
-
-        /// <summary>
-        /// Creates a texture button that can be dropped onto.
-        /// </summary>
-        /// <param name="label">The label for the button.</param>
-        /// <param name="originalTexture">The original texture, or null.</param>
-        /// <param name="dimensions">The dimensions of the button.</param>
-        /// <param name="newTexture">The new texture, if one was dropped.</param>
-        /// <returns>Whether we had a new texture dropped.</returns>
-        public static bool DragAndDropTextureButton(string label, Texture originalTexture, Vector2Int dimensions, out Texture newTexture)
-        {
-            Text(label);
-
-            ImageButton(originalTexture, dimensions.X, dimensions.Y);
-            if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Drag and drop an image onto this button!");
-
-            if (AcceptFileDrop(out string path))
-            {
-                newTexture = new Texture(path);
-                return true;
-            }
-
-            newTexture = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Creates a texture button that can be dropped onto.
-        /// </summary>
-        /// <param name="label">The label for the button.</param>
-        /// <param name="originalTexture">The original texture, or null.</param>
-        /// <param name="newTexture">The new texture, if one was dropped.</param>
-        /// <returns>Whether we had a new texture dropped.</returns>
-        public static bool DragAndDropTextureButton(string label, Texture originalTexture, out Texture newTexture)
-        {
-            return DragAndDropTextureButton(label, originalTexture, new Vector2Int(100, 100), out newTexture);
+            return ImGui.ImageButton(new IntPtr(texture.TextureId), new Vector2(x, y));
         }
 
         /// <summary>
@@ -264,6 +228,40 @@ namespace VTTiny.Editor
                     if (ImGui.Selectable(actor.Name, actor == currentSelectedActor))
                     {
                         newSelectedActor = actor;
+                        return true;
+                    }
+                }
+
+                ImGui.EndCombo();
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Shows a dropdown for all assets of a type.
+        /// </summary>
+        /// <typeparam name="T">The type of the asset.</typeparam>
+        /// <param name="label">The label to display.</param>
+        /// <param name="database">The asset database.</param>
+        /// <param name="currentAsset">The current asset.</param>
+        /// <param name="newAsset">The new asset, if selected.</param>
+        /// <returns>Whether we've selected a new asset.</returns>
+        public static bool AssetDropdown<T>(string label, AssetDatabase database, T currentAsset, out T newAsset) where T : Asset
+        {
+            newAsset = default;
+
+            currentAsset?.RenderAssetPreview();
+            if (ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}"))
+            {
+                if (ImGui.Selectable("None", currentAsset == null))
+                    return true;
+
+                foreach (var asset in database.GetAllAssetsOfType<T>())
+                {
+                    if (ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
+                    {
+                        newAsset = asset;
                         return true;
                     }
                 }

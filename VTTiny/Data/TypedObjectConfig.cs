@@ -10,6 +10,7 @@ namespace VTTiny.Data
     {
         public string Namespace { get; set; } = "VTTiny.Components";
         public string Type { get; set; }
+        public string Name { get; set; }
         public JsonElement? Parameters { get; set; }
 
         /// <summary>

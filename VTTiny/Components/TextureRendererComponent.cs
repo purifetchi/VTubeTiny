@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ImGuiNET;
 using Raylib_cs;
+using VTTiny.Assets;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 
@@ -29,23 +30,11 @@ namespace VTTiny.Components
         public float Scale { get; set; } = 1f;
 
         /// <summary>
-        /// Whether to force bilinear filtering on textures.
-        /// </summary>
-        public bool ForceBilinearFiltering { get; set; } = false;
-
-        /// <summary>
         /// Set the texture for this texture renderer.
         /// </summary>
         /// <param name="texture">The texture to set.</param>
         public void SetTexture(Texture texture)
         {
-            if (texture == null)
-            {
-                Texture = null;
-                return;
-            }
-
-            texture.SetTextureFilterMode(ForceBilinearFiltering ? TextureFilter.TEXTURE_FILTER_BILINEAR : TextureFilter.TEXTURE_FILTER_POINT);
             Texture = texture;
         }
 
@@ -55,14 +44,6 @@ namespace VTTiny.Components
                 return;
 
             Raylib.DrawTextureEx(Texture.BackingTexture, Parent.Transform.Position, Rotation, Scale, Tint);
-        }
-
-        public override void Destroy()
-        {
-            if (Texture == null)
-                return;
-
-            Texture.Dispose();
         }
 
         public override Rectangle GetBoundingBox()
@@ -80,21 +61,16 @@ namespace VTTiny.Components
             Tint = config.Tint;
             Rotation = config.Rotation;
             Scale = config.Scale;
-            ForceBilinearFiltering = config.ForceBilinearFiltering;
 
-            if (!string.IsNullOrEmpty(config.Image))
-                SetTexture(new Texture(config.Image));
+            if (config.Image.HasValue)
+                SetTexture(config.Image.Value.Resolve(Parent.OwnerStage.AssetDatabase));
         }
 
         internal override void RenderEditorGUI()
         {
-            if (EditorGUI.DragAndDropTextureButton("Texture", Texture, out Texture newTexture))
-            {
-                Texture?.Dispose();
+            if (EditorGUI.AssetDropdown("Texture", Parent.OwnerStage.AssetDatabase, Texture, out Texture newTexture))
                 SetTexture(newTexture);
-            }
 
-            ForceBilinearFiltering = EditorGUI.Checkbox("Force bilinear filtering", ForceBilinearFiltering);
             Tint = EditorGUI.ColorEdit("Tint", Tint);
             Rotation = EditorGUI.DragFloat("Rotation", Rotation);
             Scale = EditorGUI.DragFloat("Scale", Scale, 0.005f);
@@ -107,11 +83,10 @@ namespace VTTiny.Components
         {
             return new TextureRendererConfig
             {
-                Image = Texture?.Path,
+                Image = Texture?.ToAssetReference<Texture>(),
                 Tint = Tint,
                 Rotation = Rotation,
-                Scale = Scale,
-                ForceBilinearFiltering = ForceBilinearFiltering
+                Scale = Scale
             };
         }
     }

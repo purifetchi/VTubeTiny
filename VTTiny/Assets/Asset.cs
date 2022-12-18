@@ -1,4 +1,5 @@
-﻿using VTTiny.Assets.Management;
+﻿using ImGuiNET;
+using VTTiny.Assets.Management;
 using VTTiny.Serialization;
 
 namespace VTTiny.Assets
@@ -36,11 +37,51 @@ namespace VTTiny.Assets
         /// <summary>
         /// Renders the editor gui for this asset.
         /// </summary>
-        public virtual void RenderEditorGUI() { }
+        /// <returns>Whether we've modified the asset database collection (e.g. by removing an item).</returns>
+        public bool RenderEditorGUI(AssetDatabase database) 
+        {
+            ImGui.PushID($"{GetHashCode()}");
+
+            if (ImGui.TreeNode(Name ?? Id.ToString()))
+            {
+                ImGui.Text("Asset Preview");
+                RenderAssetPreview();
+
+                ImGui.NewLine();
+
+                ImGui.Text("Asset Settings");
+                InternalRenderEditorGUI();
+
+                if (ImGui.Button("Remove asset"))
+                {
+                    database.RemoveAsset(this);
+                    return true;
+                }
+
+                ImGui.TreePop();
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Renders the asset-specific editor gui.
+        /// </summary>
+        protected virtual void InternalRenderEditorGUI() { }
+
+        /// <summary>
+        /// Renders the preview for this asset.
+        /// </summary>
+        public virtual void RenderAssetPreview() { }
 
         /// <summary>
         /// Destroys this asset and frees all things associated with it.
         /// </summary>
         public virtual void Destroy() { }
+
+        protected override string GetNameForSerialization()
+        {
+            return Name;
+        }
     }
 }

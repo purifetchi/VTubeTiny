@@ -1,6 +1,8 @@
-﻿using ImGuiNET;
+﻿using System.IO;
+using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
+using VTTiny.Assets;
 using VTTiny.Components;
 using VTTiny.Rendering;
 using VTTiny.Scenery;
@@ -89,7 +91,10 @@ namespace VTTiny.Editor.UI
             var actor = Stage.CreateActor();
             var renderer = actor.AddComponent<TextureRendererComponent>();
 
-            var texture = new Texture(path);
+            var texture = Stage.AssetDatabase.CreateAsset<Texture>();
+            texture.Name = Path.GetFileName(path);
+            texture.LoadTextureFromFile(path);
+
             renderer.SetTexture(texture);
 
             // Offset the mouse cursor by half of the texture's size, putting the actor's center
