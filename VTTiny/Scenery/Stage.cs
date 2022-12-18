@@ -1,6 +1,7 @@
 ﻿using Raylib_cs;
 using System.Collections.Generic;
 using System.Diagnostics;
+using VTTiny.Assets.Management;
 using VTTiny.Data;
 using VTTiny.Rendering;
 
@@ -11,6 +12,11 @@ namespace VTTiny.Scenery
     /// </summary>
     public partial class Stage
     {
+        /// <summary>
+        /// The asset database for this stage.
+        /// </summary>
+        public AssetDatabase AssetDatabase { get; private set; }
+
         /// <summary>
         /// The dimensions of this stage.
         /// </summary>
@@ -61,7 +67,8 @@ namespace VTTiny.Scenery
                 _timer = timer,
                 ClearColor = new(0, 255, 0, 255),
                 Dimensions = new(800, 400),
-                RenderingContext = new GenericRaylibRenderingContext()
+                RenderingContext = new GenericRaylibRenderingContext(),
+                AssetDatabase = new()
             };
         }
 
@@ -74,6 +81,8 @@ namespace VTTiny.Scenery
         {
             if (config == null)
                 return this;
+
+            AssetDatabase.LoadConfig(config);
 
             ResizeStage(config.Dimensions);
 
