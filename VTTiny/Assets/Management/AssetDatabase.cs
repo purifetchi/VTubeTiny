@@ -124,5 +124,16 @@ namespace VTTiny.Assets.Management
         {
             return _assets.Values;
         }
+
+        /// <summary>
+        /// Destroys this asset database.
+        /// </summary>
+        public void Destroy()
+        {
+            foreach (var asset in GetAssets())
+                asset.Destroy();
+
+            _assets.Clear();
+        }
     }
 }

@@ -223,6 +223,9 @@ namespace VTTiny.Scenery
                 actor.Destroy();
 
             _actors.Clear();
+
+            AssetDatabase.Destroy();
+            AssetDatabase = null;
         }
     }
 }
