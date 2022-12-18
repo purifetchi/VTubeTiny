@@ -98,13 +98,15 @@ namespace VTTiny.Assets
         {
             var config = JsonObjectToConfig<TextureConfig>(parameters);
             LoadTextureFromFile(config.Path);
+            SetTextureFilterMode(config.FilteringMode);
         }
 
         protected override object PackageParametersIntoConfig()
         {
             return new TextureConfig
             {
-                Path = Path
+                Path = Path,
+                FilteringMode = FilteringMode
             };
         }
 
