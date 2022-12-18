@@ -10,27 +10,21 @@ namespace VTTiny.Assets
         /// <summary>
         /// The ID of this asset.
         /// </summary>
-        public int Id { get; private set; }
+        public int Id { get; internal set; }
 
         /// <summary>
         /// The name of this asset.
         /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// Creates a new asset.
-        /// </summary>
-        /// <param name="id">The asset id.</param>
-        /// <param name="name">The asset's name.</param>
-        public Asset(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// Renders the editor gui for this asset.
         /// </summary>
         public virtual void RenderEditorGUI() { }
+
+        /// <summary>
+        /// Destroys this asset and frees all things associated with it.
+        /// </summary>
+        public virtual void Destroy() { }
     }
 }

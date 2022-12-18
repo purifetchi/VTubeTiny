@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using VTTiny.Assets.Management;
+using VTTiny.Data;
 
 namespace VTTiny.Assets.Management
 {
@@ -9,6 +9,11 @@ namespace VTTiny.Assets.Management
     /// </summary>
     public partial class AssetDatabase
     {
+        /// <summary>
+        /// The config.
+        /// </summary>
+        private AssetDatabaseConfig _config;
+
         /// <summary>
         /// The asset database.
         /// </summary>
@@ -27,7 +32,71 @@ namespace VTTiny.Assets.Management
         public AssetDatabase()
         {
             _assets = new();
-            _idAllocator = new();
+            _idAllocator = new(() => new AssetIdAllocator(_config?.LastId ?? -1));
+        }
+
+        /// <summary>
+        /// Creates a new asset of a type.
+        /// </summary>
+        /// <typeparam name="T">The type of the asset.</typeparam>
+        /// <returns>The asset.</returns>
+        public T CreateAsset<T>() where T : Asset, new()
+        {
+            var id = _idAllocator.Value.AllocateId();
+            return CreateAsset<T>(id);
+        }
+
+        /// <summary>
+        /// Creates a new asset of a type with a specified id.
+        /// </summary>
+        /// <typeparam name="T">The type of the asset.</typeparam>
+        /// <param name="id">The id of the asset.</param>
+        /// <returns>The asset.</returns>
+        private T CreateAsset<T>(int id) where T : Asset, new()
+        {
+            var asset = new T
+            {
+                Id = id,
+                Name = $"{typeof(T).Name} ({id})"
+            };
+
+            _assets[id] = asset;
+            return asset;
+        }
+
+        /// <summary>
+        /// Creates an asset from its type class and its id.
+        /// </summary>
+        /// <param name="assetType">The type of the asset.</param>
+        /// <param name="id">The id of the asset.</param>
+        /// <returns>The asset.</returns>
+        private Asset CreateAssetFromType(Type assetType, int id)
+        {
+            var ctor = assetType.GetConstructor(Array.Empty<Type>());
+            var asset = (Asset)ctor.Invoke(Array.Empty<object>());
+
+            asset.Id = id;
+            _assets[id] = asset;
+
+            return asset;
+        }
+
+        /// <summary>
+        /// Removes an asset.
+        /// </summary>
+        /// <param name="asset">The asset to remove.</param>
+        public bool RemoveAsset(Asset asset)
+        {
+            if (asset == null)
+                return false;
+
+            if (!_assets.ContainsKey(asset.Id))
+                return false;
+
+            _idAllocator.Value.FreeId(asset.Id);
+            asset.Destroy();
+
+            return _assets.Remove(asset.Id);            
         }
 
         /// <summary>
@@ -51,9 +120,9 @@ namespace VTTiny.Assets.Management
         /// Gets all of the assets.
         /// </summary>
         /// <returns>The assets.</returns>
-        public IEnumerable<KeyValuePair<int, Asset>> GetAssets()
+        public IEnumerable<Asset> GetAssets()
         {
-            return _assets;
+            return _assets.Values;
         }
     }
 }

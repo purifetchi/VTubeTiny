@@ -1,4 +1,5 @@
-﻿using VTTiny.Data;
+﻿using System;
+using VTTiny.Data;
 
 namespace VTTiny.Assets.Management
 {
@@ -10,7 +11,23 @@ namespace VTTiny.Assets.Management
         /// <param name="config">The config to load from.</param>
         public void LoadConfig(Config config)
         {
+            _config = config.AssetDatabase;
+            if (_config == null || _config.Assets == null)
+                return;
 
+            foreach (var item in _config.Assets)
+            {
+                // Resolve this assets type.
+                var assetConfig = item.Value;
+                if (!assetConfig.TryResolveType<Asset>(out Type assetType))
+                {
+                    Console.WriteLine($"Couldn't resolve asset type for {assetConfig.Namespace}.{assetConfig.Type}");
+                    continue;
+                }
+
+                var asset = CreateAssetFromType(assetType, item.Key);
+                asset.InheritParametersFromConfig(assetConfig.Parameters);
+            }
         }
 
         /// <summary>

@@ -13,5 +13,6 @@ namespace VTTiny.Data
         public int FPSLimit { get; set; } = 60;
 
         public IList<ActorConfig> Actors { get; set; }
+        public AssetDatabaseConfig AssetDatabase { get; set; }
     }
 }

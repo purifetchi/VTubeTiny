@@ -20,9 +20,10 @@ namespace VTTiny.Assets.Management
         /// <summary>
         /// Create a new asset id allocator.
         /// </summary>
-        public AssetIdAllocator()
+        public AssetIdAllocator(int lastId = -1)
         {
             _freeIds = new();
+            _lastUsedId = lastId;
         }
 
         /// <summary>

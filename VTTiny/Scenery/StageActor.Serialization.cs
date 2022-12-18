@@ -18,9 +18,7 @@ namespace VTTiny.Scenery
 
             foreach (var componentConfig in componentConfigs)
             {
-                // Get the type of the constructor, which .NET expects as {namespace}.{type}
-                var type = Type.GetType($"{componentConfig.Namespace}.{componentConfig.Type}");
-                if (type == null)
+                if (!componentConfig.TryResolveType<Component>(out Type type))
                 {
                     Console.WriteLine($"Couldn't instantiate component {componentConfig.Namespace}.{componentConfig.Type} in actor {Name}.");
                     continue;
