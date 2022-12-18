@@ -11,6 +11,6 @@ namespace VTTiny.Data
         public string ParentActorName { get; set; } = "";
         public Vector2Int Position { get; set; } = new(0, 0);
 
-        public IList<ComponentConfig> Components { get; set; }
+        public IList<TypedObjectConfig> Components { get; set; }
     }
 }

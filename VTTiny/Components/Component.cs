@@ -1,11 +1,10 @@
 ﻿using System.Text.Json;
-using VTTiny.Data;
 using VTTiny.Scenery;
 using VTTiny.Serialization;
 
 namespace VTTiny.Components
 {
-    public abstract class Component
+    public abstract class Component : TypedSerializedObject
     {
         /// <summary>
         /// Parent actor of this component.
@@ -20,38 +19,6 @@ namespace VTTiny.Components
         public T GetComponent<T>() where T : Component
         {
             return Parent.GetComponent<T>();
-        }
-
-        /// <summary>
-        /// Returns the config for a component from a json object.
-        /// </summary>
-        /// <typeparam name="T">The type of the config.</typeparam>
-        /// <param name="parameters">The parameters JObject (supplied inside of InheritParametersFromConfig)</param>
-        /// <returns>Either a blank default config if parameters was null, or the decoded config.</returns>
-        internal T JsonObjectToConfig<T>(JsonElement? parameters) where T : new()
-        {
-            if (parameters.HasValue)
-                return JsonSerializationHelper.JsonElementToType<T>(parameters.Value);
-            return new T();
-        }
-
-        /// <summary>
-        /// Packages this component into its config class for exporting.
-        /// </summary>
-        /// <returns>The component config.</returns>
-        internal ComponentConfig PackageComponentIntoConfig()
-        {
-            var config = new ComponentConfig
-            {
-                Type = GetType().Name,
-                Namespace = GetType().Namespace
-            };
-
-            var parameters = PackageParametersIntoConfig();
-            if (parameters != null)
-                config.Parameters = JsonSerializationHelper.ObjectToJsonElement(parameters);
-
-            return config;
         }
 
         /// <summary>
@@ -77,18 +44,6 @@ namespace VTTiny.Components
         /// The destroy method, called at the end of an actor's lifetime.
         /// </summary>
         public virtual void Destroy() { }
-
-        /// <summary>
-        /// Packages this component's parameters into a config class for exporting.
-        /// </summary>
-        /// <returns>The config class (or none).</returns>
-        protected virtual object PackageParametersIntoConfig() { return null; }
-
-        /// <summary>
-        /// Inherits parameters from the config file.
-        /// </summary>
-        /// <param name="parameters">The raw JObject containing the parameters.</param>
-        internal virtual void InheritParametersFromConfig(JsonElement? parameters) { }
 
         /// <summary>
         /// The method called whenever we're updating the editor GUI, called after the regular Update() when editor mode is on.

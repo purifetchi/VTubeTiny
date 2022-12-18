@@ -3,9 +3,9 @@
 namespace VTTiny.Data
 {
     /// <summary>
-    /// Component configuration data.
+    /// Typed serialized object configuration data.
     /// </summary>
-    public class ComponentConfig
+    public class TypedObjectConfig
     {
         public string Namespace { get; set; } = "VTTiny.Components";
         public string Type { get; set; }

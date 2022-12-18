@@ -8,6 +8,6 @@ namespace VTTiny.Data
     public class AssetDatabaseConfig
     {
         public int LastId { get; set; }
-        public IDictionary<int, AssetConfig> Assets { get; set; }
+        public IDictionary<int, TypedObjectConfig> Assets { get; set; }
     }
 }

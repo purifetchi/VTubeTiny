@@ -11,7 +11,7 @@ namespace VTTiny.Scenery
         /// Build all the components from a component config.
         /// </summary>
         /// <param name="componentConfigs"></param>
-        internal void BuildComponentsFromConfig(IList<ComponentConfig> componentConfigs)
+        internal void BuildComponentsFromConfig(IList<TypedObjectConfig> componentConfigs)
         {
             if (componentConfigs == null)
                 return;
@@ -48,9 +48,9 @@ namespace VTTiny.Scenery
                 Position = Transform.LocalPosition
             };
 
-            var componentList = new List<ComponentConfig>();
+            var componentList = new List<TypedObjectConfig>();
             foreach (var component in _components)
-                componentList.Add(component.PackageComponentIntoConfig());
+                componentList.Add(component.PackageIntoConfig());
 
             config.Components = componentList;
 

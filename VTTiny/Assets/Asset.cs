@@ -1,9 +1,11 @@
-﻿namespace VTTiny.Assets
+﻿using VTTiny.Serialization;
+
+namespace VTTiny.Assets
 {
     /// <summary>
     /// An abstract asset used by VTubeTiny.
     /// </summary>
-    public abstract class Asset
+    public abstract class Asset : TypedSerializedObject
     {
         /// <summary>
         /// The ID of this asset.
