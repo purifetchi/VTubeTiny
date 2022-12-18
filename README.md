@@ -16,7 +16,12 @@ VTubeTiny is a small VTuber/PNGTuber suite (written in C# and utilizing Raylib) 
 * A GPU that supports OpenGL ES 3.
 
 ## Usage
+
 All of the VTubeTiny data is described in a JSON config file, from which VTubeTiny generates the **Stage**. Every **Stage** is split into **Actors**, which can have **Components** attached to them. Components serve multiple purposes, from rendering textures or text, to animating characters based on the microphone levels.
+
+Every stage also has an **Asset Database** attached to it, that stores all of the **Assets** it uses. Assets are anything loaded from disk that can be then used by Components. (For now, the only Asset type that's properly supported are textures, but more will be added as more components are added in.)
+
+Assets help reduce the amount of loaded data, as common assets can be shared between many components.
 
 This is how a sample VTubeTiny configuration file looks like:
 
@@ -132,8 +137,12 @@ namespace VTTiny.Components
 Now, if we were to attach this component to an actor and enter editor mode, the component's dimensions will be fully editable!
 
 ## Future Goals
+
+* Much better and tidier editor UI.
 * Proper cross-platform support.
 * More components!
+* Editor localization?
 
 ## Contributing Guide
+
 If you'd really want to contribute to this project (thank you!) please adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) commit format as much as you can. 
