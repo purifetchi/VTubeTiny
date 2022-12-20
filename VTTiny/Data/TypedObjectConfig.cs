@@ -27,7 +27,7 @@ namespace VTTiny.Data
             if (type == null)
                 return false;
 
-            if (!type.IsSubclassOf(typeof(T))) 
+            if (!type.IsSubclassOf(typeof(T)))
                 return false;
 
             resolvedType = type;

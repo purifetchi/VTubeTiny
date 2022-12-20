@@ -102,7 +102,7 @@ namespace VTTiny.Assets.Management
             _idAllocator.Value.FreeId(asset.Id);
             asset.Destroy();
 
-            return _assets.Remove(asset.Id);            
+            return _assets.Remove(asset.Id);
         }
 
         /// <summary>

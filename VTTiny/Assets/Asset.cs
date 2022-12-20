@@ -37,7 +37,7 @@ namespace VTTiny.Assets
         /// Renders the editor gui for this asset.
         /// </summary>
         /// <returns>Whether we've modified the asset database collection (e.g. by removing an item).</returns>
-        public bool RenderEditorGUI(AssetDatabase database) 
+        public bool RenderEditorGUI(AssetDatabase database)
         {
             ImGui.PushID($"{GetHashCode()}");
 

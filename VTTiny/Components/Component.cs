@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using VTTiny.Scenery;
+﻿using VTTiny.Scenery;
 using VTTiny.Serialization;
 
 namespace VTTiny.Components

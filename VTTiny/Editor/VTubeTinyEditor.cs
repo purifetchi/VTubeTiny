@@ -1,8 +1,8 @@
-﻿using ImGuiNET;
+﻿using System;
+using System.Collections.Generic;
+using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
-using System;
-using System.Collections.Generic;
 using VTTiny.Editor.Native;
 using VTTiny.Editor.UI;
 using VTTiny.Rendering;
@@ -118,7 +118,7 @@ namespace VTTiny.Editor
             AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
-            
+
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;
