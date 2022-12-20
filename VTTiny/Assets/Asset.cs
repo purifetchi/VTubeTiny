@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using VTTiny.Assets.Management;
 using VTTiny.Serialization;
 
@@ -26,12 +27,10 @@ namespace VTTiny.Assets
         /// <returns>The reference.</returns>
         public AssetReference<T> ToAssetReference<T>() where T : Asset
         {
-            var reference = new AssetReference<T>
-            {
-                Id = Id
-            };
+            if (this is not T typedAsset)
+                throw new NotSupportedException($"Cannot construct a reference from type {GetType().FullName} (asset is of type {typeof(T).FullName}).");
 
-            return reference;
+            return new AssetReference<T>(typedAsset);
         }
 
         /// <summary>
