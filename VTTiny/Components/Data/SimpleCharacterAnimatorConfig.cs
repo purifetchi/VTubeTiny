@@ -18,14 +18,9 @@ namespace VTTiny.Components.Data
         /// <param name="animator">The animator.</param>
         public void LoadStates(SimpleCharacterAnimatorComponent animator)
         {
-            if (Idle.HasValue)
-                animator.SetTextureForState(Idle.Value.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Idle);
-
-            if (Speaking.HasValue)
-                animator.SetTextureForState(Speaking.Value.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Speaking);
-
-            if (Blinking.HasValue)
-                animator.SetTextureForState(Blinking.Value.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Blinking);
+            animator.SetTextureForState(Idle?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Idle);
+            animator.SetTextureForState(Speaking?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Speaking);
+            animator.SetTextureForState(Blinking?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Blinking);
         }
     }
 }

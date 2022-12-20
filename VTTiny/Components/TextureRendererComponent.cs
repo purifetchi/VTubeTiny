@@ -62,8 +62,7 @@ namespace VTTiny.Components
             Rotation = config.Rotation;
             Scale = config.Scale;
 
-            if (config.Image.HasValue)
-                SetTexture(config.Image.Value.Resolve(Parent.OwnerStage.AssetDatabase));
+            SetTexture(config.Image?.Resolve(Parent.OwnerStage.AssetDatabase));
         }
 
         internal override void RenderEditorGUI()
