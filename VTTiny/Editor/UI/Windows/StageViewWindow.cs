@@ -110,11 +110,13 @@ namespace VTTiny.Editor.UI
         private void HandleActorDragging()
         {
             var absolutePos = (Vector2Int)Raylib.GetMousePosition();
-            if (!TryGetPositionWithinStage(absolutePos, out Vector2Int relativePos))
-                return;
+            var isPosWithinStage = TryGetPositionWithinStage(absolutePos, out Vector2Int relativePos);
 
             if (_heldActor == null)
             {
+                if (!isPosWithinStage)
+                    return;
+
                 if (!TryFindNewActorForDragging(relativePos))
                     return;
             }
