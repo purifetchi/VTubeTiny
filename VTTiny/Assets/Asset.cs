@@ -28,7 +28,7 @@ namespace VTTiny.Assets
         public AssetReference<T> ToAssetReference<T>() where T : Asset
         {
             if (this is not T typedAsset)
-                throw new NotSupportedException($"Cannot construct a reference from type {GetType().FullName} (asset is of type {typeof(T).FullName}).");
+                throw new NotSupportedException($"Cannot construct an asset reference of type {typeof(T).FullName} (since asset is of type {GetType().FullName}).");
 
             return new AssetReference<T>(typedAsset);
         }
