@@ -23,13 +23,14 @@ namespace VTTiny.Scenery
                     return true;
                 }
 
+                AllowRendering = EditorGUI.Checkbox("Allow rendering", AllowRendering);
+
                 ImGui.Text($"Parented to:");
                 ImGui.SameLine();
 
                 if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
                     TryReparent(newParent);
 
-                ImGui.Text($"Allows rendering: {AllowRendering}");
                 ImGui.NewLine();
 
                 DrawComponents();

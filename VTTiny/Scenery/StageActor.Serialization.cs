@@ -43,7 +43,8 @@ namespace VTTiny.Scenery
             {
                 Name = Name,
                 ParentActorName = ParentActor?.Name ?? string.Empty,
-                Position = Transform.LocalPosition
+                Position = Transform.LocalPosition,
+                AllowRendering = AllowRendering
             };
 
             var componentList = new List<TypedObjectConfig>();

@@ -19,6 +19,7 @@ namespace VTTiny.Scenery
             {
                 var actor = CreateActor(config.Name);
                 actor.Transform.LocalPosition = config.Position;
+                actor.AllowRendering = config.AllowRendering;
 
                 // Try to set the parent of this actor
                 var parent = FindActor(config.ParentActorName);

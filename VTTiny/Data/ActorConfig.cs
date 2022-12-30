@@ -10,6 +10,7 @@ namespace VTTiny.Data
         public string Name { get; set; } = "StageActor";
         public string ParentActorName { get; set; } = "";
         public Vector2Int Position { get; set; } = new(0, 0);
+        public bool AllowRendering { get; set; } = true;
 
         public IList<TypedObjectConfig> Components { get; set; }
     }
