@@ -76,7 +76,7 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void RenderBoundingBox()
         {
-            if (_renderables.Count < 1)
+            if (_renderables.Count < 1 || !AllowRendering)
                 return;
 
             foreach (var component in _renderables)
@@ -209,6 +209,9 @@ namespace VTTiny.Scenery
         /// <returns>Whether the position overlapped any of the renderables.</returns>
         public bool HitTest(Vector2Int position)
         {
+            if (!AllowRendering)
+                return false;
+
             foreach (var renderable in _renderables)
             {
                 if (Raylib.CheckCollisionPointRec(position, renderable.GetBoundingBox()))
