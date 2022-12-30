@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VTTiny.Data;
+using VTTiny.Extensions;
 
 namespace VTTiny.Assets.Management
 {
@@ -78,8 +79,7 @@ namespace VTTiny.Assets.Management
         /// <returns>The asset.</returns>
         private Asset CreateAssetFromType(Type assetType, int id)
         {
-            var ctor = assetType.GetConstructor(Array.Empty<Type>());
-            var asset = (Asset)ctor.Invoke(Array.Empty<object>());
+            var asset = assetType.Construct<Asset>();
 
             asset.Id = id;
             _assets[id] = asset;

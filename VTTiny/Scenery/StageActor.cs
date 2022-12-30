@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Raylib_cs;
 using VTTiny.Components;
+using VTTiny.Extensions;
 
 namespace VTTiny.Scenery
 {
@@ -103,8 +104,7 @@ namespace VTTiny.Scenery
         private Component ConstructComponentFromType(Type type)
         {
             // Get the constructor of the component from the type and instantiate the component.
-            var ctor = type.GetConstructor(Array.Empty<Type>());
-            var component = (Component)ctor.Invoke(Array.Empty<object>());
+            var component = type.Construct<Component>();
             InitializeComponent(component);
 
             return component;
