@@ -23,6 +23,11 @@ namespace VTTiny.Scenery
                     return true;
                 }
 
+                ImGui.SameLine();
+
+                if (ImGui.Button("Rename Actor"))
+                    EditorGUI.ShowTextInputWindow($"Setting new name for actor {Name}.", Name, newName => Name = newName, OwnerStage.VTubeTiny);
+
                 AllowRendering = EditorGUI.Checkbox("Allow rendering", AllowRendering);
 
                 ImGui.Text($"Parented to:");

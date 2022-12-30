@@ -25,7 +25,7 @@ namespace VTTiny
         /// <summary>
         /// The VTubeTiny editor instance.
         /// </summary>
-        private VTubeTinyEditor Editor { get; set; }
+        internal VTubeTinyEditor Editor { get; set; }
 
         /// <summary>
         /// Instantiates a new instance of VTubeTiny.
@@ -65,7 +65,7 @@ namespace VTTiny
         /// </summary>
         public void ReloadStage()
         {
-            var stage = Stage.Blank()
+            var stage = Stage.Blank(this)
                              .WithConfig(Config);
 
             SetActiveStage(stage);

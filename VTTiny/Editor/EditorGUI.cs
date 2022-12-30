@@ -7,6 +7,7 @@ using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Components;
+using VTTiny.Scenery;
 
 namespace VTTiny.Editor
 {
@@ -284,6 +285,18 @@ namespace VTTiny.Editor
             ImGui.Combo(" ", ref index, KeyNameCache, KeyNameCache.Length);
 
             return KeyCache[index];
+        }
+
+        /// <summary>
+        /// Shows a text input window.
+        /// </summary>
+        /// <param name="title">The title of the window.</param>
+        /// <param name="initial">The initial string.</param>
+        /// <param name="callback">The callback.</param>
+        /// <param name="vtubetiny">The VTubeTiny instance for which it's invoked.</param>
+        public static void ShowTextInputWindow(string title, string initial, Action<string> callback, VTubeTiny vtubetiny)
+        {
+            vtubetiny.Editor.AddWindow(new UI.TextInputWindow(title, initial, callback, vtubetiny.Editor));
         }
     }
 }

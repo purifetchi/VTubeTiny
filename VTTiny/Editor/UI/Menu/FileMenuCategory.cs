@@ -24,7 +24,7 @@ namespace VTTiny.Editor.UI
         {
             AddAction("New Stage", editor =>
             {
-                var stage = Stage.Blank();
+                var stage = Stage.Blank(editor.VTubeTiny);
                 editor.VTubeTiny.SetActiveStage(stage);
                 editor.ForEachWindowOfType<IStageAwareWindow>(window => window.OnStageChange(editor.VTubeTiny.ActiveStage));
             });

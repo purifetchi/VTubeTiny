@@ -40,12 +40,17 @@ namespace VTTiny.Scenery
         /// <summary>
         /// Should the scene render the bounding boxes of its actors?
         /// </summary>
-        public bool RenderBoundingBoxes { get; set; } = false;
+        public bool RenderBoundingBoxes { get; private set; } = false;
+
+        /// <summary>
+        /// The instance of VTubeTiny this scene is tied to.
+        /// </summary>
+        internal VTubeTiny VTubeTiny { get; private set; } = null;
 
         /// <summary>
         /// The rendering context for this scene.
         /// </summary>
-        public IRenderingContext RenderingContext { get; set; }
+        public IRenderingContext RenderingContext { get; private set; }
 
         private List<StageActor> _actors;
         private Stopwatch _timer;
@@ -56,7 +61,7 @@ namespace VTTiny.Scenery
         /// Creates a blank scene.
         /// </summary>
         /// <returns>A blank scene with default values.</returns>
-        public static Stage Blank()
+        public static Stage Blank(VTubeTiny vtubetiny)
         {
             var timer = new Stopwatch();
             timer.Start();
@@ -68,6 +73,7 @@ namespace VTTiny.Scenery
                 ClearColor = new(0, 255, 0, 255),
                 Dimensions = new(800, 400),
                 RenderingContext = new GenericRaylibRenderingContext(),
+                VTubeTiny = vtubetiny,
                 AssetDatabase = new()
             };
         }
