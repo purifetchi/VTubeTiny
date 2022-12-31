@@ -38,6 +38,11 @@ namespace VTTiny.Scenery
         public double DeltaTime { get => Time - _lastUpdateTime; }
 
         /// <summary>
+        /// The target framerate this stage runs at.
+        /// </summary>
+        public int TargetFPS { get; private set; }
+
+        /// <summary>
         /// Should the scene render the bounding boxes of its actors?
         /// </summary>
         public bool RenderBoundingBoxes { get; private set; } = false;
@@ -73,6 +78,7 @@ namespace VTTiny.Scenery
                 ClearColor = new(0, 255, 0, 255),
                 Dimensions = new(800, 400),
                 RenderingContext = new GenericRaylibRenderingContext(),
+                TargetFPS = Raylib.GetFPS(),
                 VTubeTiny = vtubetiny,
                 AssetDatabase = new()
             };
@@ -93,11 +99,21 @@ namespace VTTiny.Scenery
             ResizeStage(config.Dimensions);
 
             ClearColor = config.ClearColor;
-            Raylib.SetTargetFPS(config.FPSLimit);
+            SetTargetFPS(config.FPSLimit);
 
             CreateActorsFromConfigList(config.Actors);
 
             return this;
+        }
+
+        /// <summary>
+        /// Set the target FPS of this stage.
+        /// </summary>
+        /// <param name="fps">The frames per second value.</param>
+        public void SetTargetFPS(int fps)
+        {
+            TargetFPS = fps;
+            Raylib.SetTargetFPS(TargetFPS);
         }
 
         /// <summary>
