@@ -1,5 +1,6 @@
 ﻿using System;
 using ImGuiNET;
+using Raylib_cs;
 
 namespace VTTiny.Editor.UI
 {
@@ -46,8 +47,9 @@ namespace VTTiny.Editor.UI
         {
             ImGui.InputText("", ref _initialString, 2048);
             ImGui.SameLine();
-            
-            if (ImGui.SmallButton("OK"))
+
+            var enterPressed = ImGui.IsWindowFocused() && Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER);
+            if (ImGui.SmallButton("OK") || enterPressed)
             {
                 Callback?.Invoke(_initialString);
                 Editor.RemoveWindow(this);
