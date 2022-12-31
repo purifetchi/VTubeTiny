@@ -17,6 +17,10 @@ namespace VTTiny.Scenery
             ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
             RenderBoundingBoxes = EditorGUI.Checkbox("Render bounding boxes", RenderBoundingBoxes);
 
+            TargetFPS = EditorGUI.DragInt("Target FPS", TargetFPS);
+            if (ImGui.IsItemDeactivatedAfterEdit())
+                SetTargetFPS(TargetFPS);
+
             ImGui.Text("Actors");
 
             foreach (var actor in _actors)
