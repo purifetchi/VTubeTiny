@@ -41,7 +41,8 @@ namespace VTTiny.Scenery
             var config = new Config
             {
                 ClearColor = ClearColor,
-                Dimensions = Dimensions
+                Dimensions = Dimensions,
+                FPSLimit = TargetFPS
             };
 
             var actorList = new List<ActorConfig>();
