@@ -176,6 +176,9 @@ namespace VTTiny.Components
             Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
+
+            EditorGUI.Text("Microphone level");
+            EditorGUI.ReactiveProgressBar(Level(), Threshold, 100);
         }
 
         protected override object PackageParametersIntoConfig()
