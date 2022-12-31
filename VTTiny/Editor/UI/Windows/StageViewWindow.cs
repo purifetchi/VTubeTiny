@@ -145,7 +145,7 @@ namespace VTTiny.Editor.UI
         /// <returns>True if found, false otherwise.</returns>
         private bool TryFindNewActorForDragging(Vector2Int position)
         {
-            if (!Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+            if (!Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) || !ImGui.IsWindowHovered())
                 return false;
 
             var actor = Stage.HitTest(position);
