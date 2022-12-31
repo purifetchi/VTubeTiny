@@ -157,8 +157,8 @@ namespace VTTiny.Scenery
         {
             foreach (var component in _components)
             {
-                if (component.GetType() == typeof(T))
-                    return (T)component;
+                if (component is T typedComponent)
+                    return typedComponent;
             }
 
             return null;
