@@ -75,18 +75,26 @@ namespace VTTiny.Components
 
         public override void Update()
         {
-            if (_blinkTimer.TimeElapsed >= BlinkEvery &&
-                !_isBlinking)
+            if (_blinking != null)
             {
-                _isBlinking = true;
-                _blinkStartTimer.SetNow();
-            }
+                if (_blinkTimer.TimeElapsed >= BlinkEvery &&
+                    !_isBlinking)
+                {
+                    _isBlinking = true;
+                    _blinkStartTimer.SetNow();
+                }
 
-            if (_isBlinking &&
-                _blinkStartTimer.TimeElapsed >= BlinkLength)
+                if (_isBlinking &&
+                    _blinkStartTimer.TimeElapsed >= BlinkLength)
+                {
+                    _isBlinking = false;
+                    _blinkTimer.SetNow();
+                }
+            }
+            else
             {
+                // We never blink if the character has no blinking texture selected.
                 _isBlinking = false;
-                _blinkTimer.SetNow();
             }
 
             if (IsSpeaking && !_isBlinking)
