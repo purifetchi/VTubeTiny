@@ -110,7 +110,9 @@ namespace VTTiny
             Console.WriteLine("VTubeTiny initializing.");
 
             Raylib.InitWindow(800, 600, "VTubeTiny");
-            Raylib.SetTargetFPS(60);
+
+            var refreshRate = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
+            Raylib.SetTargetFPS(refreshRate);
 
             ReloadStage();
             Editor?.Initialize();
