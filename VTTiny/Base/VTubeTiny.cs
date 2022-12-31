@@ -120,6 +120,9 @@ namespace VTTiny
             RenderLoop();
         }
 
+        /// <summary>
+        /// The render loop that handles drawing everything.
+        /// </summary>
         private void RenderLoop()
         {
             while (!Raylib.WindowShouldClose())
