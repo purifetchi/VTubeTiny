@@ -39,7 +39,7 @@ namespace VTTiny.Editor.UI
                 editor.VTubeTiny.ReloadStage();
 
                 editor.ForEachWindowOfType<IStageAwareWindow>(window => window.OnStageChange(editor.VTubeTiny.ActiveStage));
-            });
+            }, true);
 
             AddAction("Save Stage", editor =>
             {
@@ -53,7 +53,7 @@ namespace VTTiny.Editor.UI
             AddAction("Quit", editor =>
             {
                 Environment.Exit(0);
-            });
+            }, true);
         }
     }
 }
