@@ -23,6 +23,11 @@ namespace VTTiny.Editor.UI
             /// The callback for the action.
             /// </summary>
             public Action<VTubeTinyEditor> Callback { get; set; }
+
+            /// <summary>
+            /// Should the action render a separator above itself?
+            /// </summary>
+            public bool SeparatorAbove { get; set; } = false;
         }
 
         /// <summary>
@@ -59,12 +64,13 @@ namespace VTTiny.Editor.UI
         /// </summary>
         /// <param name="name">The name of this action.</param>
         /// <param name="callback">The callback.</param>
-        public void AddAction(string name, Action<VTubeTinyEditor> callback)
+        public void AddAction(string name, Action<VTubeTinyEditor> callback, bool withSeparator = false)
         {
             _actions.Add(new MenuAction
             {
                 Name = name,
-                Callback = callback
+                Callback = callback,
+                SeparatorAbove = withSeparator
             });
         }
 
@@ -78,6 +84,9 @@ namespace VTTiny.Editor.UI
 
             foreach (var action in _actions)
             {
+                if (action.SeparatorAbove)
+                    ImGui.Separator();
+
                 if (ImGui.MenuItem(action.Name))
                     action.Callback?.Invoke(ParentMenu.Editor);
             }
