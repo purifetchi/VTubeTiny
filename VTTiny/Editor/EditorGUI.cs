@@ -221,12 +221,17 @@ namespace VTTiny.Editor
             if (ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
             {
                 if (ImGui.Selectable("None", currentSelectedActor == null))
+                {
+                    ImGui.EndCombo();
                     return true;
+                }
 
                 foreach (var actor in stage.GetActors())
                 {
                     if (ImGui.Selectable(actor.Name, actor == currentSelectedActor))
                     {
+                        ImGui.EndCombo();
+
                         newSelectedActor = actor;
                         return true;
                     }
