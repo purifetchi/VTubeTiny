@@ -42,7 +42,7 @@ SOFTWARE.
         /// Constructs a new About VTubeTiny window.
         /// </summary>
         public AboutWindow(VTubeTinyEditor editor)
-            : base("About VTubeTiny", ImGuiWindowFlags.NoDocking)
+            : base("About VTubeTiny", ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoSavedSettings)
         {
             Editor = editor;
         }
