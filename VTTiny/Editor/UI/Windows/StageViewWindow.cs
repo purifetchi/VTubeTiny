@@ -123,6 +123,8 @@ namespace VTTiny.Editor.UI
 
             if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
             {
+                _heldActor.Paused = true;
+
                 _heldActor.RenderBoundingBox();
 
                 var delta = relativePos - _lastMousePosition;
@@ -132,6 +134,7 @@ namespace VTTiny.Editor.UI
                 return;
             }
 
+            _heldActor.Paused = false;
             _heldActor = null;
         }
 
