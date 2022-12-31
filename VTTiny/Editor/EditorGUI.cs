@@ -7,7 +7,6 @@ using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Components;
-using VTTiny.Scenery;
 
 namespace VTTiny.Editor
 {
@@ -297,6 +296,28 @@ namespace VTTiny.Editor
         public static void ShowTextInputWindow(string title, string initial, Action<string> callback, VTubeTiny vtubetiny)
         {
             vtubetiny.Editor.AddWindow(new UI.TextInputWindow(title, initial, callback, vtubetiny.Editor));
+        }
+
+        /// <summary>
+        /// Shows a progress bar that changes the color based on a threshold.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="threshold">The threshold.</param>
+        /// <param name="max">The maximum value.</param>
+        public static void ReactiveProgressBar(float value, float threshold, float max)
+        {
+            // If the value exceedes the threshold, change the progress bar to be green.
+            if (value >= threshold)
+                ImGui.PushStyleColor(ImGuiCol.PlotHistogram, new Vector4(0, 255, 0, 255));
+
+            // Otherwise make it red.
+            else
+                ImGui.PushStyleColor(ImGuiCol.PlotHistogram, new Vector4(255, 0, 0, 255));
+
+            var size = new Vector2Int((int)ImGui.GetWindowSize().X - 50, 20);
+            ImGui.ProgressBar(value / max, size);
+
+            ImGui.PopStyleColor();
         }
     }
 }
