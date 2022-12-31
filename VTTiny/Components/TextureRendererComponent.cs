@@ -73,9 +73,6 @@ namespace VTTiny.Components
             Tint = EditorGUI.ColorEdit("Tint", Tint);
             Rotation = EditorGUI.DragFloat("Rotation", Rotation);
             Scale = EditorGUI.DragFloat("Scale", Scale, 0.005f);
-
-            if (ImGui.Button("Reload image"))
-                SetTexture(Texture);
         }
 
         protected override object PackageParametersIntoConfig()
