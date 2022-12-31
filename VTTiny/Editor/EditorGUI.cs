@@ -255,12 +255,17 @@ namespace VTTiny.Editor
             if (ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}"))
             {
                 if (ImGui.Selectable("None", currentAsset == null))
+                {
+                    ImGui.EndCombo();
                     return true;
+                }
 
                 foreach (var asset in database.GetAllAssetsOfType<T>())
                 {
                     if (ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
                     {
+                        ImGui.EndCombo();
+
                         newAsset = asset;
                         return true;
                     }
