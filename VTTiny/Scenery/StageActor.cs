@@ -32,6 +32,11 @@ namespace VTTiny.Scenery
         public bool AllowRendering { get; set; } = true;
 
         /// <summary>
+        /// Stop the actor from running its update method.
+        /// </summary>
+        public bool Paused { get; set; } = false;
+
+        /// <summary>
         /// The transform component attached to this actor.
         /// </summary>
         public TransformComponent Transform { get; private set; }
@@ -56,6 +61,12 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Update()
         {
+            if (Paused)
+            {
+                Transform.Update();
+                return;
+            }
+
             foreach (var component in _components)
                 component.Update();
         }
