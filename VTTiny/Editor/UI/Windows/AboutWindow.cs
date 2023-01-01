@@ -50,7 +50,7 @@ SOFTWARE.
         protected override void DrawUI()
         {
             ImGui.Text("VTubeTiny - tiny VTuber/PNGTuber suite with minimal overhead.");
-            ImGui.Text("(c) prefetcher, et al. 2022, licensed under MIT (the license follows).");
+            ImGui.Text("(c) prefetcher, et al. 2022-2023, licensed under MIT (the license follows).");
 
             ImGui.NewLine();
             ImGui.Separator();
