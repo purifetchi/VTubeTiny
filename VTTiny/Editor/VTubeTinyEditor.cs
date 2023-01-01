@@ -17,12 +17,12 @@ namespace VTTiny.Editor
         /// <summary>
         /// The current instance of VTubeTiny this editor is working with.
         /// </summary>
-        internal VTubeTiny VTubeTiny { get; set; }
+        internal VTubeTiny VTubeTiny { get; init; }
 
         /// <summary>
         /// The rendering context of the window.
         /// </summary>
-        private IRenderingContext RenderingContext { get; set; }
+        private IRenderingContext RenderingContext { get; init; }
 
         /// <summary>
         /// The main menu bar.

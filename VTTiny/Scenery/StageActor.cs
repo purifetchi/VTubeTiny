@@ -14,7 +14,7 @@ namespace VTTiny.Scenery
         /// <summary>
         /// The stage that owns this actor.
         /// </summary>
-        public Stage OwnerStage { get; private set; }
+        public Stage OwnerStage { get; init; }
 
         /// <summary>
         /// The parent actor of this stage actor.
