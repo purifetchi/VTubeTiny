@@ -39,11 +39,16 @@ namespace VTTiny.Scenery
         /// <summary>
         /// The transform component attached to this actor.
         /// </summary>
-        public TransformComponent Transform { get; private set; }
+        public TransformComponent Transform { get; init; }
 
         private readonly List<Component> _components;
         private readonly List<RendererComponent> _renderables;
 
+        /// <summary>
+        /// Constructs a new stage actor.
+        /// </summary>
+        /// <param name="stage">The stage this actor is a part of.</param>
+        /// <param name="name">The name of this actor.</param>
         public StageActor(Stage stage, string name)
         {
             OwnerStage = stage;
