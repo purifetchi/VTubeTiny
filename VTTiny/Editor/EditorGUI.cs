@@ -3,9 +3,11 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
+using NAudio.CoreAudioApi;
 using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Assets.Management;
+using VTTiny.Audio;
 using VTTiny.Components;
 
 namespace VTTiny.Editor
@@ -328,6 +330,46 @@ namespace VTTiny.Editor
             ImGui.ProgressBar(value / max, size);
 
             ImGui.PopStyleColor();
+        }
+
+        /// <summary>
+        /// Shows a dropdown for all microphones.
+        /// </summary>
+        /// <param name="label">The label for the dropdown.</param>
+        /// <param name="currentMicrophone">The current microphone.</param>
+        /// <param name="newMicrophone">The new microphone.</param>
+        /// <returns>Whether we've switched the selection.</returns>
+        public static bool MicrophoneDropdown(string label, MMDevice currentMicrophone, out MMDevice newMicrophone)
+        {
+            newMicrophone = default;
+
+            var name = MicrophoneHelper.GetMicrophoneNameFast(currentMicrophone);
+            if (ImGui.BeginCombo($"{label}##MicrophoneDropdown", $"{name ?? "No microphone selected."}"))
+            {
+                if (ImGui.Selectable("None", currentMicrophone == null))
+                {
+                    ImGui.EndCombo();
+                    return true;
+                }
+
+                var mics = MicrophoneHelper.GetMicrophones();
+                for (var i = 0; i < mics.Count; i++)
+                {
+                    var microphone = mics[i];
+
+                    if (ImGui.Selectable(MicrophoneHelper.GetMicrophoneNames()[i], microphone == currentMicrophone))
+                    {
+                        ImGui.EndCombo();
+
+                        newMicrophone = microphone;
+                        return true;
+                    }
+                }
+
+                ImGui.EndCombo();
+            }
+
+            return false;
         }
     }
 }

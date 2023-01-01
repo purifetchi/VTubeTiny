@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
+using ImGuiNET;
 using NAudio.CoreAudioApi;
+using VTTiny.Audio;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Scenery;
@@ -41,37 +43,19 @@ namespace VTTiny.Components
         private bool _jump;
 
         /// <summary>
-        /// Set the microphone by its name.
+        /// Sets the microphone for this component.
         /// </summary>
-        /// <param name="name">The microphone name.</param>
-        public void SetMicrophoneByName(string name)
+        /// <param name="microphone">The microphone.</param>
+        public void SetMicrophone(MMDevice microphone)
         {
             DestroyWasapiContexts();
-
-            var deviceEnumerator = new MMDeviceEnumerator();
-
-            var devices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
-            var device = devices?.FirstOrDefault(mic => mic.FriendlyName.Contains(name));
-            _microphone = device;
+            _microphone = microphone;
 
             if (_microphone == null)
-            {
-                Console.WriteLine($"The microphone {name} does not exist!");
                 return;
-            }
 
             _capture = new WasapiCapture(_microphone);
             _capture.StartRecording();
-        }
-
-        /// <summary>
-        /// Gets the default microphone's name.
-        /// </summary>
-        /// <returns>The default microphone's name.</returns>
-        private string GetDefaultMicrophone()
-        {
-            var deviceEnumerator = new MMDeviceEnumerator();
-            return deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications)?.FriendlyName;
         }
 
         /// <summary>
@@ -80,6 +64,9 @@ namespace VTTiny.Components
         /// <returns>The peak level.</returns>
         private int Level()
         {
+            if (_microphone == null)
+                return 0;
+
             return (int)Math.Round(_microphone.AudioMeterInformation.MasterPeakValue * 100 * Multiplier);
         }
 
@@ -88,20 +75,10 @@ namespace VTTiny.Components
         /// </summary>
         private void DestroyWasapiContexts()
         {
-            if (_capture != null)
-            {
-                _capture.StopRecording();
-                _capture.Dispose();
+            _capture?.StopRecording();
+            _capture?.Dispose();
 
-                _capture = null;
-            }
-
-            if (_microphone != null)
-            {
-                _microphone.Dispose();
-
-                _microphone = null;
-            }
+            _capture = null;
         }
 
         public override void Start()
@@ -109,7 +86,7 @@ namespace VTTiny.Components
             _character = GetComponent<SimpleCharacterAnimatorComponent>();
             _jumpTimer = new StageTimer(Parent.OwnerStage);
 
-            SetMicrophoneByName(GetDefaultMicrophone());
+            SetMicrophone(MicrophoneHelper.GetDefaultMicrophone());
         }
 
         public override void Update()
@@ -159,10 +136,9 @@ namespace VTTiny.Components
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
 
             if (string.IsNullOrEmpty(config.Microphone))
-                SetMicrophoneByName(GetDefaultMicrophone());
-
+                SetMicrophone(MicrophoneHelper.GetDefaultMicrophone());
             else
-                SetMicrophoneByName(config.Microphone);
+                SetMicrophone(MicrophoneHelper.GetMicrophoneByName(config.Microphone));
 
             Threshold = config.Threshold;
             Multiplier = config.Multiplier;
@@ -176,6 +152,10 @@ namespace VTTiny.Components
             Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
+
+            ImGui.Separator();
+            if (EditorGUI.MicrophoneDropdown("Microphone", _microphone, out MMDevice newMic))
+                SetMicrophone(newMic);
 
             EditorGUI.Text("Microphone level");
             EditorGUI.ReactiveProgressBar(Level(), Threshold, 100);
