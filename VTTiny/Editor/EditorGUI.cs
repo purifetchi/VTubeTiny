@@ -165,22 +165,6 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
-        /// Accepts a file drop onto the last drawn gui component.
-        /// </summary>
-        /// <param name="path">The path of the file that was dropped.</param>
-        /// <returns>Whether the last gui component had a file dropped onto it.</returns>
-        public static bool AcceptFileDrop(out string path)
-        {
-            path = string.Empty;
-            if (!ImGui.IsItemHovered() || !Raylib.IsFileDropped())
-                return false;
-
-            path = Raylib.GetDroppedFiles()[0];
-            Raylib.ClearDroppedFiles();
-            return true;
-        }
-
-        /// <summary>
         /// Creates a text label.
         /// </summary>
         /// <param name="text">The text.</param>
