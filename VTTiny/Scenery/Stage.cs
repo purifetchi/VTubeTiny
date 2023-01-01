@@ -63,22 +63,30 @@ namespace VTTiny.Scenery
         private double _lastUpdateTime = 0;
 
         /// <summary>
+        /// The default stage constructor.
+        /// </summary>
+        private Stage()
+        {
+            SetTargetFPS(TargetFPS);
+
+            _timer = new Stopwatch();
+            _timer.Start();
+        }
+
+        /// <summary>
         /// Creates a blank scene.
         /// </summary>
         /// <returns>A blank scene with default values.</returns>
         public static Stage Blank(VTubeTiny vtubetiny)
         {
-            var timer = new Stopwatch();
-            timer.Start();
-
+            var refreshRate = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
             return new Stage
             {
                 _actors = new(),
-                _timer = timer,
                 ClearColor = new(0, 255, 0, 255),
                 Dimensions = new(800, 400),
                 RenderingContext = new GenericRaylibRenderingContext(),
-                TargetFPS = Raylib.GetFPS(),
+                TargetFPS = refreshRate,
                 VTubeTiny = vtubetiny,
                 AssetDatabase = new()
             };
