@@ -139,9 +139,8 @@ namespace VTTiny.Editor
         /// </summary>
         public void Render()
         {
-            RenderingContext.Begin();
+            RenderingContext.Begin(Color.BLANK);
             rlImGui.Begin();
-            Raylib.ClearBackground(Color.BLANK);
 
             var dockId = ImGui.DockSpaceOverViewport();
 

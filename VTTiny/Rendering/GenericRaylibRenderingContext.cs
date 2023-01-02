@@ -7,9 +7,10 @@ namespace VTTiny.Rendering
     /// </summary>
     internal class GenericRaylibRenderingContext : IRenderingContext
     {
-        public void Begin()
+        public void Begin(Color color)
         {
             Raylib.BeginDrawing();
+            Raylib.ClearBackground(color);
         }
 
         public void End()

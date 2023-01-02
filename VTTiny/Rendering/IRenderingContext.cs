@@ -10,7 +10,8 @@ namespace VTTiny.Rendering
         /// <summary>
         /// Enters drawing mode.
         /// </summary>
-        void Begin();
+        /// <param name="color">The color to clear the context with.</param>
+        void Begin(Color color);
 
         /// <summary>
         /// Resizes the rendering context.

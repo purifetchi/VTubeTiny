@@ -230,8 +230,7 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Render()
         {
-            RenderingContext.Begin();
-            Raylib.ClearBackground(ClearColor);
+            RenderingContext.Begin(ClearColor);
 
             foreach (var actor in _actors)
             {

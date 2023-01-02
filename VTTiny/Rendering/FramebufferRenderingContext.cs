@@ -19,9 +19,10 @@ namespace VTTiny.Rendering
             _renderTexture = Raylib.LoadRenderTexture(800, 600);
         }
 
-        public void Begin()
+        public void Begin(Color color)
         {
             Raylib.BeginTextureMode(_renderTexture);
+            Raylib.ClearBackground(color);
         }
 
         public void End()
