@@ -25,9 +25,15 @@
 				{
 					"Type": "SimpleCharacterAnimatorComponent",
 					"Parameters": {
-						"Idle": "1.png",
-						"Speaking": "2.png",
-						"Blinking": "3.png"
+						"Idle": {
+							"Id": 0
+						},
+						"Speaking": {
+							"Id": 1
+						},
+						"Blinking": {
+							"Id": 2
+						}
 					}
 				},
 				{
@@ -48,5 +54,39 @@
 				}
 			]
 		}
-	]
+	],
+
+	"AssetDatabase": {
+		"LastId": 2,
+
+		"Assets": {
+			"0": {
+				"Namespace": "VTTiny.Assets",
+				"Type": "Texture",
+				"Name": "Idle",
+				"Parameters":
+				{
+					"Path": "1.png"
+				}
+			},
+			"1": {
+				"Namespace": "VTTiny.Assets",
+				"Type": "Texture",
+				"Name": "Speaking",
+				"Parameters":
+				{
+					"Path": "2.png"
+				}
+			},
+			"2": {
+				"Namespace": "VTTiny.Assets",
+				"Type": "Texture",
+				"Name": "Blinking",
+				"Parameters":
+				{
+					"Path": "3.png"
+				}
+			}
+		}
+	}
 }
