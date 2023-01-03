@@ -9,6 +9,8 @@ namespace VTTiny
     {
         public int X, Y;
 
+        public static Vector2Int Zero => new Vector2Int(0, 0);
+
         public static implicit operator Vector2Int(Vector2 vec)
         {
             return new Vector2Int((int)vec.X, (int)vec.Y);
