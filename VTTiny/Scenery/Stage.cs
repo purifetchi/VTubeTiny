@@ -255,6 +255,8 @@ namespace VTTiny.Scenery
 
             AssetDatabase.Destroy();
             AssetDatabase = null;
+
+            RenderingContext.Dispose();
         }
     }
 }
