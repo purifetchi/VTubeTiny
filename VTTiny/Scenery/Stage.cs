@@ -48,6 +48,11 @@ namespace VTTiny.Scenery
         public bool RenderBoundingBoxes { get; private set; } = false;
 
         /// <summary>
+        /// Should this stage be broadcasted via Spout? (WINDOWS ONLY)
+        /// </summary>
+        public bool BroadcastViaSpout { get; private set; } = false;
+
+        /// <summary>
         /// The instance of VTubeTiny this scene is tied to.
         /// </summary>
         internal VTubeTiny VTubeTiny { get; private set; } = null;
@@ -88,6 +93,7 @@ namespace VTTiny.Scenery
                 RenderingContext = new GenericRaylibRenderingContext(),
                 TargetFPS = refreshRate,
                 VTubeTiny = vtubetiny,
+                BroadcastViaSpout = false,
                 AssetDatabase = new()
             };
         }
@@ -109,9 +115,29 @@ namespace VTTiny.Scenery
             ClearColor = config.ClearColor;
             SetTargetFPS(config.FPSLimit);
 
+            SetSpoutOrDefaultContext<GenericRaylibRenderingContext>(config.BroadcastViaSpout);
+
             CreateActorsFromConfigList(config.Actors);
 
             return this;
+        }
+
+        /// <summary>
+        /// Enables spout and sets the rendering context or constructs a fallback rendering context specified by T.
+        /// </summary>
+        /// <param name="enabled">Whether it should be enabled</param>
+        /// <typeparam name="T">The rendering context to set when disabling spout.</typeparam>
+        public void SetSpoutOrDefaultContext<T>(bool enabled) where T: IRenderingContext, new()
+        {
+            if (BroadcastViaSpout == enabled)
+                return;
+
+            BroadcastViaSpout = enabled;
+
+            if (BroadcastViaSpout)
+                ReplaceRenderingContext(new SpoutFramebufferRenderingContext());
+            else
+                ReplaceRenderingContext(new T());
         }
 
         /// <summary>
@@ -130,7 +156,9 @@ namespace VTTiny.Scenery
         /// <param name="context">The new rendering context.</param>
         internal void ReplaceRenderingContext(IRenderingContext context)
         {
+            RenderingContext?.Dispose();
             RenderingContext = context;
+
             ResizeStage(Dimensions);
         }
 

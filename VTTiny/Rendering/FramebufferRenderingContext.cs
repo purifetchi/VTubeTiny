@@ -11,6 +11,8 @@ namespace VTTiny.Rendering
         protected RenderTexture2D _renderTexture;
         private bool _disposedValue;
 
+        private bool _drawInFullscreen;
+
         /// <summary>
         /// Sets up the render texture.
         /// </summary>
@@ -28,6 +30,9 @@ namespace VTTiny.Rendering
         public virtual void End()
         {
             Raylib.EndTextureMode();
+
+            if (_drawInFullscreen)
+                DrawFullscreen();
         }
 
         public Texture2D? GetFramebuffer()
@@ -39,6 +44,24 @@ namespace VTTiny.Rendering
         {
             Raylib.UnloadRenderTexture(_renderTexture);
             _renderTexture = Raylib.LoadRenderTexture(dimensions.X, dimensions.Y);
+        }
+
+        public void SetCanDrawFullscreen(bool enabled)
+        {
+            _drawInFullscreen = enabled;
+        }
+
+        /// <summary>
+        /// Draws this framebuffer to the entire screen.
+        /// </summary>
+        private void DrawFullscreen()
+        {
+            Raylib.BeginDrawing();
+
+            var rect = new Rectangle(0, 0, _renderTexture.texture.width, -_renderTexture.texture.height);
+            Raylib.DrawTextureRec(_renderTexture.texture, rect, Vector2Int.Zero, Color.WHITE);
+
+            Raylib.EndDrawing();
         }
 
         protected virtual void Dispose(bool disposing)

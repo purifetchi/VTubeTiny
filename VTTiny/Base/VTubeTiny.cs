@@ -2,6 +2,7 @@
 using Raylib_cs;
 using VTTiny.Data;
 using VTTiny.Editor;
+using VTTiny.Rendering;
 using VTTiny.Scenery;
 using VTTiny.Serialization;
 
@@ -88,6 +89,8 @@ namespace VTTiny
         {
             ActiveStage?.Destroy();
             ActiveStage = stage;
+
+            ActiveStage.RenderingContext.SetCanDrawFullscreen(Editor == null);
         }
 
         /// <summary>

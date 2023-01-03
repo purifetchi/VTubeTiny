@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using VTTiny.Editor;
+using VTTiny.Rendering;
 
 namespace VTTiny.Scenery
 {
@@ -20,6 +21,10 @@ namespace VTTiny.Scenery
             TargetFPS = EditorGUI.DragInt("Target FPS", TargetFPS);
             if (ImGui.IsItemDeactivatedAfterEdit())
                 SetTargetFPS(TargetFPS);
+
+            var newBroadcastVal = EditorGUI.Checkbox("Enable Spout Broadcasting", BroadcastViaSpout);
+            if (newBroadcastVal != BroadcastViaSpout)
+                SetSpoutOrDefaultContext<FramebufferRenderingContext>(newBroadcastVal);
 
             ImGui.Text("Actors");
 

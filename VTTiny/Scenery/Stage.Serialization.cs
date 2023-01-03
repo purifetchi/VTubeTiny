@@ -42,7 +42,8 @@ namespace VTTiny.Scenery
             {
                 ClearColor = ClearColor,
                 Dimensions = Dimensions,
-                FPSLimit = TargetFPS
+                FPSLimit = TargetFPS,
+                BroadcastViaSpout = BroadcastViaSpout,
             };
 
             var actorList = new List<ActorConfig>();

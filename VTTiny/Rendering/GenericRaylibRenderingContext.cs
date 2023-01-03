@@ -28,6 +28,11 @@ namespace VTTiny.Rendering
             Raylib.SetWindowSize(dimensions.X, dimensions.Y);
         }
 
+        public void SetCanDrawFullscreen(bool _)
+        {
+            // The generic context only draws in full screen.
+        }
+
         public void Dispose()
         {
 

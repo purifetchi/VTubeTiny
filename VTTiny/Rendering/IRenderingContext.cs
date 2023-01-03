@@ -26,6 +26,12 @@ namespace VTTiny.Rendering
         void End();
 
         /// <summary>
+        /// Sets whether this rendering context can present itself in fullscreen.
+        /// </summary>
+        /// <param name="enabled">Whether this rendering context can present itself in fullscreen.</param>
+        void SetCanDrawFullscreen(bool enabled);
+
+        /// <summary>
         /// Gets the framebuffer (if possible).
         /// </summary>
         /// <returns>The framebuffer.</returns>
