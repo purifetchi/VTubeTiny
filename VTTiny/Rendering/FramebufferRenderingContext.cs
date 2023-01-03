@@ -8,7 +8,7 @@ namespace VTTiny.Rendering
     /// </summary>
     internal class FramebufferRenderingContext : IRenderingContext
     {
-        private RenderTexture2D _renderTexture;
+        protected RenderTexture2D _renderTexture;
         private bool _disposedValue;
 
         /// <summary>
@@ -19,13 +19,13 @@ namespace VTTiny.Rendering
             _renderTexture = Raylib.LoadRenderTexture(800, 600);
         }
 
-        public void Begin(Color color)
+        public virtual void Begin(Color color)
         {
             Raylib.BeginTextureMode(_renderTexture);
             Raylib.ClearBackground(color);
         }
 
-        public void End()
+        public virtual void End()
         {
             Raylib.EndTextureMode();
         }
@@ -35,7 +35,7 @@ namespace VTTiny.Rendering
             return _renderTexture.texture;
         }
 
-        public void Resize(Vector2Int dimensions)
+        public virtual void Resize(Vector2Int dimensions)
         {
             Raylib.UnloadRenderTexture(_renderTexture);
             _renderTexture = Raylib.LoadRenderTexture(dimensions.X, dimensions.Y);
