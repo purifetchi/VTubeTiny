@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -39,5 +39,13 @@
     <PackageReference Include="NAudio.Wasapi" Version="2.1.0" />
     <PackageReference Include="Raylib-cs" Version="4.0.0.1" />
   </ItemGroup>
+
+  <Target Name="CopySpoutToBuild" BeforeTargets="Build" Condition="'$(IsWindows)'=='true'">
+    <Copy SourceFiles="$(ProjectDir)External\Spout.NET\Libraries\Spout.dll" DestinationFolder="$(OutputPath)Libraries\" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="CopySpoutToPublish" AfterTargets="Publish" Condition="'$(IsWindows)'=='true'">
+    <Copy SourceFiles="$(ProjectDir)External\Spout.NET\Libraries\Spout.dll" DestinationFolder="$(PublishDir)Libraries\" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
 
 </Project>
