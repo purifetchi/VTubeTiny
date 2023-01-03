@@ -27,5 +27,10 @@ namespace VTTiny.Rendering
         {
             Raylib.SetWindowSize(dimensions.X, dimensions.Y);
         }
+
+        public void Dispose()
+        {
+
+        }
     }
 }

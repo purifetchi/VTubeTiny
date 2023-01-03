@@ -6,7 +6,7 @@ namespace VTTiny.Rendering
     /// <summary>
     /// Framebuffer backed rendering context. Renders its contents to a render texture.
     /// </summary>
-    internal class FramebufferRenderingContext : IRenderingContext, IDisposable
+    internal class FramebufferRenderingContext : IRenderingContext
     {
         private RenderTexture2D _renderTexture;
         private bool _disposedValue;

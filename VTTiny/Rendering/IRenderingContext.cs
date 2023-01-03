@@ -1,11 +1,12 @@
-﻿using Raylib_cs;
+﻿using System;
+using Raylib_cs;
 
 namespace VTTiny.Rendering
 {
     /// <summary>
     /// A rendering context. Responsible for managing the drawing systems.
     /// </summary>
-    public interface IRenderingContext
+    public interface IRenderingContext : IDisposable
     {
         /// <summary>
         /// Enters drawing mode.
