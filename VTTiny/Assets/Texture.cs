@@ -14,12 +14,12 @@ namespace VTTiny.Assets
         /// <summary>
         /// The actual Raylib texture.
         /// </summary>
-        public Texture2D BackingTexture { get; private set; }
+        public virtual Texture2D BackingTexture { get; protected set; }
 
         /// <summary>
         /// The path to the texture on disk.
         /// </summary>
-        public string Path { get; private set; }
+        public string Path { get; protected set; }
 
         /// <summary>
         /// The width of the texture.
@@ -55,7 +55,7 @@ namespace VTTiny.Assets
         /// Loads a texture from a given path.
         /// </summary>
         /// <param name="path">The path to the texture.</param>
-        public void LoadTextureFromFile(string path)
+        public virtual void LoadTextureFromFile(string path)
         {
             BackingTexture = Raylib.LoadTexture(path);
             Path = path;

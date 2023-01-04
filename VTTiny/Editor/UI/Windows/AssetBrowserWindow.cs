@@ -53,10 +53,15 @@ namespace VTTiny.Editor.UI
             {
                 case ".png":
                 case ".bmp":
-                case ".gif":
                     var texture = Stage.AssetDatabase.CreateAsset<Texture>();
                     texture.Name = Path.GetFileName(path);
                     texture.LoadTextureFromFile(path);
+                    break;
+
+                case ".gif":
+                    var gifTexture = Stage.AssetDatabase.CreateAsset<GifTexture>();
+                    gifTexture.Name = Path.GetFileName(path);
+                    gifTexture.LoadTextureFromFile(path);
                     break;
 
                 default:
