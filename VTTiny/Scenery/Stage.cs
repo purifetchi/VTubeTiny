@@ -127,7 +127,7 @@ namespace VTTiny.Scenery
         /// </summary>
         /// <param name="enabled">Whether it should be enabled</param>
         /// <typeparam name="T">The rendering context to set when disabling spout.</typeparam>
-        public void SetSpoutOrDefaultContext<T>(bool enabled) where T: IRenderingContext, new()
+        public void SetSpoutOrDefaultContext<T>(bool enabled) where T : IRenderingContext, new()
         {
             if (BroadcastViaSpout == enabled)
                 return;

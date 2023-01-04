@@ -27,7 +27,7 @@ namespace VTTiny.Audio
         /// </summary>
         private static Lazy<string[]> _microphoneNames;
 
-        static MicrophoneHelper() 
+        static MicrophoneHelper()
         {
             EnumerateDevices();
         }
@@ -35,8 +35,8 @@ namespace VTTiny.Audio
         /// <summary>
         /// Refreshes the device enumerator.
         /// </summary>
-        public static void EnumerateDevices() 
-        { 
+        public static void EnumerateDevices()
+        {
             DeviceEnumerator = new();
             _microphones = new(DeviceEnumerator.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active));
             _microphoneNames = new(() => _microphones.Select(mic => mic.FriendlyName).ToArray());

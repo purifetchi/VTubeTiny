@@ -69,7 +69,7 @@ namespace VTTiny.Components.Animator
         /// <param name="time">The current time.</param>
         public void Update(double time)
         {
-            var isBlinking = (_currentState == State.IdleBlink) || 
+            var isBlinking = (_currentState == State.IdleBlink) ||
                              (_currentState == State.SpeakingBlink);
 
             var delta = time - _lastBlinkAction;
@@ -94,7 +94,7 @@ namespace VTTiny.Components.Animator
                 _currentState = IsSpeaking ? State.SpeakingBlink : State.IdleBlink;
 
             else
-                _currentState = IsSpeaking ? State.Speaking : State.Idle; 
+                _currentState = IsSpeaking ? State.Speaking : State.Idle;
         }
 
         /// <summary>

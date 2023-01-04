@@ -15,8 +15,8 @@ namespace VTTiny.Assets
     /// </summary>
     public class GifTexture : Texture
     {
-        public override Texture2D BackingTexture 
-        { 
+        public override Texture2D BackingTexture
+        {
             get
             {
                 if (_stopwatch.ElapsedMilliseconds >= FrameDelay)
@@ -126,7 +126,7 @@ namespace VTTiny.Assets
 
         protected override object PackageParametersIntoConfig()
         {
-            return new GifTextureConfig 
+            return new GifTextureConfig
             {
                 FilteringMode = FilteringMode,
                 FrameDelay = FrameDelay,

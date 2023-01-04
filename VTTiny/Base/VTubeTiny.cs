@@ -2,7 +2,6 @@
 using Raylib_cs;
 using VTTiny.Data;
 using VTTiny.Editor;
-using VTTiny.Rendering;
 using VTTiny.Scenery;
 using VTTiny.Serialization;
 

@@ -1,9 +1,6 @@
 ﻿using System.Text.Json;
-using VTTiny.Assets;
 using VTTiny.Components.Animator;
 using VTTiny.Components.Data;
-using VTTiny.Editor;
-using VTTiny.Scenery;
 
 namespace VTTiny.Components
 {

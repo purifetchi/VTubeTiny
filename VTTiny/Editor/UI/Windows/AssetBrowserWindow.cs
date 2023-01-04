@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using ImGuiNET;
+﻿using ImGuiNET;
 using Raylib_cs;
-using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Scenery;
 
