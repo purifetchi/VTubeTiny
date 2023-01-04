@@ -1,5 +1,6 @@
 ﻿using VTTiny.Assets;
 using VTTiny.Assets.Management;
+using VTTiny.Components.Animator;
 
 namespace VTTiny.Components.Data
 {
@@ -8,19 +9,50 @@ namespace VTTiny.Components.Data
         public AssetReference<Texture>? Idle { get; set; }
         public AssetReference<Texture>? Speaking { get; set; }
         public AssetReference<Texture>? Blinking { get; set; }
+        public AssetReference<Texture>? SpeakingBlinking { get; set; }
 
         public float BlinkEvery { get; set; } = 1.5f;
         public float BlinkLength { get; set; } = 0.1f;
 
         /// <summary>
-        /// Load the states into an animator component.
+        /// Constructs a new config from an existing character.
+        /// 
+        /// We do it this way to preserve backwards compatibility with earlier versions.
         /// </summary>
-        /// <param name="animator">The animator.</param>
-        public void LoadStates(SimpleCharacterAnimatorComponent animator)
+        /// <returns>A new animator config.</returns>
+        /// <param name="character">The character.</param>
+        public static SimpleCharacterAnimatorConfig FromCharacter(AnimatorCharacter character)
         {
-            animator.SetTextureForState(Idle?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Idle);
-            animator.SetTextureForState(Speaking?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Speaking);
-            animator.SetTextureForState(Blinking?.Resolve(animator.Parent.OwnerStage.AssetDatabase), SimpleCharacterAnimatorComponent.State.Blinking);
+            return new SimpleCharacterAnimatorConfig
+            {
+                BlinkEvery = character.BlinkEvery,
+                BlinkLength = character.BlinkLength,
+
+                Idle = character.Idle?.ToAssetReference<Texture>(),
+                Blinking = character.IdleBlink?.ToAssetReference<Texture>(),
+
+                Speaking = character.Speaking?.ToAssetReference<Texture>(),
+                SpeakingBlinking = character.SpeakingBlink?.ToAssetReference<Texture>()
+            };
+        }
+
+        /// <summary>
+        /// Constructs an animator character from the configuration.
+        /// </summary>
+        /// <param name="assetDatabase">The database to resolve all the assets from.</param>
+        public AnimatorCharacter ConstructCharacterPackage(AssetDatabase assetDatabase)
+        {
+            return new AnimatorCharacter
+            {
+                BlinkEvery = BlinkEvery,
+                BlinkLength = BlinkLength,
+
+                Idle = Idle?.Resolve(assetDatabase),
+                IdleBlink = Blinking?.Resolve(assetDatabase),
+
+                Speaking = Speaking?.Resolve(assetDatabase),
+                SpeakingBlink = SpeakingBlinking?.Resolve(assetDatabase),
+            };
         }
     }
 }
