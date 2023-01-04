@@ -3,6 +3,7 @@ using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Assets;
+using VTTiny.Assets.Management;
 using VTTiny.Components;
 using VTTiny.Rendering;
 using VTTiny.Scenery;
@@ -77,8 +78,6 @@ namespace VTTiny.Editor.UI
         /// <summary>
         /// Handles drag and dropping images into the VTubeTiny stage. Will automatically instantiate a
         /// new actor with a texture renderer set to the dragged image.
-        /// 
-        /// NOTE: Drag and dropping images onto texture buttons takes precedence over this behavior.
         /// </summary>
         private void HandleDragAndDropImages()
         {
@@ -88,12 +87,12 @@ namespace VTTiny.Editor.UI
             var path = Raylib.GetDroppedFiles()[0];
             Raylib.ClearDroppedFiles();
 
+            var asset = AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
+            if (asset is not Texture texture)
+                return;
+
             var actor = Stage.CreateActor();
             var renderer = actor.AddComponent<TextureRendererComponent>();
-
-            var texture = Stage.AssetDatabase.CreateAsset<Texture>();
-            texture.Name = Path.GetFileName(path);
-            texture.LoadTextureFromFile(path);
 
             renderer.SetTexture(texture);
 

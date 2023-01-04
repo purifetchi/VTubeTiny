@@ -3,6 +3,7 @@ using System.IO;
 using ImGuiNET;
 using Raylib_cs;
 using VTTiny.Assets;
+using VTTiny.Assets.Management;
 using VTTiny.Scenery;
 
 namespace VTTiny.Editor.UI
@@ -38,36 +39,7 @@ namespace VTTiny.Editor.UI
             var path = Raylib.GetDroppedFiles()[0];
             Raylib.ClearDroppedFiles();
 
-            LoadBasedOnExtension(path);
-        }
-
-        /// <summary>
-        /// Loads an asset based on the extension.
-        /// </summary>
-        /// <param name="path">The path to the asset.</param>
-        private void LoadBasedOnExtension(string path)
-        {
-            var extension = Path.GetExtension(path);
-
-            switch (extension.ToLower())
-            {
-                case ".png":
-                case ".bmp":
-                    var texture = Stage.AssetDatabase.CreateAsset<Texture>();
-                    texture.Name = Path.GetFileName(path);
-                    texture.LoadTextureFromFile(path);
-                    break;
-
-                case ".gif":
-                    var gifTexture = Stage.AssetDatabase.CreateAsset<GifTexture>();
-                    gifTexture.Name = Path.GetFileName(path);
-                    gifTexture.LoadTextureFromFile(path);
-                    break;
-
-                default:
-                    Console.WriteLine($"Unknown asset at path {path}");
-                    return;
-            }
+            AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
         }
 
         protected override void DrawUI()
