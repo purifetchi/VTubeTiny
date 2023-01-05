@@ -52,7 +52,7 @@ namespace VTTiny
             try
             {
                 Console.WriteLine($"Loading stage {path}.");
-                var config = JsonSerializationHelper.LoadConfigFromFile(path);
+                var config = JsonSerializationHelper.LoadFromFile<Config>(path);
                 Config = config;
             }
             catch

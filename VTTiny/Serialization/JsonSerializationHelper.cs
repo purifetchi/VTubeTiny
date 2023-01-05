@@ -33,14 +33,17 @@ namespace VTTiny.Serialization
         }
 
         /// <summary>
-        /// Loads a config from a json file.
+        /// Deserializes a class from a json file.
         /// </summary>
         /// <param name="path">The path to the file.</param>
-        /// <returns>The resulting config.</returns>
-        public static Config LoadConfigFromFile(string path)
+        /// <returns>The resulting class.</returns>
+        public static T LoadFromFile<T>(string path)
         {
+            if (!File.Exists(path))
+                return default;
+
             var data = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<Config>(data, SerializerOptions);
+            return JsonSerializer.Deserialize<T>(data, SerializerOptions);
         }
 
         /// <summary>
