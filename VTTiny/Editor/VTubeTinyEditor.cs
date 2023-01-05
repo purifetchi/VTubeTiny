@@ -138,7 +138,7 @@ namespace VTTiny.Editor
         /// </summary>
         private void LoadTheme()
         {
-            _theme?.UnloadTheme();
+            _theme?.UnloadTheme(false);
 
             _theme = JsonSerializationHelper.LoadFromFile<EditorTheme>("res/editortheme.json");
             _theme?.LoadTheme();
@@ -207,6 +207,7 @@ namespace VTTiny.Editor
         /// </summary>
         public void Destroy()
         {
+            _theme?.UnloadTheme(true);
             rlImGui.Shutdown();
             Raylib.ClearWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
         }

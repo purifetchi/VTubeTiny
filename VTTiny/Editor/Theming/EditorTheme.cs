@@ -153,8 +153,11 @@ namespace VTTiny.Editor.Theming
         /// <summary>
         /// Unload these settings.
         /// </summary>
-        internal void UnloadTheme()
+        internal void UnloadTheme(bool exitting)
         {
+            if (exitting)
+                return;
+
             _font?.Destroy();
             rlImGui.ReloadFonts();
             ImGui.StyleColorsClassic();
