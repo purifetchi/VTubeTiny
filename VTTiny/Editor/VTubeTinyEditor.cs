@@ -4,8 +4,10 @@ using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Editor.Native;
+using VTTiny.Editor.Theming;
 using VTTiny.Editor.UI;
 using VTTiny.Rendering;
+using VTTiny.Serialization;
 
 namespace VTTiny.Editor
 {
@@ -33,6 +35,11 @@ namespace VTTiny.Editor
         /// The windows list.
         /// </summary>
         private readonly List<EditorWindow> _windows;
+
+        /// <summary>
+        /// The current theme.
+        /// </summary>
+        private EditorTheme _theme;
 
         private bool _didLayoutEditorDocks = false;
         private bool _wasEditorListModified = false;
@@ -112,6 +119,8 @@ namespace VTTiny.Editor
             ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
+            LoadTheme();
+
             Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
             Raylib.MaximizeWindow();
 
@@ -122,6 +131,17 @@ namespace VTTiny.Editor
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;
+        }
+
+        /// <summary>
+        /// Loads the editor theme.
+        /// </summary>
+        private void LoadTheme()
+        {
+            _theme?.UnloadTheme();
+
+            _theme = JsonSerializationHelper.LoadFromFile<EditorTheme>("res/editortheme.json");
+            _theme?.LoadTheme();
         }
 
         /// <summary>
@@ -142,6 +162,8 @@ namespace VTTiny.Editor
             RenderingContext.Begin(Color.BLANK);
             rlImGui.Begin();
 
+            _theme.PushFont();
+
             var dockId = ImGui.DockSpaceOverViewport();
 
             _menuBar.Render();
@@ -158,6 +180,8 @@ namespace VTTiny.Editor
 
             if (!_didLayoutEditorDocks)
                 LayoutDockWindows(dockId);
+
+            _theme.PopFont();
 
             rlImGui.End();
             RenderingContext.End();
