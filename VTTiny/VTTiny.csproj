@@ -40,6 +40,18 @@
     <PackageReference Include="Raylib-cs" Version="4.0.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorResourceFiles Include="$(ProjectDir)Resources\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="CopyEditorResourcesToBuild" BeforeTargets="Build">
+    <Copy SourceFiles="@(EditorResourceFiles)" DestinationFolder="$(OutputPath)res\%(RecursiveDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="CopyEditorResourcesToPublish" AfterTargets="Publish">
+    <Copy SourceFiles="@(EditorResourceFiles)" DestinationFolder="$(PublishDir)res\%(RecursiveDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
   <Target Name="CopySpoutToBuild" BeforeTargets="Build" Condition="'$(IsWindows)'=='true'">
     <Copy SourceFiles="$(ProjectDir)External\Spout.NET\Libraries\Spout.dll" DestinationFolder="$(OutputPath)Libraries\" SkipUnchangedFiles="true" ContinueOnError="true" />
   </Target>
