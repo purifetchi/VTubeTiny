@@ -13,11 +13,21 @@ namespace VTTiny.Components
         /// <summary>
         /// Get a component given its type.
         /// </summary>
-        /// <typeparam name="T">The type of the component (Must derive from VTTiny.Components.Component).</typeparam>
+        /// <typeparam name="T">The type of the component (or the interface it inherits).</typeparam>
         /// <returns>Either null if not found, or the component.</returns>
-        public T GetComponent<T>() where T : Component
+        public T GetComponent<T>()
         {
             return Parent.GetComponent<T>();
+        }
+
+        /// <summary>
+        /// Gets all the components given their type (or inherited interface).
+        /// </summary>
+        /// <typeparam name="T">The type of the component (or the interface it inherits).</typeparam>
+        /// <returns>A list of all of the components.</returns>
+        public T[] GetComponents<T>()
+        {
+            return Parent.GetComponents<T>();
         }
 
         /// <summary>
