@@ -31,10 +31,21 @@ namespace VTTiny.Components
         /// </summary>
         public float JumpSpeedMultiplier { get; set; } = 10;
 
+        /// <summary>
+        /// Should the amount of jumps be limited?
+        /// </summary>
+        public bool LimitJumps { get; set; } = false;
+
+        /// <summary>
+        /// The maximum amount of jumps.
+        /// </summary>
+        public int MaxJumps { get; set; } = 1;
+
         private WasapiCapture _capture;
         private MMDevice _microphone;
         private bool _talking;
         private int _lastLevel = 0;
+        private int _jumpCount = 0;
 
         private ISpeakingAwareComponent[] _components;
         private Vector2Int _basePos;
@@ -98,13 +109,21 @@ namespace VTTiny.Components
 
             _lastLevel = level;
 
-            if (_talking &&
-                !_jump)
+            if (_talking)
             {
-                _jumpTimer.SetNow();
+                if (!_jump)
+                {
+                    _jumpTimer.SetNow();
 
-                _basePos = Parent.Transform.LocalPosition;
-                _jump = true;
+                    _basePos = Parent.Transform.LocalPosition;
+
+                    _jump = !LimitJumps || (LimitJumps && _jumpCount < MaxJumps);
+                    _jumpCount++;
+                }
+            }
+            else
+            {
+                _jumpCount = 0;
             }
 
             if (_jump)
@@ -143,6 +162,8 @@ namespace VTTiny.Components
             Multiplier = config.Multiplier;
             JumpHeight = config.JumpHeight;
             JumpSpeedMultiplier = config.JumpSpeedMultiplier;
+            LimitJumps = config.LimitJumps;
+            MaxJumps = config.MaxJumps;
         }
 
         internal override void RenderEditorGUI()
@@ -151,6 +172,10 @@ namespace VTTiny.Components
             Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
+
+            LimitJumps = EditorGUI.Checkbox("Limit jumps?", LimitJumps);
+            if (LimitJumps)
+                MaxJumps = EditorGUI.DragInt("Max jumps", MaxJumps);
 
             ImGui.Separator();
             if (EditorGUI.MicrophoneDropdown("Microphone", _microphone, out MMDevice newMic))
@@ -168,7 +193,10 @@ namespace VTTiny.Components
                 Multiplier = Multiplier,
                 JumpSpeedMultiplier = JumpSpeedMultiplier,
                 JumpHeight = JumpHeight,
-                Microphone = _microphone?.FriendlyName
+                Microphone = _microphone?.FriendlyName,
+
+                LimitJumps = LimitJumps,
+                MaxJumps = MaxJumps
             };
         }
     }
