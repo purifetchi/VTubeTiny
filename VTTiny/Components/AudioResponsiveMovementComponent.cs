@@ -36,7 +36,7 @@ namespace VTTiny.Components
         private bool _talking;
         private int _lastLevel = 0;
 
-        private SimpleCharacterAnimatorComponent _character;
+        private ISpeakingAwareComponent[] _components;
         private Vector2Int _basePos;
         private StageTimer _jumpTimer;
         private bool _jump;
@@ -82,7 +82,7 @@ namespace VTTiny.Components
 
         public override void Start()
         {
-            _character = GetComponent<SimpleCharacterAnimatorComponent>();
+            _components = GetComponents<ISpeakingAwareComponent>();
             _jumpTimer = new StageTimer(Parent.OwnerStage);
 
             SetMicrophone(MicrophoneHelper.GetDefaultMicrophone());
@@ -121,8 +121,8 @@ namespace VTTiny.Components
                 }
             }
 
-            if (_character != null)
-                _character.IsSpeaking = _talking;
+            foreach (var component in _components)
+                component.IsSpeaking = _talking;
         }
 
         public override void Destroy()

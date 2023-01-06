@@ -4,7 +4,7 @@ using VTTiny.Components.Data;
 
 namespace VTTiny.Components
 {
-    public class SimpleCharacterAnimatorComponent : Component
+    public class SimpleCharacterAnimatorComponent : Component, ISpeakingAwareComponent
     {
         /// <summary>
         /// Is the character speaking?
