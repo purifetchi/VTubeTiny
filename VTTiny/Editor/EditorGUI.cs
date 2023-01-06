@@ -9,6 +9,7 @@ using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Audio;
 using VTTiny.Components;
+using VTTiny.Extensions;
 
 namespace VTTiny.Editor
 {
@@ -145,9 +146,9 @@ namespace VTTiny.Editor
         /// <returns>The modified color value.</returns>
         public static Color ColorEdit(string label, Color color)
         {
-            var vec = new Vector4(color.r / 255f, color.g / 255f, color.b / 255f, color.a / 255f);
+            var vec = color.ToVector4();
             ImGui.ColorEdit4(label, ref vec);
-            return new Color((int)(vec.X * 255), (int)(vec.Y * 255), (int)(vec.Z * 255), (int)(vec.W * 255));
+            return vec.ToColor();
         }
 
         /// <summary>
