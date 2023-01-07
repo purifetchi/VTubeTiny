@@ -162,7 +162,7 @@ namespace VTTiny.Editor
             RenderingContext.Begin(Color.BLANK);
             rlImGui.Begin();
 
-            _theme.PushFont();
+            _theme?.PushFont();
 
             var dockId = ImGui.DockSpaceOverViewport();
 
@@ -181,7 +181,7 @@ namespace VTTiny.Editor
             if (!_didLayoutEditorDocks)
                 LayoutDockWindows(dockId);
 
-            _theme.PopFont();
+            _theme?.PopFont();
 
             rlImGui.End();
             RenderingContext.End();
