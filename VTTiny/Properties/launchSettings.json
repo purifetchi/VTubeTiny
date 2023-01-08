@@ -2,7 +2,7 @@
   "profiles": {
     "VTTiny": {
       "commandName": "Project",
-      "commandLineArgs": "-f config.json -e"
+      "commandLineArgs": "-f config.json"
     }
   }
 }

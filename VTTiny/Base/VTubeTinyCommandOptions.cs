@@ -13,7 +13,7 @@ namespace VTTiny
         [Option('f', "Config File", Required = false, HelpText = "The config file to load.")]
         public string ConfigFile { get; set; }
 
-        [Option('e', "Editor mode", Required = false, HelpText = "Enter editor mode.")]
-        public bool EditorMode { get; set; }
+        [Option('s', "Stage Viewer Mode", Required = false, HelpText = "Launch into the stage viewer mode. (VTubeTiny will launch into the editor mode otherwise.)")]
+        public bool StageViewerMode { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace VTTiny
             LoadConfigFromFile(options.ConfigFile);
             SetVerbosity(options.Verbose);
 
-            if (options.EditorMode)
+            if (!options.StageViewerMode)
                 CreateEditor();
         }
 
