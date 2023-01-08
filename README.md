@@ -9,6 +9,8 @@ VTubeTiny is a small VTuber/PNGTuber suite (written in C# and utilizing Raylib) 
 
 ![Editor Demo](/Meta/editor.gif)
 
+*(Bow asset by [J_I_N_X_T](https://twitter.com/J_I_N_X_T))*
+
 ## Requirements
 
 * .NET 6
