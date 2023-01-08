@@ -59,21 +59,17 @@ This is how a sample VTubeTiny configuration file looks like:
 }
 ```
 
-After having generated a config file, you launch VTubeTiny by providing it the path to your config file:
+After having generated a config file, you can launch VTubeTiny's **Stage Viewer** mode by providing it the path to your config file, like so:
 
 ```
-VTubeTiny.exe -f config.json
+VTubeTiny.exe -s -f config.json
 ```
 
-By default, VTubeTiny launches with an empty stage.
+The **-s** parameters instructs VTubeTiny to launch into the slimmed-down **Stage Viewer**, which only processes the stage and skips the overhead of the Editor.
 
 ## Editor
 
-VTubeTiny features a fully fledged editor mode which you can enter by launching VTubeTiny with the `-e` parameter, like so:
-
-```
-VTubeTiny.exe -e
-```
+When you launch VTubeTiny without any parameters, it launches into a fully built-in **Stage Editor** mode!
 
 It allows for full stage editing, exporting, actor editing and more! It completely erases the need to construct configuration files by themselves.
 
