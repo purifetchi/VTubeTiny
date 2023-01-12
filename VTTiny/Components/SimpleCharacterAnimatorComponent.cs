@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using VTTiny.Components.Animator;
-using VTTiny.Components.Data;
+using VTTiny.Components.Animator.Data;
 
 namespace VTTiny.Components
 {
@@ -39,8 +39,8 @@ namespace VTTiny.Components
 
         internal override void InheritParametersFromConfig(JsonElement? parameters)
         {
-            var config = JsonObjectToConfig<SimpleCharacterAnimatorConfig>(parameters);
-            Character = config.ConstructCharacterPackage(Parent.OwnerStage.AssetDatabase);
+            var config = JsonObjectToConfig<AnimatorCharacterConfig>(parameters);
+            Character = config.ToAnimatorCharacter(Parent.OwnerStage.AssetDatabase);
         }
 
         internal override void RenderEditorGUI()
@@ -50,7 +50,7 @@ namespace VTTiny.Components
 
         protected override object PackageParametersIntoConfig()
         {
-            return SimpleCharacterAnimatorConfig.FromCharacter(Character);
+            return Character.PackageIntoConfig();
         }
     }
 }
