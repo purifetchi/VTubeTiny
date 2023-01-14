@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Raylib_cs;
+using VTTiny.Base;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 using VTTiny.Extensions;
@@ -11,6 +11,7 @@ namespace VTTiny.Components
     /// <summary>
     /// The component that switches the actor's color when they're speaking and not.
     /// </summary>
+    [DependsOnComponent(typeof(TextureRendererComponent))]
     public class SpeakingColorChangerComponent : Component, ISpeakingAwareComponent
     {
         public bool IsSpeaking { get; set; } = false;

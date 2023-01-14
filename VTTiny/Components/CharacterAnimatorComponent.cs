@@ -2,6 +2,7 @@
 using System.Text.Json;
 using ImGuiNET;
 using Raylib_cs;
+using VTTiny.Base;
 using VTTiny.Components.Animator;
 using VTTiny.Components.Animator.Data;
 using VTTiny.Components.Data;
@@ -9,6 +10,7 @@ using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
+    [DependsOnComponent(typeof(TextureRendererComponent))]
     public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
     {
         public bool IsSpeaking { get; set; }

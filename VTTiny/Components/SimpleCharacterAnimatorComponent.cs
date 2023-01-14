@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
+using VTTiny.Base;
 using VTTiny.Components.Animator;
 using VTTiny.Components.Animator.Data;
 
 namespace VTTiny.Components
 {
+    [DependsOnComponent(typeof(TextureRendererComponent))]
     public class SimpleCharacterAnimatorComponent : Component, ISpeakingAwareComponent
     {
         /// <summary>
