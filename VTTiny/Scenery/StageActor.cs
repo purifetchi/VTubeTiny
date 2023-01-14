@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Raylib_cs;
+using VTTiny.Base;
 using VTTiny.Components;
 using VTTiny.Extensions;
 
@@ -140,11 +143,41 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Returns whether the actor contains a component of a type.
+        /// </summary>
+        /// <param name="type">The type of the component.</param>
+        /// <returns>Whether the actor contains the component.</returns>
+        internal bool ContainsComponent(Type type)
+        {
+            return _components.Any(component => component.GetType() == type);
+        }
+
+        /// <summary>
+        /// Processes the component dependencies for a given component and instantiates them.
+        /// </summary>
+        /// <param name="component">The component to process the dependencies of.</param>
+        private void ProcessComponentDependencyChain(Component component)
+        {
+            var deps = component.GetType()
+                .GetCustomAttributes<DependsOnComponentAttribute>()
+                .Select(attrib => attrib.ComponentType)
+                .Where(type => !ContainsComponent(type));
+
+            foreach (var dependency in deps)
+            {
+                ConstructComponentFromType(dependency);
+                Console.WriteLine($"Resolved unsatisfied dependency {dependency.FullName} for component {component.GetType().FullName}.");
+            }
+        }
+
+        /// <summary>
         /// Initializes a component.
         /// </summary>
         /// <param name="component">The component.</param>
-        internal void InitializeComponent(Component component)
+        private void InitializeComponent(Component component)
         {
+            ProcessComponentDependencyChain(component);
+
             component.SetParent(this);
             component.Start();
 
