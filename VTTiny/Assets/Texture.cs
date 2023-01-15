@@ -72,6 +72,19 @@ namespace VTTiny.Assets
 
             Raylib.SetTextureFilter(BackingTexture, filter);
             FilteringMode = filter;
+
+            // If we're above trilinear filtering, generate mipmaps.
+            if ((int)FilteringMode >= (int)TextureFilter.TEXTURE_FILTER_TRILINEAR)
+                GenerateMipmaps();
+        }
+
+        /// <summary>
+        /// Generates mipmaps for this texture.
+        /// </summary>
+        protected virtual void GenerateMipmaps()
+        {
+            var texture = BackingTexture;
+            Raylib.GenTextureMipmaps(ref texture);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -117,8 +130,8 @@ namespace VTTiny.Assets
 
         protected override void InternalRenderEditorGUI()
         {
-            var isBilinear = EditorGUI.Checkbox("Bilinear Filtering", FilteringMode == TextureFilter.TEXTURE_FILTER_BILINEAR);
-            SetTextureFilterMode(isBilinear ? TextureFilter.TEXTURE_FILTER_BILINEAR : TextureFilter.TEXTURE_FILTER_POINT);
+            var isSmooth = EditorGUI.Checkbox("Smooth Filtering", FilteringMode == TextureFilter.TEXTURE_FILTER_TRILINEAR);
+            SetTextureFilterMode(isSmooth ? TextureFilter.TEXTURE_FILTER_TRILINEAR : TextureFilter.TEXTURE_FILTER_POINT);
         }
     }
 }

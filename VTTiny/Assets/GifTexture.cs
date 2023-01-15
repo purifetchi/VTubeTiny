@@ -108,6 +108,11 @@ namespace VTTiny.Assets
                 Raylib.UnloadImage(_image);
         }
 
+        protected override void GenerateMipmaps()
+        {
+            // Mipmaps are not supported on GIF textures.
+        }
+
         protected override void InternalRenderEditorGUI()
         {
             base.InternalRenderEditorGUI();
