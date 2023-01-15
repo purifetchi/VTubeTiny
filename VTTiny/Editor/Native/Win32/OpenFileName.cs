@@ -9,6 +9,9 @@ namespace VTTiny.Editor.Native.Win32
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     internal struct OpenFileName
     {
+        private const int MAX_FILE_NAME_LENGTH = 256;
+        private const int MAX_FILE_TITLE_LENGTH = 64;
+
         /// <summary>
         /// Constructs a new OpenFileName struct with generic data.
         /// </summary>
@@ -18,16 +21,15 @@ namespace VTTiny.Editor.Native.Win32
             var ofn = new OpenFileName
             {
                 structSize = Marshal.SizeOf<OpenFileName>(),
-                filter = "Scene data\0*.json",
-                defExt = "json"
+                filter = "Scene data\0*.json\0",
+                defExt = "json",
+
+                file = new(new char[MAX_FILE_NAME_LENGTH]),
+                maxFile = MAX_FILE_NAME_LENGTH,
+
+                fileTitle = new(new char[MAX_FILE_TITLE_LENGTH]),
+                maxFileTitle = MAX_FILE_TITLE_LENGTH
             };
-
-
-            ofn.file = new(new char[256]);
-            ofn.maxFile = ofn.file.Length;
-
-            ofn.fileTitle = new(new char[64]);
-            ofn.maxFileTitle = ofn.fileTitle.Length;
 
             return ofn;
         }
