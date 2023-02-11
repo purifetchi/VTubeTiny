@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-using System.Xml.Linq;
 using ImGuiNET;
-using NAudio.CoreAudioApi;
 using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Assets.Management;
@@ -330,35 +328,31 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
-        /// Shows a dropdown for all microphones.
+        /// Shows a dropdown for the listenable devices.
         /// </summary>
         /// <param name="label">The label for the dropdown.</param>
-        /// <param name="currentMicrophone">The current microphone.</param>
-        /// <param name="newMicrophone">The new microphone.</param>
+        /// <param name="currentDevice">The current listenable device.</param>
+        /// <param name="newDevice">The picked listenable device.</param>
         /// <returns>Whether we've switched the selection.</returns>
-        public static bool MicrophoneDropdown(string label, MMDevice currentMicrophone, out MMDevice newMicrophone)
+        public static bool ListenableDeviceDropdown(string label, IListenableDevice currentDevice, out IListenableDevice newDevice)
         {
-            newMicrophone = default;
+            newDevice = default;
 
-            var name = MicrophoneHelper.GetMicrophoneNameFast(currentMicrophone);
-            if (ImGui.BeginCombo($"{label}##MicrophoneDropdown", $"{name ?? "No microphone selected."}"))
+            if (ImGui.BeginCombo($"{label}##MicrophoneDropdown", $"{currentDevice?.Name ?? "No microphone selected."}"))
             {
-                if (ImGui.Selectable("None", currentMicrophone == null))
+                if (ImGui.Selectable("None", currentDevice == null))
                 {
                     ImGui.EndCombo();
                     return true;
                 }
 
-                var mics = MicrophoneHelper.GetMicrophones();
-                for (var i = 0; i < mics.Count; i++)
+                foreach (var device in ListenableDeviceHelper.GetAllListenableDevices())
                 {
-                    var microphone = mics[i];
-
-                    if (ImGui.Selectable(MicrophoneHelper.GetMicrophoneNames()[i], microphone == currentMicrophone))
+                    if (ImGui.Selectable(device.Name, device == currentDevice))
                     {
                         ImGui.EndCombo();
 
-                        newMicrophone = microphone;
+                        newDevice = device;
                         return true;
                     }
                 }

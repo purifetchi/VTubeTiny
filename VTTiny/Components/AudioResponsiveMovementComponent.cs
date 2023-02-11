@@ -41,8 +41,11 @@ namespace VTTiny.Components
         /// </summary>
         public int MaxJumps { get; set; } = 1;
 
-        private WasapiCapture _capture;
-        private MMDevice _microphone;
+        /// <summary>
+        /// The device we're listening to.
+        /// </summary>
+        private IListenableDevice _device;
+
         private bool _talking;
         private int _lastLevel = 0;
         private int _jumpCount = 0;
@@ -53,19 +56,18 @@ namespace VTTiny.Components
         private bool _jump;
 
         /// <summary>
-        /// Sets the microphone for this component.
+        /// Sets the listenable device for this component.
         /// </summary>
-        /// <param name="microphone">The microphone.</param>
-        public void SetMicrophone(MMDevice microphone)
+        /// <param name="device">The device.</param>
+        public void SetListenableDevice(IListenableDevice device)
         {
-            DestroyWasapiContexts();
-            _microphone = microphone;
+            _device?.Stop();
 
-            if (_microphone == null)
+            if (device == null)
                 return;
 
-            _capture = new WasapiCapture(_microphone);
-            _capture.StartRecording();
+            _device = device;
+            _device.Listen();
         }
 
         /// <summary>
@@ -74,21 +76,10 @@ namespace VTTiny.Components
         /// <returns>The peak level.</returns>
         private int Level()
         {
-            if (_microphone == null)
+            if (_device == null)
                 return 0;
 
-            return (int)Math.Round(_microphone.AudioMeterInformation.MasterPeakValue * 100 * Multiplier);
-        }
-
-        /// <summary>
-        /// Destroys all WASAPI related contexts (WasapiCapture, Microphone).
-        /// </summary>
-        private void DestroyWasapiContexts()
-        {
-            _capture?.StopRecording();
-            _capture?.Dispose();
-
-            _capture = null;
+            return (int)Math.Round(_device.Level * 100 * Multiplier);
         }
 
         public override void Start()
@@ -96,12 +87,12 @@ namespace VTTiny.Components
             _components = GetComponents<ISpeakingAwareComponent>();
             _jumpTimer = new StageTimer(Parent.OwnerStage);
 
-            SetMicrophone(MicrophoneHelper.GetDefaultMicrophone());
+            SetListenableDevice(ListenableDeviceHelper.GetFirstDefaultDevice());
         }
 
         public override void Update()
         {
-            if (_microphone == null)
+            if (_device == null)
                 return;
 
             var level = Level();
@@ -146,7 +137,7 @@ namespace VTTiny.Components
 
         public override void Destroy()
         {
-            DestroyWasapiContexts();
+            _device?.Stop();
         }
 
         internal override void InheritParametersFromConfig(JsonElement? parameters)
@@ -154,9 +145,9 @@ namespace VTTiny.Components
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
 
             if (string.IsNullOrEmpty(config.Microphone))
-                SetMicrophone(MicrophoneHelper.GetDefaultMicrophone());
+                SetListenableDevice(ListenableDeviceHelper.GetFirstDefaultDevice());  
             else
-                SetMicrophone(MicrophoneHelper.GetMicrophoneByName(config.Microphone));
+                SetListenableDevice(ListenableDeviceHelper.GetListenableDeviceByName(config.Microphone));
 
             Threshold = config.Threshold;
             Multiplier = config.Multiplier;
@@ -178,10 +169,10 @@ namespace VTTiny.Components
                 MaxJumps = EditorGUI.DragInt("Max jumps", MaxJumps);
 
             ImGui.Separator();
-            if (EditorGUI.MicrophoneDropdown("Microphone", _microphone, out MMDevice newMic))
-                SetMicrophone(newMic);
+            if (EditorGUI.ListenableDeviceDropdown("Device", _device, out IListenableDevice newDevice))
+                SetListenableDevice(newDevice);
 
-            EditorGUI.Text("Microphone level");
+            EditorGUI.Text("Device level");
             EditorGUI.ReactiveProgressBar(Level(), Threshold, 100);
         }
 
@@ -193,7 +184,7 @@ namespace VTTiny.Components
                 Multiplier = Multiplier,
                 JumpSpeedMultiplier = JumpSpeedMultiplier,
                 JumpHeight = JumpHeight,
-                Microphone = _microphone?.FriendlyName,
+                Microphone = _device?.Name,
 
                 LimitJumps = LimitJumps,
                 MaxJumps = MaxJumps
