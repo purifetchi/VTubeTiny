@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Xml.Linq;
 using ImGuiNET;
 using NAudio.CoreAudioApi;
 using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Audio;
+using VTTiny.Base;
 using VTTiny.Components;
 using VTTiny.Extensions;
 
@@ -281,6 +283,16 @@ namespace VTTiny.Editor
             ImGui.Combo(" ", ref index, KeyNameCache, KeyNameCache.Length);
 
             return KeyCache[index];
+        }
+
+        /// <summary>
+        /// Shows a text input window for renaming.
+        /// </summary>
+        /// <param name="namedObject">The object to rename.</param>
+        /// <param name="vtubetiny">The VTubeTiny instance for which it's invoked.</param>
+        public static void ShowRenameWindow(INamedObject namedObject, VTubeTiny vtubetiny)
+        {
+            ShowTextInputWindow($"Renaming '{namedObject.Name}'.", namedObject.Name, name => namedObject.Name = name, vtubetiny);
         }
 
         /// <summary>

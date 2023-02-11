@@ -12,7 +12,7 @@ namespace VTTiny.Scenery
     /// <summary>
     /// An object in a stage, can contain components that modify what it does.
     /// </summary>
-    public partial class StageActor
+    public partial class StageActor : INamedObject
     {
         /// <summary>
         /// The stage that owns this actor.
@@ -27,7 +27,7 @@ namespace VTTiny.Scenery
         /// <summary>
         /// The name of this actor.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Allow/disable rendering of this component.

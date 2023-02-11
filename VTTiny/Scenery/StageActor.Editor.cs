@@ -26,7 +26,7 @@ namespace VTTiny.Scenery
                 ImGui.SameLine();
 
                 if (ImGui.Button("Rename Actor"))
-                    EditorGUI.ShowTextInputWindow($"Setting new name for actor {Name}.", Name, newName => Name = newName, OwnerStage.VTubeTiny);
+                    EditorGUI.ShowRenameWindow(this, OwnerStage.VTubeTiny);
 
                 AllowRendering = EditorGUI.Checkbox("Allow rendering", AllowRendering);
 

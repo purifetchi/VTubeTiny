@@ -1,11 +1,12 @@
 ﻿using Raylib_cs;
+using VTTiny.Base;
 
 namespace VTTiny.Components.Animator
 {
     /// <summary>
     /// This class contains the single definition of a state for the character animator.
     /// </summary>
-    public partial class AnimatorState
+    public partial class AnimatorState : INamedObject
     {
         /// <summary>
         /// The name of this animator state.

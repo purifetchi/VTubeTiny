@@ -19,7 +19,7 @@ namespace VTTiny.Components.Animator
                 EditorGUI.Checkbox("Is default?", IsDefaultState);
 
                 if (ImGui.Button("Rename state"))   
-                    EditorGUI.ShowTextInputWindow($"Setting new name for state {Name}", Name, newName => Name = newName, stage.VTubeTiny);
+                    EditorGUI.ShowRenameWindow(this, stage.VTubeTiny);
 
                 Key = EditorGUI.KeycodeDropdown(Key);
 

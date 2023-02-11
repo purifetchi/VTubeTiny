@@ -1,6 +1,7 @@
 ﻿using System;
 using ImGuiNET;
 using VTTiny.Assets.Management;
+using VTTiny.Base;
 using VTTiny.Serialization;
 
 namespace VTTiny.Assets
@@ -8,7 +9,7 @@ namespace VTTiny.Assets
     /// <summary>
     /// An abstract asset used by VTubeTiny.
     /// </summary>
-    public abstract class Asset : TypedSerializedObject
+    public abstract class Asset : TypedSerializedObject, INamedObject
     {
         /// <summary>
         /// The ID of this asset.
@@ -18,7 +19,7 @@ namespace VTTiny.Assets
         /// <summary>
         /// The name of this asset.
         /// </summary>
-        public string Name { get; internal set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Constructs a reference to this asset.
