@@ -17,7 +17,7 @@ namespace VTTiny.Extensions
         {
             // First ensure the <T> parameter is actually either the class or its parent class.
             if (type != typeof(T) &&
-                !type.IsSubclassOf(typeof(T)))
+                !type.IsAssignableTo(typeof(T)))
             {
                 throw new ArgumentException($"{type.FullName} is not / does not derive from {typeof(T).FullName}!", nameof(type));
             }
