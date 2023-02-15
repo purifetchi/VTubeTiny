@@ -42,10 +42,10 @@ namespace VTTiny.Audio.Native.Win32
             if (_backingDevice.DataFlow == DataFlow.Render)
                 return;
 
-            if (_wasapiCapture != null)
+            if (_wasapiCapture != null && _wasapiCapture.CaptureState == CaptureState.Capturing)
                 return;
 
-            _wasapiCapture = new WasapiCapture(_backingDevice);
+            _wasapiCapture ??= new WasapiCapture(_backingDevice);
             _wasapiCapture.StartRecording();
         }
 
