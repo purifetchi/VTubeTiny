@@ -66,6 +66,8 @@ namespace VTTiny
         /// </summary>
         public void ReloadStage()
         {
+            SetActiveStage(null);
+
             var stage = Stage.Blank(this)
                              .WithConfig(Config);
 
@@ -89,7 +91,7 @@ namespace VTTiny
             ActiveStage?.Destroy();
             ActiveStage = stage;
 
-            ActiveStage.RenderingContext.SetCanDrawFullscreen(Editor == null);
+            ActiveStage?.RenderingContext.SetCanDrawFullscreen(Editor == null);
         }
 
         /// <summary>
