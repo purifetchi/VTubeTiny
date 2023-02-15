@@ -61,6 +61,9 @@ namespace VTTiny.Components
         /// <param name="device">The device.</param>
         public void SetListenableDevice(IListenableDevice device)
         {
+            if (device == _device)
+                return;
+
             _device?.Stop();
 
             if (device == null)
