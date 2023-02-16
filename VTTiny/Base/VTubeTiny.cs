@@ -2,6 +2,7 @@
 using Raylib_cs;
 using VTTiny.Data;
 using VTTiny.Editor;
+using VTTiny.Plugins;
 using VTTiny.Scenery;
 using VTTiny.Serialization;
 
@@ -113,6 +114,9 @@ namespace VTTiny
         public void Run()
         {
             Console.WriteLine("VTubeTiny initializing.");
+
+            Console.WriteLine("Loading plugins...");
+            PluginManager.LoadAllPlugins();
 
             Raylib.InitWindow(800, 600, "VTubeTiny");
 
