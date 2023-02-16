@@ -30,7 +30,7 @@ namespace VTTiny.Plugins
             foreach (var directory in Directory.GetDirectories(PLUGINS_FOLDER_PATH))
             {
                 var plugin = Plugin.TryLoadFromFile(directory);
-                
+
                 if (plugin == null)
                 {
                     Console.WriteLine($"Failed to load plugin {directory}.");
@@ -56,6 +56,19 @@ namespace VTTiny.Plugins
         }
 
         /// <summary>
+        /// Gets all the types from the loaded assemblies.
+        /// </summary>
+        /// <returns>The types.</returns>
+        public static IEnumerable<Type> GetTypesInLoadedAssemblies()
+        {
+            foreach (var assembly in GetAllLoadedAssemblies())
+            {
+                foreach (var type in assembly.GetTypes())
+                    yield return type;
+            }
+        }
+
+        /// <summary>
         /// Finds and returns the type given its name in all the loaded assemblies.
         /// </summary>
         /// <param name="typeName">The type name.</param>
@@ -65,11 +78,11 @@ namespace VTTiny.Plugins
             foreach (var assembly in GetAllLoadedAssemblies())
             {
                 var type = assembly.GetType(typeName);
-                
+
                 if (type != null)
                     return type;
             }
-            
+
             return null;
         }
     }
