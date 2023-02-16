@@ -10,6 +10,7 @@ using VTTiny.Audio;
 using VTTiny.Base;
 using VTTiny.Components;
 using VTTiny.Extensions;
+using VTTiny.Plugins;
 
 namespace VTTiny.Editor
 {
@@ -66,8 +67,7 @@ namespace VTTiny.Editor
         /// </summary>
         private static void CollectComponents()
         {
-            var components = Assembly.GetAssembly(typeof(Component))
-                                     .GetTypes()
+            var components = PluginManager.GetTypesInLoadedAssemblies()
                                      .Where(type => type.IsSubclassOf(typeof(Component)) && !type.IsAbstract && type.IsClass)
                                      .Select(type => type.FullName)
                                      .ToArray();
@@ -186,7 +186,7 @@ namespace VTTiny.Editor
 
             if (ImGui.Button("Add Component"))
             {
-                componentType = Type.GetType(ComponentTypeCache[_comboBoxComponentIndex]);
+                componentType = PluginManager.FindTypeInLoadedAssemblies(ComponentTypeCache[_comboBoxComponentIndex]);
                 return true;
             }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json;
+using VTTiny.Plugins;
 
 namespace VTTiny.Data
 {
@@ -23,7 +24,7 @@ namespace VTTiny.Data
         {
             resolvedType = null;
 
-            var type = System.Type.GetType($"{Namespace}.{Type}");
+            var type = PluginManager.FindTypeInLoadedAssemblies($"{Namespace}.{Type}");
             if (type == null)
                 return false;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using VTTiny.Extensions;
+using VTTiny.Plugins;
 
 namespace VTTiny.Audio
 {
@@ -35,8 +36,7 @@ namespace VTTiny.Audio
 
             // Get all the listenable enumerator types via reflection.
             // This is kindaaaa bad but it should work for now.
-            var enumeratorTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
+            var enumeratorTypes = PluginManager.GetTypesInLoadedAssemblies()
                 .Where(t => t.IsClass && t.IsAssignableTo(typeof(IListenableDeviceEnumerator)));
 
             foreach (var enumeratorType in enumeratorTypes)
