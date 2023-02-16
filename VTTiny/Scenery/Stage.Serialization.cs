@@ -40,7 +40,7 @@ namespace VTTiny.Scenery
         {
             var config = new Config
             {
-                ClearColor = ClearColor,
+                Background = Background.PackageIntoConfig(),
                 Dimensions = Dimensions,
                 FPSLimit = TargetFPS,
                 BroadcastViaSpout = BroadcastViaSpout,

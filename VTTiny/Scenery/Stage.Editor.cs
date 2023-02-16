@@ -29,7 +29,8 @@ namespace VTTiny.Scenery
             if (ImGui.IsItemDeactivatedAfterEdit())
                 ResizeStage(Dimensions);
 
-            ClearColor = EditorGUI.ColorEdit("Clear color", ClearColor);
+            Background.RenderEditorGUI(AssetDatabase);
+
             TargetFPS = EditorGUI.DragInt("Target FPS", TargetFPS);
             if (ImGui.IsItemDeactivatedAfterEdit())
                 SetTargetFPS(TargetFPS);

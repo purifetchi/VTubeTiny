@@ -23,9 +23,9 @@ namespace VTTiny.Scenery
         public Vector2Int Dimensions { get; private set; }
 
         /// <summary>
-        /// The background color of this stage.
+        /// The background of this stage.
         /// </summary>
-        public Color ClearColor { get; private set; }
+        public Background Background { get; private set; }
 
         /// <summary>
         /// The time in seconds ever since the scene became active.
@@ -88,7 +88,7 @@ namespace VTTiny.Scenery
             return new Stage
             {
                 _actors = new(),
-                ClearColor = new(0, 255, 0, 255),
+                Background = Background.Default(),
                 Dimensions = new(800, 400),
                 RenderingContext = new GenericRaylibRenderingContext(),
                 TargetFPS = refreshRate,
@@ -112,7 +112,7 @@ namespace VTTiny.Scenery
 
             ResizeStage(config.Dimensions);
 
-            ClearColor = config.ClearColor;
+            Background = Background.FromConfig(config.Background, AssetDatabase);
             SetTargetFPS(config.FPSLimit);
 
             SetSpoutOrDefaultContext<GenericRaylibRenderingContext>(config.BroadcastViaSpout);
@@ -258,7 +258,8 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Render()
         {
-            RenderingContext.Begin(ClearColor);
+            RenderingContext.Begin(Background.Color);
+            Background.Render(Dimensions);
 
             foreach (var actor in _actors)
             {
