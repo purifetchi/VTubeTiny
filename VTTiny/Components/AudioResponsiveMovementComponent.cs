@@ -124,6 +124,8 @@ namespace VTTiny.Components
             {
                 var clone = _basePos;
                 clone.Y -= (int)(JumpHeight * (Math.Sin(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
+                //TODO: Make this wiggle work separately from the jump. similair to how VaedoTubeMini
+                clone.X += (int)(JumpHeight * (Math.Cos(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
 
                 Parent.Transform.LocalPosition = clone;
 

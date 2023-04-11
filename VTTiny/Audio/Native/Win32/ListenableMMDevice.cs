@@ -1,5 +1,6 @@
 ﻿#if ARCH_WINDOWS
 
+using System;
 using NAudio.CoreAudioApi;
 
 namespace VTTiny.Audio.Native.Win32

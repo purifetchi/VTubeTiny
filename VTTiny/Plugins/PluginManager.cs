@@ -8,12 +8,12 @@ namespace VTTiny.Plugins
     /// <summary>
     /// A manager class tasked with loading and storing all of the plugins.
     /// </summary>
-    internal static class PluginManager
+    internal  static  class PluginManager
     {
         /// <summary>
         /// The path of the plugins subdirectory.
         /// </summary>
-        private const string PLUGINS_FOLDER_PATH = "./Plugins/";
+        private static string PLUGINS_FOLDER_PATH = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, System.AppDomain.CurrentDomain.RelativeSearchPath ?? "", "Plugins");
 
         /// <summary>
         /// The currently loaded plugins.
@@ -26,7 +26,9 @@ namespace VTTiny.Plugins
         public static void LoadAllPlugins()
         {
             _plugins = new();
-
+            if (!Directory.Exists(PLUGINS_FOLDER_PATH))
+                Directory.CreateDirectory(PLUGINS_FOLDER_PATH); //TODO: Mark this as an issue
+            //First boot after download will not have the plugins folder, and crash
             foreach (var directory in Directory.GetDirectories(PLUGINS_FOLDER_PATH))
             {
                 var plugin = Plugin.TryLoadFromFile(directory);
