@@ -1,4 +1,8 @@
-﻿using VTTiny.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VTTiny.Assets;
 
 namespace VTTiny.Components.Animator
 {
@@ -41,7 +45,7 @@ namespace VTTiny.Components.Animator
         /// <summary>
         /// The texture for when the character is speaking.
         /// </summary>
-        public Texture Speaking { get; set; }
+        public IList<Texture> Speaking { get; set; }
 
         /// <summary>
         /// The texture for when the character is speaking and blinking.
@@ -57,6 +61,27 @@ namespace VTTiny.Components.Animator
         /// Whether the character is currently blinking.
         /// </summary>
         private State _currentState = State.Idle;
+        
+        /// <summary>
+        /// Previous state of the character
+        /// </summary>
+        private State _lastState = State.Idle;
+        
+        /// <summary>
+        /// The last mouth texture.
+        /// </summary>
+        private Texture _PreviousViseme = null;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private double _visemeInBetweenTime = 100.0;
+        
+        /// <summary>
+        /// Last viseme time
+        /// </summary>
+        private TimeSpan _lastVisemeTime = TimeSpan.Zero;
+        
 
         /// <summary>
         /// The last blink action time.
@@ -103,11 +128,41 @@ namespace VTTiny.Components.Animator
         /// <returns>The texture.</returns>
         public Texture GetCurrentStateTexture()
         {
+            Speaking ??= new List<Texture>();
+            //if the state is the same as the last state, return the previous viseme
+            if (_PreviousViseme != null && _currentState == _lastState)
+            {
+                //unless the time is greater than the viseme in between time
+                if (DateTime.Now.TimeOfDay - _lastVisemeTime > TimeSpan.FromMilliseconds(_visemeInBetweenTime))
+                {
+                    _PreviousViseme = null;
+                }
+                else
+                {
+                    return _PreviousViseme;
+                }
+                return _PreviousViseme;
+            }
+            
+            _lastState = _currentState;
+            if (_currentState == State.Speaking)
+            {
+                _lastVisemeTime = DateTime.Now.TimeOfDay;
+            }
+            //get a random viseme, from the speaking list, only the not null ones
+            var visemelist = Speaking.Where(x => x != null && x.Id != default).ToList();
+            Texture viseme = null;
+            if (visemelist.Count > 0)
+            {
+                viseme = visemelist[Random.Shared.Next(visemelist.Count)];
+            }
+            
+            //Return the texture for the current state
             return _currentState switch
             {
                 State.Idle => Idle,
                 State.IdleBlink when IdleBlink != null => IdleBlink,
-                State.Speaking when Speaking != null => Speaking,
+                State.Speaking when Speaking != null && Speaking.Any() && visemelist.Any() => viseme,
                 State.SpeakingBlink when SpeakingBlink != null => SpeakingBlink,
                 _ => Idle
             };

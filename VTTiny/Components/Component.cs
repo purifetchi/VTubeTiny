@@ -3,7 +3,30 @@ using VTTiny.Serialization;
 
 namespace VTTiny.Components
 {
-    public abstract class Component : TypedSerializedObject
+    public interface IComponent
+    {
+        /// <summary>
+        /// The start method, called on the component initialization.
+        /// </summary>
+        void Start();
+
+        /// <summary>
+        /// The update method, called each frame for the component.
+        /// </summary>
+        void Update();
+
+        /// <summary>
+        /// The destroy method, called at the end of an actor's lifetime.
+        /// </summary>
+        void Destroy();
+
+        /// <summary>
+        /// The method called whenever we're updating the editor GUI, called after the regular Update() when editor mode is on.
+        /// </summary>
+        void RenderEditorGUI();
+    }
+
+    public abstract class Component : TypedSerializedObject, IComponent
     {
         /// <summary>
         /// Parent actor of this component.
@@ -57,6 +80,6 @@ namespace VTTiny.Components
         /// <summary>
         /// The method called whenever we're updating the editor GUI, called after the regular Update() when editor mode is on.
         /// </summary>
-        internal virtual void RenderEditorGUI() { }
+        public virtual void RenderEditorGUI() { }
     }
 }

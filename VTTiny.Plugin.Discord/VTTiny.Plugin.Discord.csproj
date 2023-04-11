@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>Plugin.VTTiny.Discord</AssemblyName>
+        <RootNamespace>Plugin.VTTiny.Discord</RootNamespace>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DSharpPlus" Version="4.4.0" />
+      <PackageReference Include="DSharpPlus.SlashCommands" Version="4.4.0" />
+      <PackageReference Include="DSharpPlus.VoiceNext" Version="4.4.0" />
+        
+    </ItemGroup>
+<!-- For future use, this is how you would link to the VTTiny project -->
+<!--    <ItemGroup>-->
+<!--        <ProjectReference Include="../VTTiny/VTTiny.csproj" >-->
+<!--            <Private>false</Private>-->
+<!--            <ExcludeAssets>runtime</ExcludeAssets>-->
+<!--        </ProjectReference>        -->
+<!--    </ItemGroup>    -->
+
+    <ItemGroup>
+      <Folder Include="Plugin\" />
+    </ItemGroup>
+</Project>

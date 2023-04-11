@@ -48,15 +48,20 @@ namespace VTTiny.Plugins
         /// </summary>
         /// <param name="path">The path to the plugin.</param>
         /// <returns>Either the loaded plugin, or null if it failed to load.</returns>
-        public static Plugin TryLoadFromFile(string path)
+        public static Plugin TryLoadFromDirectory(string directory)
         {
-            var dllPath = Directory.GetFiles(path)
+            var dllPath = Directory.GetFiles(directory)
                 .FirstOrDefault(file => Path.GetExtension(file) == ".dll");
 
             if (dllPath == null)
                 return null;
 
             var assembly = Assembly.LoadFrom(dllPath);
+            return new Plugin(assembly);
+        }
+        public static Plugin TryLoadFromFile(string file)
+        {
+            var assembly = Assembly.LoadFrom(file);
             return new Plugin(assembly);
         }
     }

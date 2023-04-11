@@ -1,0 +1,21 @@
+name: .NET Core
+on:
+  push:
+    branches: [master] #Branches that are getting merged into master
+  pull_request:
+    branches: [master] #check per pull request if it would break master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.* # SDK Version to use.
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore

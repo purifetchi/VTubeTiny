@@ -53,7 +53,7 @@ namespace VTTiny.Components
             return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Texture.Width * Scale, Texture.Height * Scale);
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
 
@@ -64,7 +64,7 @@ namespace VTTiny.Components
             SetTexture(config.Image?.Resolve(Parent.OwnerStage.AssetDatabase));
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             if (EditorGUI.AssetDropdown("Texture", Parent.OwnerStage.AssetDatabase, Texture, out Texture newTexture))
                 SetTexture(newTexture);

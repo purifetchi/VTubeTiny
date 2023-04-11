@@ -27,6 +27,15 @@ namespace rlImGui_cs
         private static ImGuiMouseCursor CurrentMouseCursor = ImGuiMouseCursor.COUNT;
         private static Dictionary<ImGuiMouseCursor, MouseCursor> MouseCursorMap;
         private static KeyboardKey[] KeyEnumMap;
+        private static ImGuiKey[] keys = {
+            ImGuiKey.Tab, ImGuiKey.LeftArrow, ImGuiKey.RightArrow,
+            ImGuiKey.UpArrow, ImGuiKey.DownArrow, ImGuiKey.PageUp,
+            ImGuiKey.PageDown, ImGuiKey.Home,  ImGuiKey.End,
+            ImGuiKey.Insert,  ImGuiKey.Delete, ImGuiKey.Backspace,
+            ImGuiKey.Space, ImGuiKey.Enter, ImGuiKey.Escape,
+            ImGuiKey.A, ImGuiKey.C, ImGuiKey.V,
+            ImGuiKey.X, ImGuiKey.Y, ImGuiKey.Z,
+        };
 
         private static Texture2D FontTexture;
 
@@ -97,28 +106,40 @@ namespace rlImGui_cs
             ImGui.GetIO().Fonts.AddFontDefault();
 
             ImGuiIOPtr io = ImGui.GetIO();
-            io.KeyMap[(int)ImGuiKey.Tab] = (int)KeyboardKey.KEY_TAB;
-            io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)KeyboardKey.KEY_LEFT;
-            io.KeyMap[(int)ImGuiKey.RightArrow] = (int)KeyboardKey.KEY_RIGHT;
-            io.KeyMap[(int)ImGuiKey.UpArrow] = (int)KeyboardKey.KEY_UP;
-            io.KeyMap[(int)ImGuiKey.DownArrow] = (int)KeyboardKey.KEY_DOWN;
-            io.KeyMap[(int)ImGuiKey.PageUp] = (int)KeyboardKey.KEY_PAGE_UP;
-            io.KeyMap[(int)ImGuiKey.PageDown] = (int)KeyboardKey.KEY_PAGE_DOWN;
-            io.KeyMap[(int)ImGuiKey.Home] = (int)KeyboardKey.KEY_HOME;
-            io.KeyMap[(int)ImGuiKey.End] = (int)KeyboardKey.KEY_END;
-            io.KeyMap[(int)ImGuiKey.Delete] = (int)KeyboardKey.KEY_DELETE;
-            io.KeyMap[(int)ImGuiKey.Backspace] = (int)KeyboardKey.KEY_BACKSPACE;
-            io.KeyMap[(int)ImGuiKey.Enter] = (int)KeyboardKey.KEY_ENTER;
-            io.KeyMap[(int)ImGuiKey.Escape] = (int)KeyboardKey.KEY_ESCAPE;
-            io.KeyMap[(int)ImGuiKey.Space] = (int)KeyboardKey.KEY_SPACE;
-            io.KeyMap[(int)ImGuiKey.A] = (int)KeyboardKey.KEY_A;
-            io.KeyMap[(int)ImGuiKey.C] = (int)KeyboardKey.KEY_C;
-            io.KeyMap[(int)ImGuiKey.V] = (int)KeyboardKey.KEY_V;
-            io.KeyMap[(int)ImGuiKey.X] = (int)KeyboardKey.KEY_X;
-            io.KeyMap[(int)ImGuiKey.Y] = (int)KeyboardKey.KEY_Y;
-            io.KeyMap[(int)ImGuiKey.Z] = (int)KeyboardKey.KEY_Z;
-
+            foreach (ImGuiKey imGuiKey in keys)
+            {
+                io.KeyMap[(int)imGuiKey] = (int)MapImGuiKeyToKeyboardKey(imGuiKey);
+            }
             ReloadFonts();
+        }
+
+        private static KeyboardKey MapImGuiKeyToKeyboardKey(ImGuiKey imGuiKey)
+        {
+            return imGuiKey switch
+            {
+                ImGuiKey.Tab => KeyboardKey.KEY_TAB,
+                ImGuiKey.LeftArrow => KeyboardKey.KEY_LEFT,
+                ImGuiKey.RightArrow => KeyboardKey.KEY_RIGHT,
+                ImGuiKey.UpArrow => KeyboardKey.KEY_UP,
+                ImGuiKey.DownArrow => KeyboardKey.KEY_DOWN,
+                ImGuiKey.PageUp => KeyboardKey.KEY_PAGE_UP,
+                ImGuiKey.PageDown => KeyboardKey.KEY_PAGE_DOWN,
+                ImGuiKey.Home => KeyboardKey.KEY_HOME,
+                ImGuiKey.End => KeyboardKey.KEY_END,
+                ImGuiKey.Delete => KeyboardKey.KEY_DELETE,
+                ImGuiKey.Backspace => KeyboardKey.KEY_BACKSPACE,
+                ImGuiKey.Enter => KeyboardKey.KEY_ENTER,
+                ImGuiKey.Escape => KeyboardKey.KEY_ESCAPE,
+                ImGuiKey.Space => KeyboardKey.KEY_SPACE,
+                ImGuiKey.Insert => KeyboardKey.KEY_INSERT,
+                ImGuiKey.A => KeyboardKey.KEY_A,
+                ImGuiKey.C => KeyboardKey.KEY_C,
+                ImGuiKey.V => KeyboardKey.KEY_V,
+                ImGuiKey.X => KeyboardKey.KEY_X,
+                ImGuiKey.Y => KeyboardKey.KEY_Y,
+                ImGuiKey.Z => KeyboardKey.KEY_Z,
+                _ => throw new ArgumentException($"Invalid ImGuiKey value {imGuiKey}")
+            };
         }
 
         private static void NewFrame()
@@ -138,11 +159,20 @@ namespace rlImGui_cs
             io.DisplayFramebufferScale = new Vector2(1, 1);
             io.DeltaTime = Raylib.GetFrameTime();
 
-            io.KeyCtrl = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_CONTROL) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL);
-            io.KeyShift = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_SHIFT) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT);
-            io.KeyAlt = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_ALT) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_ALT);
-            io.KeySuper = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_SUPER) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SUPER);
-
+            NewFrameKeys(io);
+            if (NewFrameMouse(io))
+            {
+                return;
+            }
+            NewFrameCursor(io);
+        }
+        /// <summary>
+        /// sets the new frame mouse event
+        /// </summary>
+        /// <param name="io"></param>
+        /// <returns></returns>
+        private static bool NewFrameMouse(ImGuiIOPtr io)
+        {
             if (io.WantSetMousePos)
             {
                 Raylib.SetMousePosition((int)io.MousePos.X, (int)io.MousePos.Y);
@@ -161,30 +191,43 @@ namespace rlImGui_cs
             else if (Raylib.GetMouseWheelMove() < 0)
                 io.MouseWheel -= 1;
 
-            if ((io.ConfigFlags & ImGuiConfigFlags.NoMouseCursorChange) == 0)
+            return (io.ConfigFlags & ImGuiConfigFlags.NoMouseCursorChange) != 0;
+        }
+        /// <summary>
+        /// On New Frame Keys
+        /// </summary>
+        /// <param name="io"></param>
+        private static void NewFrameKeys(ImGuiIOPtr io)
+        {
+            io.KeyCtrl = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_CONTROL) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL);
+            io.KeyShift = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_SHIFT) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT);
+            io.KeyAlt = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_ALT) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_ALT);
+            io.KeySuper = Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT_SUPER) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SUPER);
+        }
+
+        private static void NewFrameCursor(ImGuiIOPtr io)
+        {
+            ImGuiMouseCursor imgui_cursor = ImGui.GetMouseCursor();
+            if (imgui_cursor == CurrentMouseCursor && !io.MouseDrawCursor)
             {
-                ImGuiMouseCursor imgui_cursor = ImGui.GetMouseCursor();
-                if (imgui_cursor != CurrentMouseCursor || io.MouseDrawCursor)
+                return;
+            }
+
+            CurrentMouseCursor = imgui_cursor;
+            if (!io.MouseDrawCursor && imgui_cursor != ImGuiMouseCursor.None)
+            {
+                Raylib.ShowCursor();
+
+                if ((io.ConfigFlags & ImGuiConfigFlags.NoMouseCursorChange) == 0)
                 {
-                    CurrentMouseCursor = imgui_cursor;
-                    if (io.MouseDrawCursor || imgui_cursor == ImGuiMouseCursor.None)
-                    {
-                        Raylib.HideCursor();
-                    }
-                    else
-                    {
-                        Raylib.ShowCursor();
-
-                        if ((io.ConfigFlags & ImGuiConfigFlags.NoMouseCursorChange) == 0)
-                        {
-
-                            if (!MouseCursorMap.ContainsKey(imgui_cursor))
-                                Raylib.SetMouseCursor(MouseCursor.MOUSE_CURSOR_DEFAULT);
-                            else
-                                Raylib.SetMouseCursor(MouseCursorMap[imgui_cursor]);
-                        }
-                    }
+                    Raylib.SetMouseCursor(!MouseCursorMap.ContainsKey(imgui_cursor)
+                        ? MouseCursor.MOUSE_CURSOR_DEFAULT
+                        : MouseCursorMap[imgui_cursor]);
                 }
+            }
+            else
+            {
+                Raylib.HideCursor();
             }
         }
 

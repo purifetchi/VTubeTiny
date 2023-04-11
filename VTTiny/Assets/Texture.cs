@@ -107,7 +107,7 @@ namespace VTTiny.Assets
             Dispose();
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<TextureConfig>(parameters);
             LoadTextureFromFile(config.Path);
