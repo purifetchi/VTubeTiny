@@ -4,7 +4,7 @@ using VTTiny.Editor;
 
 namespace VTTiny.Components.Animator
 {
-    public partial class AnimatorCharacter
+    public partial class AnimatorCharacter : IEditableGUI
     {
         /// <summary>
         /// Draw the editor gui for this character.

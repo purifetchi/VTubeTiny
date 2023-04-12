@@ -192,6 +192,7 @@ namespace VTTiny.Editor
             }
 
             componentType = default;
+            
             return false;
         }
 
@@ -324,7 +325,7 @@ namespace VTTiny.Editor
                 // Otherwise make it red.
                 value >= threshold ? new Vector4(0, 255, 0, 255) : new Vector4(255, 0, 0, 255));
 
-            var size = new Vector2Int((int)ImGui.GetWindowSize().X - 50, 20);
+            var size = new Vector2Int(300, 20); // The size of the progress bar was way too big on 4k
             ImGui.ProgressBar(value / max, size);
 
             ImGui.PopStyleColor();

@@ -3,13 +3,13 @@ using VTTiny.Components.Animator.Data;
 
 namespace VTTiny.Components.Animator
 {
-    public partial class AnimatorCharacter
+    public partial class AnimatorCharacter : IPackageAble
     {
         /// <summary>
         /// Packages the state of this animator character for serialization.
         /// </summary>
         /// <returns>The resulting config.</returns>
-        internal AnimatorCharacterConfig PackageIntoConfig()
+        public AnimatorCharacterConfig PackageIntoConfig()
         {
             return new AnimatorCharacterConfig
             {

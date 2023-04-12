@@ -64,7 +64,7 @@ namespace VTTiny.Components
             SetTexture(config.Image?.Resolve(Parent.OwnerStage.AssetDatabase));
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             if (EditorGUI.AssetDropdown("Texture", Parent.OwnerStage.AssetDatabase, Texture, out Texture newTexture))
                 SetTexture(newTexture);

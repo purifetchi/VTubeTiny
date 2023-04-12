@@ -32,7 +32,7 @@ namespace VTTiny.Components
             };
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             ToggleKey = EditorGUI.KeycodeDropdown(ToggleKey);
         }

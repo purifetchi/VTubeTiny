@@ -41,7 +41,10 @@ namespace VTTiny.Scenery
                 DrawComponents();
 
                 if (EditorGUI.ComponentDropdown(out Type componentType))
+                {
                     ConstructComponentFromType(componentType);
+                    
+                }
 
                 ImGui.TreePop();
             }

@@ -30,6 +30,22 @@ namespace VTTiny.Components
         /// The multiplier of the speed of the jump.
         /// </summary>
         public float JumpSpeedMultiplier { get; set; } = 10;
+        
+        /// <summary>
+        /// If Object can wiggle
+        /// </summary>
+        public bool CanWiggle { get; set; } = true;
+        
+        /// <summary>
+        /// Wiggle Amount
+        /// </summary>
+        public float WiggleSpeed { get; set; } = 5f;
+        
+        /// <summary>
+        /// Wiggle Speed Multiplier
+        /// </summary>
+        public float WiggleSpeedMultiplier { get; set; } = 3;
+        
 
         /// <summary>
         /// Should the amount of jumps be limited?
@@ -124,8 +140,10 @@ namespace VTTiny.Components
             {
                 var clone = _basePos;
                 clone.Y -= (int)(JumpHeight * (Math.Sin(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
+                
                 //TODO: Make this wiggle work separately from the jump. similair to how VaedoTubeMini
-                clone.X += (int)(JumpHeight * (Math.Cos(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
+                if (CanWiggle)
+                    clone.X += (int)(WiggleSpeed * (Math.Sin(_jumpTimer.TimeElapsed * WiggleSpeedMultiplier)));
 
                 Parent.Transform.LocalPosition = clone;
 
@@ -162,16 +180,24 @@ namespace VTTiny.Components
             MaxJumps = config.MaxJumps;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             Threshold = EditorGUI.DragInt("Volume threshold", Threshold);
             Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
+            
+            CanWiggle = EditorGUI.Checkbox("Can Wiggle?", CanWiggle);
+            if (CanWiggle)
+            {
+                WiggleSpeed = EditorGUI.DragFloat("Wiggle Speed", WiggleSpeed);
+                WiggleSpeedMultiplier = EditorGUI.DragFloat("Wiggle Speed Multiplier", WiggleSpeedMultiplier);
+            }
 
             LimitJumps = EditorGUI.Checkbox("Limit jumps?", LimitJumps);
             if (LimitJumps)
                 MaxJumps = EditorGUI.DragInt("Max jumps", MaxJumps);
+            
 
             ImGui.Separator();
             if (EditorGUI.ListenableDeviceDropdown("Device", _device, out IListenableDevice newDevice))

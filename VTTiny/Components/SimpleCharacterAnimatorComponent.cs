@@ -45,7 +45,7 @@ namespace VTTiny.Components
             Character = config.ToAnimatorCharacter(Parent.OwnerStage.AssetDatabase);
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             Character.DrawEditorGUI(Parent.OwnerStage.AssetDatabase);
         }

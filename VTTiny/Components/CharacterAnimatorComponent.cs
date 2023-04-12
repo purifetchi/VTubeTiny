@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using ImGuiNET;
 using Raylib_cs;
@@ -46,13 +47,10 @@ namespace VTTiny.Components
 
         public override void Update()
         {
-            foreach (var state in _states)
+            foreach (var state in _states.Where(state => Raylib.IsKeyPressed(state.Key)))
             {
-                if (Raylib.IsKeyPressed(state.Key))
-                {
-                    _currentCharacter = state.Character;
-                    break;
-                }
+                _currentCharacter = state.Character;
+                break;
             }
 
             if (_currentCharacter != null)
@@ -87,7 +85,7 @@ namespace VTTiny.Components
             };
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             EditorGUI.Text("States");
 

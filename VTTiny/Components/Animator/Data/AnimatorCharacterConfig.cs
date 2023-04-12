@@ -3,7 +3,7 @@ using VTTiny.Assets;
 
 namespace VTTiny.Components.Animator.Data
 {
-    internal class AnimatorCharacterConfig
+    public class AnimatorCharacterConfig
     {
         public AssetReference<Texture>? Idle { get; set; }
         public AssetReference<Texture>? Speaking { get; set; }

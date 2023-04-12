@@ -41,7 +41,7 @@ namespace VTTiny.Components
             Color = config.Color;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             Text = EditorGUI.InputText("Text", Text);
             Color = EditorGUI.ColorEdit("Color", Color);
