@@ -1,4 +1,8 @@
-﻿using VTTiny.Assets;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Editor;
 
@@ -20,12 +24,70 @@ namespace VTTiny.Components.Animator
 
             if (EditorGUI.AssetDropdown("Idle blinking", assetDatabase, IdleBlink, out Texture newBlinking))
                 IdleBlink = newBlinking;
-
-            if (EditorGUI.AssetDropdown("Speaking", assetDatabase, Speaking, out Texture newSpeaking))
-                Speaking = newSpeaking;
-
+            
             if (EditorGUI.AssetDropdown("Speaking blinking", assetDatabase, SpeakingBlink, out Texture newSpeakingBlink))
                 SpeakingBlink = newSpeakingBlink;
+            
+            //Continuously add Speaking textures
+
+            Speaking ??= new List<Texture>()
+            {
+                new Texture()
+            };
+
+            if (Speaking.Count() >= 0)
+            {
+                //remove all textures that are null
+                //var empty = Speaking.Where(x=>x == default(Texture)).ToList().Count() -1;
+
+                //Check for null textures
+                // for (int i = 0; i < empty; i++)
+                // {
+                //     Speaking.Remove(default(Texture));
+                // }
+
+                if (Speaking.Any() && Speaking.Last() != default)
+                {
+                    var i = Speaking.Last();
+                    if (i.Id != default)
+                    {
+                        //Add button to add new speaking texture
+                        Speaking.Add(new Texture());
+                        
+                    }
+
+                }
+
+                if (!Speaking.Any())
+                {
+                    Speaking.Add(new() );
+                }
+                for (int i = 0; i < Speaking.Count(); i++)
+                {
+                    if (EditorGUI.AssetDropdown("Speaking " + i, assetDatabase, Speaking[i], out Texture newSpeaking))
+                        Speaking[i] = newSpeaking;
+                    
+                }
+                // //if the last texture is not null, add a new one
+                // if (Speaking.Last() != default(Texture))
+                // {
+                //     Console.WriteLine("Adding new speaking texture");
+                //     Speaking.Add(new Texture());
+                // }
+            }
+            else
+            {
+                if (Speaking.Count() == 0)
+                {
+                    Speaking.Add(new Texture());
+                }
+                if (EditorGUI.AssetDropdown("Speaking", assetDatabase, Speaking[0] , out Texture newSpeaking))
+                    Speaking[0] = newSpeaking;
+                
+            }
+            
+            
+
         }
     }
 }

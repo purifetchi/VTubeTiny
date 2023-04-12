@@ -135,7 +135,10 @@ namespace VTTiny.Components
             {
                 _jumpCount = 0;
             }
-
+            foreach (var component in _components)
+            {
+                component.IsSpeaking = _talking;
+            }
             if (_jump)
             {
                 var clone = _basePos;
@@ -154,8 +157,7 @@ namespace VTTiny.Components
                 }
             }
 
-            foreach (var component in _components)
-                component.IsSpeaking = _talking;
+            
         }
 
         public override void Destroy()

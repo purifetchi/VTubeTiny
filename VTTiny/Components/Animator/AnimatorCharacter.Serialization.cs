@@ -1,4 +1,6 @@
-﻿using VTTiny.Assets;
+﻿using System.Collections.Generic;
+using VTTiny.Assets;
+using VTTiny.Assets.Management;
 using VTTiny.Components.Animator.Data;
 
 namespace VTTiny.Components.Animator
@@ -11,6 +13,15 @@ namespace VTTiny.Components.Animator
         /// <returns>The resulting config.</returns>
         public AnimatorCharacterConfig PackageIntoConfig()
         {
+            List<AssetReference<Texture>?>? speakingList = new List<AssetReference<Texture>?>();
+            if (Speaking != null)
+            {
+                foreach (var speaking in Speaking)
+                {
+                    speakingList.Add(speaking.ToAssetReference<Texture>());
+                }
+            }
+
             return new AnimatorCharacterConfig
             {
                 BlinkEvery = BlinkEvery,
@@ -18,7 +29,7 @@ namespace VTTiny.Components.Animator
 
                 Idle = Idle?.ToAssetReference<Texture>(),
                 Blinking = IdleBlink?.ToAssetReference<Texture>(),
-                Speaking = Speaking?.ToAssetReference<Texture>(),
+                Speaking = speakingList,
                 SpeakingBlinking = SpeakingBlink?.ToAssetReference<Texture>()
             };
         }
