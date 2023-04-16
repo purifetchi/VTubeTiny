@@ -151,14 +151,18 @@ namespace VTTiny.Components.Animator
             }
             //get a random viseme, from the speaking list, only the not null ones
             var visemelist = Speaking.Where(x => x != null && x.Id != default).ToList();
-            var viseme = visemelist[Random.Shared.Next(visemelist.Count)];
+            Texture viseme = null;
+            if (visemelist.Count > 0)
+            {
+                viseme = visemelist[Random.Shared.Next(visemelist.Count)];
+            }
             
             //Return the texture for the current state
             return _currentState switch
             {
                 State.Idle => Idle,
                 State.IdleBlink when IdleBlink != null => IdleBlink,
-                State.Speaking when Speaking != null && Speaking.Any() => viseme,
+                State.Speaking when Speaking != null && Speaking.Any() && visemelist.Any() => viseme,
                 State.SpeakingBlink when SpeakingBlink != null => SpeakingBlink,
                 _ => Idle
             };

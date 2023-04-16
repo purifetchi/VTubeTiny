@@ -261,9 +261,7 @@ namespace VTTiny.Editor
             foreach (var asset in database.GetAllAssetsOfType<T>())
             {
                 if (!ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
-                {
                     continue;
-                }
 
                 ImGui.EndCombo();
 

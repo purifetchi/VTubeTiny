@@ -18,7 +18,7 @@ namespace VTTiny.Components
                 Parent.AllowRendering = !Parent.AllowRendering;
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<KeyToggleableConfig>(parameters);
             ToggleKey = config.ToggleKey;

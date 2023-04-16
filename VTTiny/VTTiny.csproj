@@ -8,7 +8,8 @@
     <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
     <IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsMacOS>
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
-    <LangVersion>latestmajor</LangVersion> 
+    <LangVersion>latestmajor</LangVersion>
+    <PackageIcon>1.ico</PackageIcon> 
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -37,6 +38,7 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="ImGui.NET" Version="1.88.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="NAudio.Core" Version="2.1.0" />
     <PackageReference Include="NAudio.Wasapi" Version="2.1.0" />
     <PackageReference Include="Raylib-cs" Version="4.0.0.1" />
@@ -44,6 +46,20 @@
 
   <ItemGroup>
     <EditorResourceFiles Include="$(ProjectDir)Resources\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="VTTiny.Plugin.Discord">
+      <HintPath>bin\Debug\net7.0\Plugins\VTTiny.Plugin.Discord.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VTTiny.Plugin.Discord\VTTiny.Plugin.Discord.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="1.ico" />
   </ItemGroup>
 
   <Target Name="CopyEditorResourcesToBuild" BeforeTargets="Build">

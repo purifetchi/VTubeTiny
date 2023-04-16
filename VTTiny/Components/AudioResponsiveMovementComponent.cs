@@ -62,14 +62,14 @@ namespace VTTiny.Components
         /// </summary>
         private IListenableDevice _device;
 
-        private bool _talking;
-        private int _lastLevel = 0;
-        private int _jumpCount = 0;
+        protected bool _talking;
+        protected int _lastLevel = 0;
+        protected int _jumpCount = 0;
 
-        private ISpeakingAwareComponent[] _components;
-        private Vector2Int _basePos;
-        private StageTimer _jumpTimer;
-        private bool _jump;
+        protected ISpeakingAwareComponent[] _components;
+        protected Vector2Int _basePos;
+        protected StageTimer _jumpTimer;
+        protected bool _jump;
 
         /// <summary>
         /// Sets the listenable device for this component.
@@ -165,7 +165,7 @@ namespace VTTiny.Components
             _device?.Stop();
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
 

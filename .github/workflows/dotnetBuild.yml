@@ -9,11 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: dev-drprasad/delete-older-releases@v0.2.0
-        with:
-          keep_latest: 2 # Remove all releases except the latest one
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:

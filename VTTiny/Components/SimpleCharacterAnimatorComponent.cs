@@ -39,7 +39,7 @@ namespace VTTiny.Components
             _renderer?.SetTexture(null);
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<AnimatorCharacterConfig>(parameters);
             Character = config.ToAnimatorCharacter(Parent.OwnerStage.AssetDatabase);

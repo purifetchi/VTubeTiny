@@ -77,8 +77,9 @@ namespace VTTiny.Components.Animator
             }
             else
             {
-                if (Speaking.Count() == 0)
+                if (!Speaking.Any())
                 {
+                    //Make Temporary Speaking texture
                     Speaking.Add(new Texture());
                 }
                 if (EditorGUI.AssetDropdown("Speaking", assetDatabase, Speaking[0] , out Texture newSpeaking))

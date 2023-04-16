@@ -13,7 +13,7 @@ namespace VTTiny.Components.Animator
         /// <returns>The resulting config.</returns>
         public AnimatorCharacterConfig PackageIntoConfig()
         {
-            List<AssetReference<Texture>?>? speakingList = new List<AssetReference<Texture>?>();
+            var speakingList = new List<AssetReference<Texture>?>();
             if (Speaking != null)
             {
                 foreach (var speaking in Speaking)
