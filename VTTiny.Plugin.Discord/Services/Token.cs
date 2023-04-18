@@ -6,10 +6,6 @@ namespace VTTiny.Plugin.Discord.Services;
 
 public class Token
 {
-    public Token()
-    {
-        
-    }
     public string? token
     {
         get; set;
@@ -42,7 +38,7 @@ public class Token
                 }
             }
             if (string.IsNullOrEmpty(token))
-                throw new IdiotException($"You are an Idiot, you forgot the Token! {BotPaths.token}");
+                throw new InvalidDataException($"you forgot the Token! {BotPaths.token}");
             return token;
         }
         catch (Exception ex)
@@ -104,12 +100,12 @@ internal class Json
             }
             else
             {
-                throw new IdiotException(filename);
+                throw new FileNotFoundException(filename);
             }
         }
         catch (FileNotFoundException ex)
         {
-            throw new IdiotException(filename);
+            throw;
         }
     }
 
@@ -119,32 +115,5 @@ internal class Json
         if (json is not (null or ""))
             return JsonSerializer.Deserialize<T>(json);
         return default;
-    }
-}
-
-/// <inheritdoc />
-[Serializable]
-public class IdiotException : Exception
-{
-    /// <inheritdoc />
-    public IdiotException()
-    {
-    }
-
-    /// <inheritdoc />
-    public IdiotException(string message) : base(message)
-    {
-    }
-
-    /// <inheritdoc />
-    public IdiotException(string message, Exception inner) : base(message, inner)
-    {
-    }
-
-    /// <inheritdoc />
-    protected IdiotException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
     }
 }

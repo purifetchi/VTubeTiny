@@ -10,7 +10,7 @@ using VTTiny.Plugin.Discord.Services;
 namespace VTTiny.Plugin.Discord.Commands;
 
 
-[SlashCommandGroup("vc", "WIP Commands for VC connectivity")]
+[SlashCommandGroup("vc", "VC connectivity")]
 public class VoiceChannelCommands : ApplicationCommandModule
 {
     /// <summary>

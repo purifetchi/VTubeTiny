@@ -34,6 +34,8 @@ namespace VTTiny.Plugins
             foreach (var file in Directory.GetFiles(PLUGINS_FOLDER_PATH)) // Apparently this was all directories, not files.
             {
                 Console.WriteLine(file);
+                PluginLoadContext context = new(file);
+                var assem = context.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(file)));
                 var plugin = Plugin.TryLoadFromFile(file);
 
                 if (plugin == null)
