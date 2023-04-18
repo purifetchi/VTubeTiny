@@ -1,9 +1,9 @@
 name: .NET Core
 on:
   push:
-    branches: [master]
+    branches: [master] #Branches that are getting merged into master
   pull_request:
-    branches: [master]
+    branches: [master] #check per pull request if it would break master
 jobs:
   build:
     runs-on: ubuntu-latest
