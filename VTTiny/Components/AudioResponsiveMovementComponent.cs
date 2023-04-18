@@ -144,7 +144,7 @@ namespace VTTiny.Components
                 var clone = _basePos;
                 clone.Y -= (int)(JumpHeight * (Math.Sin(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
                 
-                //TODO: Make this wiggle work separately from the jump. similair to how VaedoTubeMini
+                //TODO: Different algorithm for wiggling
                 if (CanWiggle)
                     clone.X += (int)(WiggleSpeed * (Math.Sin(_jumpTimer.TimeElapsed * WiggleSpeedMultiplier)));
 

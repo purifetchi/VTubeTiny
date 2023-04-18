@@ -18,6 +18,12 @@ If you ran the component before it will have created the file for you, if not yo
 
 if you're on ``Linux``, the path will be ``~/.config/VTtinyDiscordBot/token.json``.
 
+### Future Versions 
+
+Drag the ``Plugin.VTTiny.Discord.dll`` into the Plugins folder of your VTTiny installation and restart VTTiny.
+
+
+
 ### Usage
 
 > Once you have your bot account and token, you can add the ``DiscordAudioComponent`` to your scene, and then configure it.
@@ -26,7 +32,7 @@ if you're on ``Linux``, the path will be ``~/.config/VTtinyDiscordBot/token.json
 
 ![DiscordAudioComponent](Sample/Screen2.png)
 
-> You can also set a Speaking color so the chacater will change color when speaking.
+> You can also set a Speaking color so the character will change color when speaking.
 
 ![DiscordAudioComponent](Sample/Screen3.png)
 

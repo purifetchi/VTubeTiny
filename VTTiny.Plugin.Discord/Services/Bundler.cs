@@ -8,5 +8,4 @@ public static class VTubeTinyDiscordBundler
     {
         return services;
     }
-    
 }
