@@ -37,15 +37,6 @@ namespace VTTiny.Components.Animator
 
             if (Speaking.Count() >= 0)
             {
-                //remove all textures that are null
-                //var empty = Speaking.Where(x=>x == default(Texture)).ToList().Count() -1;
-
-                //Check for null textures
-                // for (int i = 0; i < empty; i++)
-                // {
-                //     Speaking.Remove(default(Texture));
-                // }
-
                 if (Speaking.Any() && Speaking.Last() != default)
                 {
                     var i = Speaking.Last();
@@ -55,25 +46,18 @@ namespace VTTiny.Components.Animator
                         Speaking.Add(new Texture());
                         
                     }
-
                 }
 
                 if (!Speaking.Any())
                 {
                     Speaking.Add(new() );
                 }
+                
                 for (int i = 0; i < Speaking.Count(); i++)
                 {
                     if (EditorGUI.AssetDropdown("Speaking " + i, assetDatabase, Speaking[i], out Texture newSpeaking))
                         Speaking[i] = newSpeaking;
-                    
                 }
-                // //if the last texture is not null, add a new one
-                // if (Speaking.Last() != default(Texture))
-                // {
-                //     Console.WriteLine("Adding new speaking texture");
-                //     Speaking.Add(new Texture());
-                // }
             }
             else
             {
@@ -84,11 +68,7 @@ namespace VTTiny.Components.Animator
                 }
                 if (EditorGUI.AssetDropdown("Speaking", assetDatabase, Speaking[0] , out Texture newSpeaking))
                     Speaking[0] = newSpeaking;
-                
             }
-            
-            
-
         }
     }
 }

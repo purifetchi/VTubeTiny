@@ -9,7 +9,7 @@
     <IsMacOS Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsMacOS>
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
     <LangVersion>latestmajor</LangVersion>
-    <PackageIcon>1.ico</PackageIcon> 
+    <PackageIcon>1.ico</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -21,12 +21,8 @@
   <PropertyGroup Condition="'$(IsLinux)'=='true'">
     <DefineConstants>ARCH_LINUX</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  
+  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -47,19 +43,9 @@
   <ItemGroup>
     <EditorResourceFiles Include="$(ProjectDir)Resources\**\*.*" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="VTTiny.Plugin.Discord">
-      <HintPath>bin\Debug\net7.0\Plugins\VTTiny.Plugin.Discord.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\VTTiny.Plugin.Discord\VTTiny.Plugin.Discord.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="1.ico" />
   </ItemGroup>
 
   <Target Name="CopyEditorResourcesToBuild" BeforeTargets="Build">

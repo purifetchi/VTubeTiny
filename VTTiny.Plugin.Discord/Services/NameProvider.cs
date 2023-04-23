@@ -2,25 +2,29 @@
 
 public class NameProvider
 {
+    //Sadly you can't solve this with dependency injection because the DiscordAudioComponent
+    //does not create new scopes
+    //So we have to use a (classic) singleton and not a DP singleton 
     public List<string> NamesToWatch { get; set; } = new List<string>();
     /// <summary>
     /// Users in the VC
     /// </summary>
-    public List<string> _users = new();
-    public Dictionary<string, DateTime> _usersSpeaking = new();
+    public List<string> Users = new();
+    public Dictionary<string, DateTime> UsersSpeaking = new();
     
     public void AddUser(string name)
     {
-        if (!_users.Contains(name))
+        if (!Users.Contains(name))
         {
-            _users.Add(name);
+            Users.Add(name);
         }
     }
+    
     public void RemoveUser(string name)
     {
-        if (_users.Contains(name))
+        if (Users.Contains(name))
         {
-            _users.Remove(name);
+            Users.Remove(name);
         }
     }
     
@@ -31,8 +35,9 @@ public class NameProvider
     /// <returns>If the user is active in VC</returns>
     public bool IsUserInVc(string name)
     {
-        return _users.Contains(name);
+        return Users.Contains(name);
     }
+    
     /// <summary>
     /// Is the User Speaking?
     /// </summary>
@@ -40,23 +45,11 @@ public class NameProvider
     /// <returns>if the User speaking?</returns>
     public bool IsUserSpeaking(string name)
     {
-        return _usersSpeaking.ContainsKey(name);
+        return UsersSpeaking.ContainsKey(name);
     }
-    //Make this a singleton
+    
     private static NameProvider _instance;
-    public static NameProvider Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new NameProvider();
-            }
-            return _instance;
-        }
-    }
-    private NameProvider()
-    {
-    }
+    public static NameProvider Instance => _instance ??= new NameProvider();
+    private NameProvider() { }
 
 }
