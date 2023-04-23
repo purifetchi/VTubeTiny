@@ -21,11 +21,10 @@ public class DiscordBot
     /// <param name="token">Token Via commandline otherwise it'll take it from disk</param>
     public DiscordBot(string? token = null)
     {
-        string Token = token ?? new Token().getToken(); 
+        string Token = token ?? new Token().GetToken(); 
         IsRunning = false;
         _token = token ?? Token;
         _services = new ServiceCollection();
-        _services.AddVTubeTinyDiscordServices();
         _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
         _serviceProvider = _services.BuildServiceProvider();
     }
@@ -52,9 +51,7 @@ public class DiscordBot
                 //Services in here
                 Services = _scopeFactory.CreateScope().ServiceProvider,
             });
-            Console.WriteLine("Registering commands");
             RegisterSlashCommands(slash);
-            Console.WriteLine("Registered commands");
             await _client.UseVoiceNextAsync(new VoiceNextConfiguration()
             {
                 EnableIncoming = true,
@@ -66,11 +63,8 @@ public class DiscordBot
             Console.WriteLine("Failed to register commands");
         }
 
-        Console.WriteLine("Registering events");
         RegisterEvents();
-        Console.WriteLine("Starting client");
         await _client.StartAsync();
-        Console.WriteLine("Started client");
         
 
         await Task.Delay(-1);
