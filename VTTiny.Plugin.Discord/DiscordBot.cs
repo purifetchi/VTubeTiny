@@ -6,6 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using VTTiny.Plugin.Discord.Commands;
 using VTTiny.Plugin.Discord.Services;
 
+namespace VTTiny.Plugin.Discord;
+/// <summary>
+/// Entry point for the Discord bot
+/// </summary>
 public class DiscordBot
 {
     public DiscordShardedClient _client;

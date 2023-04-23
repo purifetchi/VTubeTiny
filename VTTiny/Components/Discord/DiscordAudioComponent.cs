@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using VTTiny.Editor;
+using VTTiny.Plugin.Discord;
 using VTTiny.Plugin.Discord.Services;
 using VTTiny.Scenery;
 
