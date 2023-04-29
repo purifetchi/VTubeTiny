@@ -1,7 +1,6 @@
 ﻿using System.Timers;
 using DSharpPlus;
 using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.VoiceNext;
 using DSharpPlus.VoiceNext.EventArgs;
@@ -14,28 +13,26 @@ namespace VTTiny.Plugin.Discord.Commands;
 public class VoiceChannelCommands : ApplicationCommandModule
 {
     /// <summary>
-    /// Users in the VC
+    /// The timer.
     /// </summary>
-    System.Timers.Timer timer = new System.Timers.Timer(500);
-    private readonly NameProvider _nameProvider;
-    public VoiceChannelCommands()
-    {
-        _nameProvider = NameProvider.Instance;
-    }
+    private readonly System.Timers.Timer _timer = new(500);
 
     /// <summary>
     /// Command to make the bot join the vc and start listening for users speaking
     /// </summary>
     /// <param name="ctx">Discord Command Context</param>
-    [SlashCommand("join", "Makes the bot join the vc")]
+    [SlashCommand("join", "Makes the bot join the channel the client is in.")]
     public async Task StartCommand(InteractionContext ctx)
     {
-        if (ctx == null) throw new ArgumentNullException(nameof(ctx)); //This could never happen
+        // This should never happen
+        if (ctx == null) 
+            throw new ArgumentNullException(nameof(ctx));
+
         await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
         
         try
         {
-            var channel = ctx?.Member?.VoiceState?.Channel;
+            var channel = ctx!.Member?.VoiceState?.Channel;
             if (channel == null)
             {
                 await ctx.EditResponseAsync(new DiscordWebhookBuilder()
@@ -50,22 +47,22 @@ public class VoiceChannelCommands : ApplicationCommandModule
             vnc.UserLeft += VncOnUserLeft;
             vnc.UserJoined += VncOnUserJoined;
             vnc.VoiceReceived += VncOnVoiceReceived;
+
             NameProvider.Instance.Users = channel.Users.Select(x => x.Username).ToList();
-            timer.Elapsed += TimerOnElapsed;
-            timer.Start();
+            _timer.Elapsed += TimerOnElapsed;
+            _timer.Start();
 
             foreach (var user in NameProvider.Instance.Users)
-            {
                 Console.WriteLine(user);
-            }
 
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
         }
+
         await ctx.EditResponseAsync(new DiscordWebhookBuilder()
-            .WithContent("I've joined the voice channel!"));
+            .WithContent("Joined the voice channel."));
 
     }
     /// <summary>
@@ -76,16 +73,13 @@ public class VoiceChannelCommands : ApplicationCommandModule
     private void TimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
         var now = DateTime.Now;
-        var inactiveUsers = 
-            (from entry in NameProvider.Instance.UsersSpeaking 
-                where now - entry.Value > TimeSpan.FromMilliseconds(100) 
-                select entry.Key)
+        var inactiveUsers = NameProvider.Instance.UsersSpeaking
+            .Where(entry => now - entry.Value > TimeSpan.FromMilliseconds(100))
+            .Select(entry => entry.Key)
             .ToList();
         
         foreach (string username in inactiveUsers)
-        {
             NameProvider.Instance.UsersSpeaking.Remove(username);
-        }
         
         #if DEBUG
         if (NameProvider.Instance.UsersSpeaking.Count != 0)
@@ -101,13 +95,11 @@ public class VoiceChannelCommands : ApplicationCommandModule
     /// <param name="args"></param>
     private Task VncOnVoiceReceived(VoiceNextConnection sender, VoiceReceiveEventArgs args)
     {
-        try
+        if (args.User is not null)
         {
-            //add user to list if they are speaking
             NameProvider.Instance.UsersSpeaking[args.User.Username] = DateTime.Now;
             NameProvider.Instance.UsersSpeaking[args.User.Id.ToString()] = DateTime.Now;
         }
-        catch (NullReferenceException ex){} //Invalid error
 
         return Task.CompletedTask;
     }
@@ -135,10 +127,8 @@ public class VoiceChannelCommands : ApplicationCommandModule
     private Task VncOnUserLeft(VoiceNextConnection sender, VoiceUserLeaveEventArgs args)
     {
         NameProvider.Instance.Users.Remove(args.User.Username);
-        foreach (var user in _nameProvider.Users)
-        {
+        foreach (var user in NameProvider.Instance.Users)
             Console.WriteLine(user);
-        }
 
         return Task.CompletedTask;
     }
@@ -150,17 +140,21 @@ public class VoiceChannelCommands : ApplicationCommandModule
     public async Task LeaveCommand(InteractionContext ctx)
     {
         await ctx.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource);
+
         var vnext = ctx.Client.GetVoiceNext();
         var vnc = vnext.GetConnection(ctx.Guild);
+
         vnc.UserJoined -= VncOnUserJoined;
         vnc.UserLeft -= VncOnUserLeft;
         vnc.VoiceReceived -= VncOnVoiceReceived;
-        timer.Stop();
-        timer.Elapsed -= TimerOnElapsed;
-        timer.Dispose();
+
+        _timer.Stop();
+        _timer.Elapsed -= TimerOnElapsed;
+        _timer.Dispose();
+
         vnc.Dispose();
         
         await ctx.EditResponseAsync(new DiscordWebhookBuilder()
-            .WithContent("I've left the voice channel!"));
+            .WithContent("Goodbye."));
     }
 }

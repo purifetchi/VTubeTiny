@@ -11,6 +11,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Plugin\**" />
+      <EmbeddedResource Remove="Plugin\**" />
+      <None Remove="Plugin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="DSharpPlus" Version="4.4.0" />
       <PackageReference Include="DSharpPlus.SlashCommands" Version="4.4.0" />
       <PackageReference Include="DSharpPlus.VoiceNext" Version="4.4.0" />
@@ -23,8 +29,4 @@
 <!--            <ExcludeAssets>runtime</ExcludeAssets>-->
 <!--        </ProjectReference>        -->
 <!--    </ItemGroup>    -->
-
-    <ItemGroup>
-      <Folder Include="Plugin\" />
-    </ItemGroup>
 </Project>

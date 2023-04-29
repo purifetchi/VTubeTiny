@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Json;
 using ImGuiNET;
-using NAudio.CoreAudioApi;
 using VTTiny.Audio;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
