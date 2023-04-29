@@ -63,11 +63,6 @@ namespace VTTiny.Components.Animator
         private State _currentState = State.Idle;
         
         /// <summary>
-        /// Previous state of the character
-        /// </summary>
-        private State _lastState = State.Idle;
-        
-        /// <summary>
         /// The last mouth texture.
         /// </summary>
         private Texture _lastViseme = null;
@@ -128,9 +123,9 @@ namespace VTTiny.Components.Animator
         {
             Speaking ??= new List<Texture>();
 
-            // If the state is the same as the last state, return the previous viseme
+            // If we have the last viseme and we're speaking, return it.
             if (_lastViseme != null && 
-                _currentState == _lastState)
+                _currentState == State.Speaking)
             {
                 // That is, unless the time is greater than the viseme in between time
                 if ((DateTime.Now.TimeOfDay - _lastVisemeTime) > TimeSpan.FromMilliseconds(_timeInbetweenVisemes))
@@ -139,7 +134,6 @@ namespace VTTiny.Components.Animator
                     return _lastViseme;
             }
             
-            _lastState = _currentState;
             if (IsSpeaking)
                 _lastVisemeTime = DateTime.Now.TimeOfDay;
 
