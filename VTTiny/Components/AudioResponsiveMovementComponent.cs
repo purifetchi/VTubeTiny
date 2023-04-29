@@ -44,7 +44,6 @@ namespace VTTiny.Components
         /// Wiggle Speed Multiplier
         /// </summary>
         public float WiggleSpeedMultiplier { get; set; } = 3;
-        
 
         /// <summary>
         /// Should the amount of jumps be limited?
@@ -134,10 +133,10 @@ namespace VTTiny.Components
             {
                 _jumpCount = 0;
             }
+
             foreach (var component in _components)
-            {
                 component.IsSpeaking = _talking;
-            }
+
             if (_jump)
             {
                 var clone = _basePos;
@@ -155,8 +154,6 @@ namespace VTTiny.Components
                     _jump = false;
                 }
             }
-
-            
         }
 
         public override void Destroy()
@@ -190,6 +187,7 @@ namespace VTTiny.Components
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
             
             CanWiggle = EditorGUI.Checkbox("Can Wiggle?", CanWiggle);
+
             if (CanWiggle)
             {
                 WiggleSpeed = EditorGUI.DragFloat("Wiggle Speed", WiggleSpeed);
@@ -199,7 +197,6 @@ namespace VTTiny.Components
             LimitJumps = EditorGUI.Checkbox("Limit jumps?", LimitJumps);
             if (LimitJumps)
                 MaxJumps = EditorGUI.DragInt("Max jumps", MaxJumps);
-            
 
             ImGui.Separator();
             if (EditorGUI.ListenableDeviceDropdown("Device", _device, out IListenableDevice newDevice))
