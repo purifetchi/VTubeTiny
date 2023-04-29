@@ -179,6 +179,7 @@ namespace VTTiny.Components
             JumpSpeedMultiplier = config.JumpSpeedMultiplier;
             LimitJumps = config.LimitJumps;
             MaxJumps = config.MaxJumps;
+            CanWiggle = config.CanWiggle;
         }
 
         public override void RenderEditorGUI()
@@ -217,6 +218,8 @@ namespace VTTiny.Components
                 JumpSpeedMultiplier = JumpSpeedMultiplier,
                 JumpHeight = JumpHeight,
                 Microphone = _device?.Name,
+
+                CanWiggle = CanWiggle,
 
                 LimitJumps = LimitJumps,
                 MaxJumps = MaxJumps
