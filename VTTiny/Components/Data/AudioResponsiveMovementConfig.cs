@@ -16,7 +16,8 @@
 
         public int MaxJumps { get; set; } = 1;
         
-        public float MaxWiggles { get; set; } = 1f;
+        public bool CanWiggle { get; set; } = false;
+
         public float WiggleSpeed { get; set; } = 5f;
     }
 }
