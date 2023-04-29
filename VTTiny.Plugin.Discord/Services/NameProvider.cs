@@ -1,17 +1,40 @@
 ﻿namespace VTTiny.Plugin.Discord.Services;
 
+/// <summary>
+/// A provider for the currently speaking users.
+/// </summary>
 public class NameProvider
 {
     //Sadly you can't solve this with dependency injection because the DiscordAudioComponent
     //does not create new scopes
     //So we have to use a (classic) singleton and not a DP singleton 
-    public List<string> NamesToWatch { get; set; } = new List<string>();
+    public List<string> NamesToWatch { get; set; } = new();
+
     /// <summary>
     /// Users in the VC
     /// </summary>
-    public List<string> Users = new();
-    public Dictionary<string, DateTime> UsersSpeaking = new();
-    
+    public List<string> Users { get; internal set; } = new();
+
+    /// <summary>
+    /// The currently speaking users.
+    /// </summary>
+    public Dictionary<string, DateTime> UsersSpeaking { get; } = new();
+
+    /// <summary>
+    /// The singleton instance of NameProvider.
+    /// </summary>
+    public static NameProvider Instance => _instance ??= new NameProvider();
+
+    private static NameProvider? _instance;
+
+    private NameProvider() 
+    {
+    }
+
+    /// <summary>
+    /// Add a user.
+    /// </summary>
+    /// <param name="name">The name of the user.</param>
     public void AddUser(string name)
     {
         if (!Users.Contains(name))
@@ -20,6 +43,10 @@ public class NameProvider
         }
     }
     
+    /// <summary>
+    /// Remove a user.
+    /// </summary>
+    /// <param name="name">The name of the user.</param>
     public void RemoveUser(string name)
     {
         if (Users.Contains(name))
@@ -47,9 +74,4 @@ public class NameProvider
     {
         return UsersSpeaking.ContainsKey(name);
     }
-    
-    private static NameProvider _instance;
-    public static NameProvider Instance => _instance ??= new NameProvider();
-    private NameProvider() { }
-
 }

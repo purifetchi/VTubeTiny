@@ -1,22 +1,35 @@
-﻿using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Text.Json;
+﻿using System.Text.Json;
+using VTTiny.Plugin.Discord.Config;
 
 namespace VTTiny.Plugin.Discord.Services;
 
-public class Token
+/// <summary>
+/// A token for the discord bot.
+/// </summary>
+public class BotToken
 {
-    public string? token { get; set; }
+    /// <summary>
+    /// The string Token data.
+    /// </summary>
+    public string? Token { get; set; }
+
+    /// <summary>
+    /// Gets the token from the token file.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidDataException"></exception>
     public string GetToken()
     {
         BotPaths.CreateFoldersAndFiles();
+
         try
         {
-            var tk = JsonSerializer.Deserialize<Token>(File.ReadAllText(BotPaths.Token));
-            token = tk?.token;
-            if (string.IsNullOrEmpty(token))
-                throw new InvalidDataException($"you forgot the Token! {BotPaths.Token}");
-            return token;
+            var tk = JsonSerializer.Deserialize<BotToken>(File.ReadAllText(BotPaths.TokenFile));
+            Token = tk?.Token;
+            if (string.IsNullOrEmpty(Token))
+                throw new InvalidDataException($"The token file does not exist. {BotPaths.TokenFile}");
+
+            return Token;
         }
         catch (Exception ex)
         {
@@ -24,33 +37,20 @@ public class Token
             throw;
         }
     }
+
+    /// <summary>
+    /// Sets the token into the token data.
+    /// </summary>
+    /// <param name="tokenstring">The token string.</param>
     public void SetToken(string tokenstring)
     {
-        this.token = tokenstring;
+        Token = tokenstring;
+
         var tokenJson = JsonSerializer.Serialize(this, new JsonSerializerOptions
         {
             WriteIndented = true
         });
-        File.WriteAllText(BotPaths.Token, tokenJson);
-        
-    }
-    
-}
-public static class BotPaths
-{
-    public static string Appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    public static string VTtinyDiscordBot = Path.Combine(Appdata, "VTtinyDiscordBot");
-    public static string Token = Path.Combine(VTtinyDiscordBot, "token.json");
-    
-    public static void CreateFoldersAndFiles()
-    {
-        if (!Directory.Exists(VTtinyDiscordBot))
-        {
-            Directory.CreateDirectory(VTtinyDiscordBot);
-        }
 
-        if (File.Exists(Token)) return;
-        Token token = new();
-        token.SetToken("Token");
+        File.WriteAllText(BotPaths.TokenFile, tokenJson);
     }
 }
