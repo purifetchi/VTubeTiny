@@ -1,6 +1,6 @@
 ﻿namespace VTTiny.Components.Data
 {
-    internal class AudioResponsiveMovementConfig
+    public class AudioResponsiveMovementConfig
     {
         public string Microphone { get; set; }
 
@@ -15,5 +15,8 @@
         public bool LimitJumps { get; set; } = false;
 
         public int MaxJumps { get; set; } = 1;
+        
+        public float MaxWiggles { get; set; } = 1f;
+        public float WiggleSpeed { get; set; } = 5f;
     }
 }

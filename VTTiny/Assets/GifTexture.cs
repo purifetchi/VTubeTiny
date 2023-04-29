@@ -121,7 +121,7 @@ namespace VTTiny.Assets
             EditorGUI.Text("Warning: GIF textures aren't ideal for performance.");
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             base.InheritParametersFromConfig(parameters);
 

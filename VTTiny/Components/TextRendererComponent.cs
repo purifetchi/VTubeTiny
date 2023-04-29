@@ -32,7 +32,7 @@ namespace VTTiny.Components
             return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Raylib.MeasureText(Text, FontSize), FontSize);
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<TextRendererConfig>(parameters);
 
@@ -41,7 +41,7 @@ namespace VTTiny.Components
             Color = config.Color;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             Text = EditorGUI.InputText("Text", Text);
             Color = EditorGUI.ColorEdit("Color", Color);

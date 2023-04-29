@@ -1,12 +1,16 @@
-﻿using VTTiny.Assets.Management;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using VTTiny.Assets.Management;
 using VTTiny.Assets;
 
 namespace VTTiny.Components.Animator.Data
 {
-    internal class AnimatorCharacterConfig
+    public class AnimatorCharacterConfig
     {
         public AssetReference<Texture>? Idle { get; set; }
-        public AssetReference<Texture>? Speaking { get; set; }
+        public IEnumerable<AssetReference<Texture>?>? Speaking { get; set; }
         public AssetReference<Texture>? Blinking { get; set; }
         public AssetReference<Texture>? SpeakingBlinking { get; set; }
 
@@ -20,13 +24,22 @@ namespace VTTiny.Components.Animator.Data
         /// <returns>The newly created animator character.</returns>
         public AnimatorCharacter ToAnimatorCharacter(AssetDatabase database)
         {
+            List<Texture?> SpeakingList = new List<Texture>();
+            if(Speaking != null)
+            {
+                SpeakingList.AddRange(from speaking in Speaking where speaking != null select speaking?.Resolve(database));
+            }
+
+
             return new AnimatorCharacter
             {
                 BlinkEvery = BlinkEvery,
                 BlinkLength = BlinkLength,
 
                 Idle = Idle?.Resolve(database),
-                Speaking = Speaking?.Resolve(database),
+                //Multiple textures for speaking
+                Speaking = SpeakingList,
+                
                 IdleBlink = Blinking?.Resolve(database),
                 SpeakingBlink = SpeakingBlinking?.Resolve(database),
             };

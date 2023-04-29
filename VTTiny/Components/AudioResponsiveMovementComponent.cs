@@ -30,6 +30,22 @@ namespace VTTiny.Components
         /// The multiplier of the speed of the jump.
         /// </summary>
         public float JumpSpeedMultiplier { get; set; } = 10;
+        
+        /// <summary>
+        /// If Object can wiggle
+        /// </summary>
+        public bool CanWiggle { get; set; } = true;
+        
+        /// <summary>
+        /// Wiggle Amount
+        /// </summary>
+        public float WiggleSpeed { get; set; } = 5f;
+        
+        /// <summary>
+        /// Wiggle Speed Multiplier
+        /// </summary>
+        public float WiggleSpeedMultiplier { get; set; } = 3;
+        
 
         /// <summary>
         /// Should the amount of jumps be limited?
@@ -46,14 +62,14 @@ namespace VTTiny.Components
         /// </summary>
         private IListenableDevice _device;
 
-        private bool _talking;
-        private int _lastLevel = 0;
-        private int _jumpCount = 0;
+        protected bool _talking;
+        protected int _lastLevel = 0;
+        protected int _jumpCount = 0;
 
-        private ISpeakingAwareComponent[] _components;
-        private Vector2Int _basePos;
-        private StageTimer _jumpTimer;
-        private bool _jump;
+        protected ISpeakingAwareComponent[] _components;
+        protected Vector2Int _basePos;
+        protected StageTimer _jumpTimer;
+        protected bool _jump;
 
         /// <summary>
         /// Sets the listenable device for this component.
@@ -119,11 +135,18 @@ namespace VTTiny.Components
             {
                 _jumpCount = 0;
             }
-
+            foreach (var component in _components)
+            {
+                component.IsSpeaking = _talking;
+            }
             if (_jump)
             {
                 var clone = _basePos;
                 clone.Y -= (int)(JumpHeight * (Math.Sin(_jumpTimer.TimeElapsed * JumpSpeedMultiplier)));
+                
+                //TODO: Different algorithm for wiggling
+                if (CanWiggle)
+                    clone.X += (int)(WiggleSpeed * (Math.Sin(_jumpTimer.TimeElapsed * WiggleSpeedMultiplier)));
 
                 Parent.Transform.LocalPosition = clone;
 
@@ -134,8 +157,7 @@ namespace VTTiny.Components
                 }
             }
 
-            foreach (var component in _components)
-                component.IsSpeaking = _talking;
+            
         }
 
         public override void Destroy()
@@ -143,7 +165,7 @@ namespace VTTiny.Components
             _device?.Stop();
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<AudioResponsiveMovementConfig>(parameters);
 
@@ -160,16 +182,24 @@ namespace VTTiny.Components
             MaxJumps = config.MaxJumps;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             Threshold = EditorGUI.DragInt("Volume threshold", Threshold);
             Multiplier = EditorGUI.DragFloat("Multiplier", Multiplier);
             JumpHeight = EditorGUI.DragFloat("Jump height", JumpHeight);
             JumpSpeedMultiplier = EditorGUI.DragFloat("Jump speed multiplier", JumpSpeedMultiplier);
+            
+            CanWiggle = EditorGUI.Checkbox("Can Wiggle?", CanWiggle);
+            if (CanWiggle)
+            {
+                WiggleSpeed = EditorGUI.DragFloat("Wiggle Speed", WiggleSpeed);
+                WiggleSpeedMultiplier = EditorGUI.DragFloat("Wiggle Speed Multiplier", WiggleSpeedMultiplier);
+            }
 
             LimitJumps = EditorGUI.Checkbox("Limit jumps?", LimitJumps);
             if (LimitJumps)
                 MaxJumps = EditorGUI.DragInt("Max jumps", MaxJumps);
+            
 
             ImGui.Separator();
             if (EditorGUI.ListenableDeviceDropdown("Device", _device, out IListenableDevice newDevice))

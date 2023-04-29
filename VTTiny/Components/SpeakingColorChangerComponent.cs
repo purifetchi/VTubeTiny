@@ -64,7 +64,7 @@ namespace VTTiny.Components
             _renderer.Tint = color;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             DefaultTint = EditorGUI.ColorEdit("Default tint", DefaultTint);
             SpeakingTint = EditorGUI.ColorEdit("Speaking tint", SpeakingTint);
@@ -84,7 +84,7 @@ namespace VTTiny.Components
             };
         }
 
-        internal override void InheritParametersFromConfig(JsonElement? parameters)
+        public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<SpeakingColorChangerConfig>(parameters);
 

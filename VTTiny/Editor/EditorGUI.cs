@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -191,6 +192,7 @@ namespace VTTiny.Editor
             }
 
             componentType = default;
+            
             return false;
         }
 
@@ -205,28 +207,29 @@ namespace VTTiny.Editor
         {
             newSelectedActor = null;
 
-            if (ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
+            if (!ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
             {
-                if (ImGui.Selectable("None", currentSelectedActor == null))
-                {
-                    ImGui.EndCombo();
-                    return true;
-                }
-
-                foreach (var actor in stage.GetActors())
-                {
-                    if (ImGui.Selectable(actor.Name, actor == currentSelectedActor))
-                    {
-                        ImGui.EndCombo();
-
-                        newSelectedActor = actor;
-                        return true;
-                    }
-                }
-
-                ImGui.EndCombo();
+                return false;
             }
 
+            if (ImGui.Selectable("None", currentSelectedActor == null))
+            {
+                ImGui.EndCombo();
+                return true;
+            }
+            //Inverting ifs to avoid big forks
+            foreach (var actor in stage.GetActors())
+            {
+                if (!ImGui.Selectable(actor.Name, actor == currentSelectedActor))
+                {
+                    continue;
+                }
+                ImGui.EndCombo();
+                newSelectedActor = actor;
+                return true;
+            }
+
+            ImGui.EndCombo();
             return false;
         }
 
@@ -244,27 +247,29 @@ namespace VTTiny.Editor
             newAsset = default;
 
             currentAsset?.RenderAssetPreview();
-            if (ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}"))
+            if (!ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}"))
             {
-                if (ImGui.Selectable("None", currentAsset == null))
-                {
-                    ImGui.EndCombo();
-                    return true;
-                }
+                return false;
+            }
 
-                foreach (var asset in database.GetAllAssetsOfType<T>())
-                {
-                    if (ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
-                    {
-                        ImGui.EndCombo();
+            if (ImGui.Selectable("None", currentAsset == null))
+            {
+                ImGui.EndCombo();
+                return true;
+            }
 
-                        newAsset = asset;
-                        return true;
-                    }
-                }
+            foreach (var asset in database.GetAllAssetsOfType<T>())
+            {
+                if (!ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
+                    continue;
 
                 ImGui.EndCombo();
+
+                newAsset = asset;
+                return true;
             }
+
+            ImGui.EndCombo();
 
             return false;
         }
@@ -313,15 +318,12 @@ namespace VTTiny.Editor
         /// <param name="max">The maximum value.</param>
         public static void ReactiveProgressBar(float value, float threshold, float max)
         {
-            // If the value exceedes the threshold, change the progress bar to be green.
-            if (value >= threshold)
-                ImGui.PushStyleColor(ImGuiCol.PlotHistogram, new Vector4(0, 255, 0, 255));
+            // If the value exceeds the threshold, change the progress bar to be green.
+            ImGui.PushStyleColor(ImGuiCol.PlotHistogram,
+                // Otherwise make it red.
+                value >= threshold ? new Vector4(0, 255, 0, 255) : new Vector4(255, 0, 0, 255));
 
-            // Otherwise make it red.
-            else
-                ImGui.PushStyleColor(ImGuiCol.PlotHistogram, new Vector4(255, 0, 0, 255));
-
-            var size = new Vector2Int((int)ImGui.GetWindowSize().X - 50, 20);
+            var size = new Vector2Int(300, 20); // The size of the progress bar was way too big on 4k
             ImGui.ProgressBar(value / max, size);
 
             ImGui.PopStyleColor();
@@ -338,27 +340,32 @@ namespace VTTiny.Editor
         {
             newDevice = default;
 
-            if (ImGui.BeginCombo($"{label}##MicrophoneDropdown", $"{currentDevice?.Name ?? "No microphone selected."}"))
+            if (!ImGui.BeginCombo($"{label}##MicrophoneDropdown",
+                    $"{currentDevice?.Name ?? "No microphone selected."}"))
             {
-                if (ImGui.Selectable("None", currentDevice == null))
-                {
-                    ImGui.EndCombo();
-                    return true;
-                }
+                return false;
+            }
 
-                foreach (var device in ListenableDeviceHelper.GetAllListenableDevices())
-                {
-                    if (ImGui.Selectable(device.Name, device == currentDevice))
-                    {
-                        ImGui.EndCombo();
+            if (ImGui.Selectable("None", currentDevice == null))
+            {
+                ImGui.EndCombo();
+                return true;
+            }
 
-                        newDevice = device;
-                        return true;
-                    }
+            foreach (var device in ListenableDeviceHelper.GetAllListenableDevices())
+            {
+                if (!ImGui.Selectable(device.Name, device == currentDevice))
+                {
+                    continue;
                 }
 
                 ImGui.EndCombo();
+
+                newDevice = device;
+                return true;
             }
+
+            ImGui.EndCombo();
 
             return false;
         }

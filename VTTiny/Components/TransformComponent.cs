@@ -26,7 +26,7 @@ namespace VTTiny.Components
             Position = LocalPosition + Parent.ParentActor.Transform.Position;
         }
 
-        internal override void RenderEditorGUI()
+        public override void RenderEditorGUI()
         {
             LocalPosition = EditorGUI.DragVector2("Local Position", LocalPosition);
         }

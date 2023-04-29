@@ -8,12 +8,12 @@ namespace VTTiny.Plugins
     /// <summary>
     /// A manager class tasked with loading and storing all of the plugins.
     /// </summary>
-    internal static class PluginManager
+    internal  static  class PluginManager
     {
         /// <summary>
         /// The path of the plugins subdirectory.
         /// </summary>
-        private const string PLUGINS_FOLDER_PATH = "./Plugins/";
+        private static string PLUGINS_FOLDER_PATH = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, System.AppDomain.CurrentDomain.RelativeSearchPath ?? "", "Plugins");
 
         /// <summary>
         /// The currently loaded plugins.
@@ -25,18 +25,37 @@ namespace VTTiny.Plugins
         /// </summary>
         public static void LoadAllPlugins()
         {
+            Console.WriteLine(PLUGINS_FOLDER_PATH);
             _plugins = new();
-
-            foreach (var directory in Directory.GetDirectories(PLUGINS_FOLDER_PATH))
+            if (!Directory.Exists(PLUGINS_FOLDER_PATH))
+                Directory.CreateDirectory(PLUGINS_FOLDER_PATH);
+            //First boot after download will not have the plugins folder, and crash
+            
+            foreach (var file in Directory.GetFiles(PLUGINS_FOLDER_PATH)) // Apparently this was all directories, not files.
             {
-                var plugin = Plugin.TryLoadFromFile(directory);
+                Console.WriteLine(file);
+                PluginLoadContext context = new(file);
+                var assem = context.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(file)));
+                var plugin = Plugin.TryLoadFromFile(file);
 
                 if (plugin == null)
                 {
-                    Console.WriteLine($"Failed to load plugin {directory}.");
+                    Console.WriteLine($"Failed to load plugin {file}.");
                     continue;
                 }
 
+                Console.WriteLine($"Loaded plugin {plugin.Name}!");
+                _plugins.Add(plugin);
+            }
+
+            foreach (var dir in Directory.GetDirectories(PLUGINS_FOLDER_PATH))
+            {
+                var plugin = Plugin.TryLoadFromDirectory(dir);
+                if (plugin == null)
+                {
+                    Console.WriteLine($"Failed to load plugin {dir}.");
+                    continue;
+                }
                 Console.WriteLine($"Loaded plugin {plugin.Name}!");
                 _plugins.Add(plugin);
             }

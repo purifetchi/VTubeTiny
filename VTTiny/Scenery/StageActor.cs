@@ -125,7 +125,6 @@ namespace VTTiny.Scenery
             // Get the constructor of the component from the type and instantiate the component.
             var component = type.Construct<Component>();
             InitializeComponent(component);
-
             return component;
         }
 
