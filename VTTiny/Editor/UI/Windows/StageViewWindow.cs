@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
 using VTTiny.Assets;
@@ -15,6 +16,11 @@ namespace VTTiny.Editor.UI
     internal class StageViewWindow : EditorWindow, IStageAwareWindow
     {
         /// <summary>
+        /// The amount by which the zoom delta will be divided while applying.
+        /// </summary>
+        private const float ZOOM_DIVISOR = 4f;
+
+        /// <summary>
         /// The stage this window is showing.
         /// </summary>
         public Stage Stage { get; private set; }
@@ -28,6 +34,16 @@ namespace VTTiny.Editor.UI
         /// The last mouse position while moving.
         /// </summary>
         private Vector2Int _lastMousePosition;
+
+        /// <summary>
+        /// The zoom factor of the stage.
+        /// </summary>
+        private float _zoomFactor = 1f;
+
+        /// <summary>
+        /// The offset of the stage view from the center of the screen.
+        /// </summary>
+        private Vector2Int _stageViewOffset;
 
         /// <summary>
         /// Creates a new stage view for a given stage.
@@ -70,7 +86,10 @@ namespace VTTiny.Editor.UI
                 width = size.X
             };
 
-            relative = absolute - (Vector2Int)pos;
+            // Calculate the inverse of the zoom factor, to adjust for how zoomed in we are.
+            var inv = 1f / _zoomFactor;
+
+            relative = absolute * inv - (Vector2Int)pos * inv;
             return Raylib.CheckCollisionPointRec(absolute, rect);
         }
 
@@ -155,10 +174,39 @@ namespace VTTiny.Editor.UI
             return true;
         }
 
+        /// <summary>
+        /// Check if we're going to zoom in/out of the stage.
+        /// </summary>
+        private void HandleZoom()
+        {
+            if (!Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL))
+                return;
+
+            var factor = MathF.Sign(Raylib.GetMouseWheelMove()) / ZOOM_DIVISOR;
+
+            _zoomFactor += factor;
+            _zoomFactor = _zoomFactor < 1 ? 1 : _zoomFactor;
+        }
+
+        /// <summary>
+        /// Handle the actual stage view being dragged around.
+        /// </summary>
+        private void HandleStageViewDragging()
+        {
+            if (!Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) ||
+                !Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
+                return;
+
+            _stageViewOffset += (Vector2Int)(Raylib.GetMouseDelta());
+        }
+
         protected override void PreDrawUI()
         {
+            HandleZoom();
+            HandleStageViewDragging();
+
             var frameBuffer = Stage.RenderingContext.GetFramebuffer().Value;
-            var size = new Vector2Int(frameBuffer.width, frameBuffer.height);
+            var size = new Vector2Int((int)(frameBuffer.width * _zoomFactor), (int)(frameBuffer.height * _zoomFactor));
 
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2Int(0, 0));
             ImGui.SetNextWindowSizeConstraints(size, size);
@@ -180,8 +228,8 @@ namespace VTTiny.Editor.UI
 
             // Draw the buffer in the center of the screen
             var center = (Vector2Int)((ImGui.GetWindowSize() - (System.Numerics.Vector2)size) * 0.5f);
-            ImGui.SetCursorPos(center);
-            rlImGui.ImageRect(frameBuffer, size.X, size.Y, viewRect);
+            ImGui.SetCursorPos(center + _stageViewOffset);
+            rlImGui.ImageRect(frameBuffer, (int)(size.X * _zoomFactor), (int)(size.Y * _zoomFactor), viewRect);
 
             HandleDragAndDropImages();
             HandleActorDragging();
