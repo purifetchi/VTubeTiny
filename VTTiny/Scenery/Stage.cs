@@ -110,11 +110,10 @@ namespace VTTiny.Scenery
 
             AssetDatabase.LoadConfig(config);
 
-            ResizeStage(config.Dimensions);
-
             Background = Background.FromConfig(config.Background, AssetDatabase);
             SetTargetFPS(config.FPSLimit);
 
+            Dimensions = config.Dimensions;
             SetSpoutOrDefaultContext<GenericRaylibRenderingContext>(config.BroadcastViaSpout);
 
             CreateActorsFromConfigList(config.Actors);
