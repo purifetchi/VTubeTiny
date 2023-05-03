@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
@@ -109,7 +110,7 @@ namespace VTTiny.Editor.UI
             if (asset is not Texture texture)
                 return;
 
-            var actor = Stage.CreateActor();
+            var actor = Stage.CreateActor(Path.GetFileName(path));
             var renderer = actor.AddComponent<TextureRendererComponent>();
 
             renderer.SetTexture(texture);
