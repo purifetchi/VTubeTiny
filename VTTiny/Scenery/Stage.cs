@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Raylib_cs;
 using VTTiny.Assets.Management;
 using VTTiny.Data;
+using VTTiny.Editor;
 using VTTiny.Rendering;
 
 namespace VTTiny.Scenery
@@ -10,7 +11,7 @@ namespace VTTiny.Scenery
     /// <summary>
     /// The class responsible for managing and drawing all of the actors.
     /// </summary>
-    public partial class Stage
+    public partial class Stage : IEditorStageTreeNode
     {
         /// <summary>
         /// The asset database for this stage.
@@ -51,6 +52,11 @@ namespace VTTiny.Scenery
         /// Should this stage be broadcasted via Spout? (WINDOWS ONLY)
         /// </summary>
         public bool BroadcastViaSpout { get; private set; } = false;
+
+        /// <summary>
+        /// The name of the stage.
+        /// </summary>
+        public string Name { get; set; } = "Stage";
 
         /// <summary>
         /// The instance of VTubeTiny this scene is tied to.

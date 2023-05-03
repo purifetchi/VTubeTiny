@@ -250,6 +250,9 @@ namespace VTTiny.Editor.UI
         public void OnStageChange(Stage stage)
         {
             SetStage(stage);
+
+            Editor.GetWindow<ObjectPropertiesWindow>()
+                .GuiObject = Stage;
         }
     }
 }

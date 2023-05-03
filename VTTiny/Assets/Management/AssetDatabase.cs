@@ -59,14 +59,16 @@ namespace VTTiny.Assets.Management
         /// <typeparam name="T">The type of the asset.</typeparam>
         /// <param name="id">The id of the asset.</param>
         /// <returns>The asset.</returns>
-        private T CreateAsset<T>(int id) where T : Asset, new()
+        private T CreateAsset<T>(int id) 
+            where T : Asset, new()
         {
             var asset = new T
             {
                 Id = id,
-                Name = $"{typeof(T).Name} ({id})"
+                Name = $"{typeof(T).Name} ({id})",
+                Database = this
             };
-
+            
             _assets[id] = asset;
             return asset;
         }
@@ -82,6 +84,7 @@ namespace VTTiny.Assets.Management
             var asset = assetType.Construct<Asset>();
 
             asset.Id = id;
+            asset.Database = this;
             _assets[id] = asset;
 
             return asset;

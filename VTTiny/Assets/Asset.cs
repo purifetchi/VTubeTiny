@@ -9,7 +9,9 @@ namespace VTTiny.Assets
     /// <summary>
     /// An abstract asset used by VTubeTiny.
     /// </summary>
-    public abstract class Asset : TypedSerializedObject, INamedObject
+    public abstract class Asset : TypedSerializedObject,
+        IEditorGUIDrawable,
+        IHasRightClickContext
     {
         /// <summary>
         /// The ID of this asset.
@@ -20,6 +22,11 @@ namespace VTTiny.Assets
         /// The name of this asset.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The asset database this asset is associated with.
+        /// </summary>
+        public AssetDatabase Database { get; set; }
 
         /// <summary>
         /// Constructs a reference to this asset.
@@ -34,34 +41,24 @@ namespace VTTiny.Assets
             return new AssetReference<T>(typedAsset);
         }
 
-        /// <summary>
-        /// Renders the editor gui for this asset.
-        /// </summary>
-        /// <returns>Whether we've modified the asset database collection (e.g. by removing an item).</returns>
-        public bool RenderEditorGUI(AssetDatabase database)
+        /// <inheritdoc/>
+        public void RenderEditorGUI()
         {
-            ImGui.PushID($"{GetHashCode()}");
+            ImGui.Text("Asset Preview");
+            RenderAssetPreview();
 
-            if (ImGui.TreeNode(Name ?? Id.ToString()))
+            ImGui.Text("Asset Settings");
+            InternalRenderEditorGUI();
+        }
+
+        /// <inheritdoc/>
+        public void RenderContextMenu()
+        {
+            if (ImGui.MenuItem("Remove Asset"))
             {
-                ImGui.Text("Asset Preview");
-                RenderAssetPreview();
-
-                ImGui.NewLine();
-
-                ImGui.Text("Asset Settings");
-                InternalRenderEditorGUI();
-
-                if (ImGui.Button("Remove asset"))
-                {
-                    database.RemoveAsset(this);
-                    return true;
-                }
-
-                ImGui.TreePop();
+                Database.RemoveAsset(this);
+                ImGui.EndPopup();
             }
-
-            return false;
         }
 
         /// <summary>

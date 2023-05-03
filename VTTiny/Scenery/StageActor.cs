@@ -5,6 +5,7 @@ using System.Reflection;
 using Raylib_cs;
 using VTTiny.Base;
 using VTTiny.Components;
+using VTTiny.Editor;
 using VTTiny.Extensions;
 
 namespace VTTiny.Scenery
@@ -12,7 +13,7 @@ namespace VTTiny.Scenery
     /// <summary>
     /// An object in a stage, can contain components that modify what it does.
     /// </summary>
-    public partial class StageActor : INamedObject
+    public partial class StageActor : IEditorStageTreeNode
     {
         /// <summary>
         /// The stage that owns this actor.
@@ -44,8 +45,20 @@ namespace VTTiny.Scenery
         /// </summary>
         public TransformComponent Transform { get; init; }
 
+        /// <summary>
+        /// The components of this actor.
+        /// </summary>
         private readonly List<Component> _components;
+
+        /// <summary>
+        /// The renderables this component has.
+        /// </summary>
         private readonly List<RendererComponent> _renderables;
+
+        /// <summary>
+        /// The child list of this actor.
+        /// </summary>
+        private List<StageActor> _children;
 
         /// <summary>
         /// Constructs a new stage actor.
@@ -182,6 +195,7 @@ namespace VTTiny.Scenery
 
             if (component is RendererComponent renderable)
                 _renderables.Add(renderable);
+
             _components.Add(component);
         }
 
@@ -240,12 +254,44 @@ namespace VTTiny.Scenery
         }
 
         /// <summary>
+        /// Adds an actor to the child list of this actor.
+        /// </summary>
+        /// <param name="actor">The actor.</param>
+        internal void AddChild(StageActor actor)
+        {
+            // Lazy initialize the child list, as we don't really need it if an actor has
+            // no children.
+            _children ??= new();
+
+            if (_children.Contains(actor))
+                return;
+
+            _children.Add(actor);
+        }
+
+        /// <summary>
+        /// Removes an actor from the child list of this actor.
+        /// </summary>
+        /// <param name="actor">The actor.</param>
+        internal void RemoveChild(StageActor actor)
+        {
+            _children ??= new();
+
+            if (!_children.Contains(actor))
+                return;
+
+            _children.Remove(actor);
+        }
+
+        /// <summary>
         /// Tries reparenting an actor to a different actor.
         /// </summary>
         /// <param name="newParent">The new parent actor.</param>
         /// <returns>True if reparenting succeeded, false otherwise.</returns>
         public bool TryReparent(StageActor newParent)
         {
+            ParentActor?.RemoveChild(this);
+
             if (newParent == null)
             {
                 ParentActor = null;
@@ -264,6 +310,7 @@ namespace VTTiny.Scenery
             } while (actor != null);
 
             ParentActor = newParent;
+            ParentActor.AddChild(this);
             return true;
         }
 

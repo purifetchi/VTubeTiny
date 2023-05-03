@@ -249,11 +249,13 @@ namespace VTTiny.Editor
         public void LayoutDockWindows(uint dockId)
         {
             ImGuiDockBuilder.SplitNode(dockId, ImGuiDir.Left, 0.8f, out uint editorDockId, out uint settingsDockId);
+            ImGuiDockBuilder.SplitNode(editorDockId, ImGuiDir.Down, 0.2f, out uint assetDockId, out uint stageViewDockId);
             ImGuiDockBuilder.SplitNode(settingsDockId, ImGuiDir.Down, 0.4f, out uint assetBrowserDockId, out uint propsDockId);
 
-            GetWindow<StagePropertiesWindow>().Dock(propsDockId);
-            GetWindow<StageViewWindow>().Dock(editorDockId);
-            GetWindow<AssetBrowserWindow>().Dock(assetBrowserDockId);
+            GetWindow<StageTreeWindow>().Dock(propsDockId);
+            GetWindow<StageViewWindow>().Dock(stageViewDockId);
+            GetWindow<AssetBrowserWindow>().Dock(assetDockId);
+            GetWindow<ObjectPropertiesWindow>().Dock(assetBrowserDockId);
 
             _didLayoutEditorDocks = true;
         }

@@ -1,4 +1,6 @@
-﻿using ImGuiNET;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ImGuiNET;
 using VTTiny.Editor;
 using VTTiny.Rendering;
 
@@ -6,22 +8,44 @@ namespace VTTiny.Scenery
 {
     public partial class Stage
     {
-        /// <summary>
-        /// Renders the editor GUI for this scene and all the actors within this scene.
-        /// </summary>
-        internal void RenderEditorGUI()
+        /// <inheritdoc/>
+        public bool HasChildren => _actors.Count > 0;
+
+        /// <inheritdoc/>
+        public bool HasParent => false;
+
+        /// <inheritdoc/>
+        public bool IsDragDropSource { get; } = false;
+
+        /// <inheritdoc/>
+        public bool IsDragDropTarget { get; } = true;
+
+        /// <inheritdoc/>
+        public void AcceptDragDrop(IEditorStageTreeNode node)
         {
-            RenderStageSettingsGUI();
-
-            ImGui.NewLine();
-
-            RenderActorsEditorGUI();
+            // Unparent the actor.
+            if (node is StageActor actor)
+                actor.TryReparent(null);
         }
 
-        /// <summary>
-        /// Renders the GUI for the stage specific settings.
-        /// </summary>
-        private void RenderStageSettingsGUI()
+        /// <inheritdoc/>
+        public IEnumerable<IEditorStageTreeNode> GetChildren()
+        {
+            return _actors.Where(actor => !actor.HasParent);
+        }
+
+        /// <inheritdoc/>
+        public void RenderContextMenu()
+        {
+            if (ImGui.MenuItem("Create Actor"))
+            {
+                CreateActor();
+                ImGui.EndPopup();
+            }
+        }
+
+        /// <inheritdoc/>
+        public void RenderEditorGUI()
         {
             ImGui.Text("Stage settings");
 
@@ -39,25 +63,6 @@ namespace VTTiny.Scenery
             var newBroadcastVal = EditorGUI.Checkbox("Enable Spout Broadcasting", BroadcastViaSpout);
             if (newBroadcastVal != BroadcastViaSpout)
                 SetSpoutOrDefaultContext<FramebufferRenderingContext>(newBroadcastVal);
-        }
-
-        /// <summary>
-        /// Renders the editor gui for the actor picker.
-        /// </summary>
-        private void RenderActorsEditorGUI()
-        {
-            ImGui.Text("Actors");
-
-            foreach (var actor in _actors)
-            {
-                if (actor.RenderEditorGUI())
-                    break;
-
-                ImGui.Separator();
-            }
-
-            if (ImGui.Button("Add Actor"))
-                CreateActor();
         }
     }
 }

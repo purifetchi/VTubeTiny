@@ -1,5 +1,7 @@
-﻿using ImGuiNET;
+﻿using System.Xml.Linq;
+using ImGuiNET;
 using Raylib_cs;
+using VTTiny.Assets;
 using VTTiny.Assets.Management;
 using VTTiny.Scenery;
 
@@ -39,6 +41,16 @@ namespace VTTiny.Editor.UI
             AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
         }
 
+        /// <summary>
+        /// Selects the asset and shows its properties in the properties window.
+        /// </summary>
+        /// <param name="asset">The asset.</param>
+        private void SelectAsset(Asset asset)
+        {
+            Editor.GetWindow<ObjectPropertiesWindow>()
+                .GuiObject = asset;
+        }
+
         protected override void DrawUI()
         {
             if (Stage.AssetDatabase.AssetCount < 1)
@@ -50,7 +62,17 @@ namespace VTTiny.Editor.UI
             }
             else
             {
-                Stage.AssetDatabase.RenderEditorGUI();
+                foreach (var asset in Stage.AssetDatabase.GetAssets())
+                {
+                    asset.RenderAssetPreview();
+
+                    if (ImGui.IsItemClicked())
+                        SelectAsset(asset);
+
+                    Editor.DoContextMenuFor(asset);
+
+                    ImGui.SameLine();
+                }
             }
 
             HandleDragAndDropAssets();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ImGuiNET;
 using VTTiny.Editor;
 
@@ -6,50 +7,61 @@ namespace VTTiny.Scenery
 {
     public partial class StageActor
     {
-        /// <summary>
-        /// Renders this stage actor's editor GUI and all of the editor GUIs for the components within.
-        /// </summary>
-        /// <returns>
-        /// Whether we've modified the actor collection before returning from the function.
-        /// For example, by removing this actor from the actor list.
-        /// </returns>
-        internal bool RenderEditorGUI()
+        /// <inheritdoc/>
+        public bool HasChildren => _children?.Count > 0;
+
+        /// <inheritdoc/>
+        public bool HasParent => ParentActor != null;
+
+        /// <inheritdoc/>
+        public bool IsDragDropSource { get; } = true;
+
+        /// <inheritdoc/>
+        public bool IsDragDropTarget { get; } = true;
+
+        /// <inheritdoc/>
+        public void AcceptDragDrop(IEditorStageTreeNode node)
         {
-            if (ImGui.TreeNode($"{Name}##{GetHashCode()}"))
+            // Reparent the actor to us.
+            if (node is StageActor actor)
+                actor.TryReparent(this);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<IEditorStageTreeNode> GetChildren()
+        {
+            return _children;
+        }
+
+        /// <inheritdoc/>
+        public void RenderContextMenu()
+        {
+            if (ImGui.MenuItem("Remove Actor"))
             {
-                if (ImGui.Button("Remove Actor"))
-                {
-                    OwnerStage.RemoveActor(this);
-                    return true;
-                }
-
-                ImGui.SameLine();
-
-                if (ImGui.Button("Rename Actor"))
-                    EditorGUI.ShowRenameWindow(this, OwnerStage.VTubeTiny);
-
-                AllowRendering = EditorGUI.Checkbox("Allow rendering", AllowRendering);
-
-                ImGui.Text($"Parented to:");
-                ImGui.SameLine();
-
-                if (EditorGUI.ActorDropdown(OwnerStage, ParentActor, out StageActor newParent))
-                    TryReparent(newParent);
-
-                ImGui.NewLine();
-
-                DrawComponents();
-
-                if (EditorGUI.ComponentDropdown(out Type componentType))
-                {
-                    ConstructComponentFromType(componentType);
-                    
-                }
-
-                ImGui.TreePop();
+                OwnerStage.RemoveActor(this);
+                ImGui.EndPopup();
             }
 
-            return false;
+            if (ImGui.MenuItem("Rename Actor"))
+            {
+                EditorGUI.ShowRenameWindow(this, OwnerStage.VTubeTiny);
+                ImGui.EndPopup();
+            }
+        }
+
+        /// <inheritdoc/>
+        public void RenderEditorGUI()
+        {
+            AllowRendering = EditorGUI.Checkbox("Allow rendering", AllowRendering);
+
+            ImGui.NewLine();
+
+            DrawComponents();
+
+            if (EditorGUI.ComponentDropdown(out Type componentType))
+                ConstructComponentFromType(componentType);
+
+            return;
         }
 
         /// <summary>
@@ -62,7 +74,7 @@ namespace VTTiny.Scenery
             {
                 ImGui.PushID(component.GetHashCode().ToString());
 
-                if (ImGui.SmallButton($"X"))
+                if (ImGui.SmallButton("X"))
                 {
                     if (RemoveComponent(component))
                     {
