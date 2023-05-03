@@ -22,7 +22,7 @@
                 if (editor.GetWindow<AboutWindow>() != null)
                     return;
 
-                editor.AddWindow(new AboutWindow(editor));
+                editor.AddWindow(new AboutWindow());
             });
         }
     }

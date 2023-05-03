@@ -307,7 +307,18 @@ namespace VTTiny.Editor
         /// <param name="vtubetiny">The VTubeTiny instance for which it's invoked.</param>
         public static void ShowTextInputWindow(string title, string initial, Action<string> callback, VTubeTiny vtubetiny)
         {
-            vtubetiny.Editor.AddWindow(new UI.TextInputWindow(title, initial, callback, vtubetiny.Editor));
+            vtubetiny.Editor.AddWindow(new UI.TextInputWindow(title, initial, callback));
+        }
+
+        /// <summary>
+        /// Shows a message box.
+        /// </summary>
+        /// <param name="title">The title of the message box.</param>
+        /// <param name="message">The message within this message box.</param>
+        /// <param name="vtubetiny">The VTubeTiny instance for which it's invoked.</param>
+        public static void MessageBox(string title, string message, VTubeTiny vtubetiny)
+        {
+            vtubetiny.Editor.AddWindow(new UI.MessageBoxWindow(title, message));
         }
 
         /// <summary>

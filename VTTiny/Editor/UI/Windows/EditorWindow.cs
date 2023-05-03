@@ -19,6 +19,11 @@ namespace VTTiny.Editor.UI
         public ImGuiWindowFlags Flags { get; set; }
 
         /// <summary>
+        /// The editor.
+        /// </summary>
+        public VTubeTinyEditor Editor { get; internal set; }
+
+        /// <summary>
         /// Constructs a new window with the given name.
         /// </summary>
         /// <param name="name">The name of the window.</param>

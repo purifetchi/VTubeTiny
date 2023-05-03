@@ -15,11 +15,6 @@ namespace VTTiny.Editor.UI
         private Action<string> Callback { get; set; }
 
         /// <summary>
-        /// The editor.
-        /// </summary>
-        private VTubeTinyEditor Editor { get; set; }
-
-        /// <summary>
         /// The initial string.
         /// </summary>
         private string _initialString;
@@ -29,11 +24,10 @@ namespace VTTiny.Editor.UI
         /// </summary>
         /// <param name="name">The name of the window.</param>
         /// <param name="callback">The callback to invoke after we're done.</param>
-        public TextInputWindow(string name, string initial, Action<string> callback, VTubeTinyEditor editor)
+        public TextInputWindow(string name, string initial, Action<string> callback)
             : base(name, ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoSavedSettings)
         {
             Callback = callback;
-            Editor = editor;
 
             _initialString = initial;
         }

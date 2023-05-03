@@ -8,11 +8,6 @@ namespace VTTiny.Editor.UI
     internal class AboutWindow : EditorWindow
     {
         /// <summary>
-        /// The editor.
-        /// </summary>
-        private VTubeTinyEditor Editor { get; set; }
-
-        /// <summary>
         /// The license of VTubeTiny.
         /// </summary>
         private const string LICENSE = @"MIT License
@@ -41,10 +36,10 @@ SOFTWARE.
         /// <summary>
         /// Constructs a new About VTubeTiny window.
         /// </summary>
-        public AboutWindow(VTubeTinyEditor editor)
+        public AboutWindow()
             : base("About VTubeTiny", ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoSavedSettings)
         {
-            Editor = editor;
+
         }
 
         protected override void DrawUI()

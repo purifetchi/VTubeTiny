@@ -63,6 +63,8 @@ namespace VTTiny.Editor
         internal void AddWindow(EditorWindow window)
         {
             _windows.Add(window);
+            window.Editor = this;
+
             _wasEditorListModified = true;
         }
 
