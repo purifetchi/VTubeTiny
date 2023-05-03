@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
@@ -41,8 +42,14 @@ namespace VTTiny.Editor
         /// </summary>
         private EditorTheme _theme;
 
+        /// <summary>
+        /// The currently selected right click context menu item.
+        /// </summary>
+        private IHasRightClickContext _currentRightClickContext;
+
         private bool _didLayoutEditorDocks = false;
         private bool _wasEditorListModified = false;
+        private bool _drewContextMenuThisFrame = false;
 
         /// <summary>
         /// Instantiates a new VTubeTiny editor instance from a given VTubeTiny instance.
@@ -73,7 +80,8 @@ namespace VTTiny.Editor
         /// </summary>
         /// <typeparam name="T">The type of the window (must derive from `VTTiny.Editor.UI.EditorWindow`.</typeparam>
         /// <returns>Either the window or null.</returns>
-        internal T GetWindow<T>() where T : EditorWindow
+        internal T GetWindow<T>()
+            where T : EditorWindow
         {
             foreach (var window in _windows)
             {
@@ -126,13 +134,31 @@ namespace VTTiny.Editor
             Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
             Raylib.MaximizeWindow();
 
-            AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
+            AddWindow(new ObjectPropertiesWindow());
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
-            AddWindow(new StagePropertiesWindow(VTubeTiny.ActiveStage));
+            AddWindow(new StageTreeWindow(VTubeTiny.ActiveStage));
+            AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
 
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;
+        }
+
+        /// <summary>
+        /// Tries to draw the context menu for an object.
+        /// </summary>
+        /// <param name="ctx">The object that has the right click context.</param>
+        public void DoContextMenuFor(IHasRightClickContext ctx)
+        {
+            if (_drewContextMenuThisFrame)
+                return;
+
+            if (ImGui.IsItemHovered() &&
+                ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+            {
+                _currentRightClickContext = ctx;
+                _drewContextMenuThisFrame = true;
+            }
         }
 
         /// <summary>
@@ -154,6 +180,29 @@ namespace VTTiny.Editor
             _menuBar.AddCategory(new FileMenuCategory(_menuBar));
             _menuBar.AddCategory(new ViewMenuCategory(_menuBar));
             _menuBar.AddCategory(new AboutMenuCategory(_menuBar));
+        }
+
+        /// <summary>
+        /// Handles the context menu.
+        /// </summary>
+        private void HandleContextMenu()
+        {
+            const string CONTEXT_NAME = "ctx";
+
+            ImGui.OpenPopup(CONTEXT_NAME);
+            if (ImGui.BeginPopup(CONTEXT_NAME))
+            {
+                _currentRightClickContext.RenderContextMenu();
+
+                var hovered = ImGui.IsWindowHovered();
+                ImGui.EndPopup();
+
+                if (!ImGui.IsPopupOpen(CONTEXT_NAME) ||
+                    (!hovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left)))
+                {
+                    _currentRightClickContext = null;
+                }
+            }
         }
 
         /// <summary>
@@ -180,6 +229,9 @@ namespace VTTiny.Editor
                 }
             }
 
+            if (_currentRightClickContext != null)
+                HandleContextMenu();
+
             if (!_didLayoutEditorDocks)
                 LayoutDockWindows(dockId);
 
@@ -187,6 +239,8 @@ namespace VTTiny.Editor
 
             rlImGui.End();
             RenderingContext.End();
+
+            _drewContextMenuThisFrame = false;
         }
 
         /// <summary>
