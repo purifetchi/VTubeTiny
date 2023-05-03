@@ -107,6 +107,12 @@ namespace VTTiny.Editor.UI
             Raylib.ClearDroppedFiles();
 
             var asset = AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
+            if (asset is null)
+            {
+                EditorGUI.MessageBox("Import error", $"Unable to load asset at path: {path}.", Editor.VTubeTiny);
+                return;
+            }
+
             if (asset is not Texture texture)
                 return;
 

@@ -34,7 +34,6 @@ namespace VTTiny.Assets.Management
                     return gifTexture;
 
                 default:
-                    Console.WriteLine($"Unknown asset at path {path}");
                     return null;
             }
         }
