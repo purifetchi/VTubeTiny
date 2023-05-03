@@ -1,7 +1,7 @@
 ﻿using System;
 using ImGuiNET;
 using VTTiny.Assets.Management;
-using VTTiny.Base;
+using VTTiny.Editor;
 using VTTiny.Serialization;
 
 namespace VTTiny.Assets
