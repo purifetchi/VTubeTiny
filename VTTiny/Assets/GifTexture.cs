@@ -89,6 +89,16 @@ namespace VTTiny.Assets
             Raylib.UpdateTexture(_backingTexture, dataPtr.ToPointer());
         }
 
+        /// <summary>
+        /// Sets the frame index.
+        /// </summary>
+        /// <param name="frame">The frame index.</param>
+        public void SetFrame(int frame)
+        {
+            _frame = frame - 1;
+            AdvanceFrame();
+        }
+
         public override void LoadTextureFromFile(string path)
         {
             Path = path;
