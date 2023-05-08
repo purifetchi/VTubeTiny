@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using VTTiny.Base;
 using VTTiny.Data;
 using VTTiny.Extensions;
 
@@ -31,7 +32,7 @@ namespace VTTiny.Assets.Management
         /// 
         /// We lazily instantiate it, since there's no reason for us to use it, if we don't need to create new assets.
         /// </summary>
-        private readonly Lazy<AssetIdAllocator> _idAllocator;
+        private readonly Lazy<IdAllocator> _idAllocator;
 
         /// <summary>
         /// Creates a new asset database.
@@ -39,7 +40,7 @@ namespace VTTiny.Assets.Management
         public AssetDatabase()
         {
             _assets = new();
-            _idAllocator = new(() => new AssetIdAllocator(_config?.LastId ?? -1));
+            _idAllocator = new(() => new IdAllocator(_config?.LastId ?? -1));
         }
 
         /// <summary>

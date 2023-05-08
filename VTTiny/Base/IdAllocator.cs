@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace VTTiny.Assets.Management
+namespace VTTiny.Base
 {
     /// <summary>
-    /// This class is responsible for allocating IDs for new assets.
+    /// This class is responsible for allocating IDs.
     /// </summary>
-    public class AssetIdAllocator
+    public class IdAllocator
     {
         /// <summary>
         /// This contains all of the returned IDs we can allocate.
@@ -20,7 +20,7 @@ namespace VTTiny.Assets.Management
         /// <summary>
         /// Create a new asset id allocator.
         /// </summary>
-        public AssetIdAllocator(int lastId = -1)
+        public IdAllocator(int lastId = -1)
         {
             _freeIds = new();
             _lastUsedId = lastId;
