@@ -33,6 +33,12 @@ namespace VTTiny.Assets.Management
                     gifTexture.Name = name;
                     return gifTexture;
 
+                case ".wav":
+                    var sound = assetDatabase.CreateAsset<Sound>();
+                    sound.LoadSoundFromFile(path);
+                    sound.Name = name;
+                    return sound;
+
                 default:
                     return null;
             }

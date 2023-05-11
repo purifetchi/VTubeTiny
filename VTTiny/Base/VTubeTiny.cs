@@ -119,6 +119,7 @@ namespace VTTiny
             PluginManager.LoadAllPlugins();
 
             Raylib.InitWindow(800, 600, "VTubeTiny");
+            Raylib.InitAudioDevice();
 
             var refreshRate = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
             Raylib.SetTargetFPS(refreshRate);
@@ -145,6 +146,7 @@ namespace VTTiny
             Editor?.Destroy();
 
             Raylib.CloseWindow();
+            Raylib.CloseAudioDevice();
 
             Console.WriteLine("Destroyed Raylib context, goodbye.");
         }
