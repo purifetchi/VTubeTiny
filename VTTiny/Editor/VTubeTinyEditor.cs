@@ -139,6 +139,7 @@ namespace VTTiny.Editor
             AddWindow(new StageViewWindow(VTubeTiny.ActiveStage));
             AddWindow(new StageTreeWindow(VTubeTiny.ActiveStage));
             AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
+            AddWindow(new StageGraphEditorWindow());
 
             InitializeMainMenuBar();
 
@@ -257,6 +258,7 @@ namespace VTTiny.Editor
             GetWindow<StageViewWindow>().Dock(stageViewDockId);
             GetWindow<AssetBrowserWindow>().Dock(assetDockId);
             GetWindow<ObjectPropertiesWindow>().Dock(assetBrowserDockId);
+            GetWindow<StageGraphEditorWindow>()?.Dock(stageViewDockId);
 
             _didLayoutEditorDocks = true;
         }

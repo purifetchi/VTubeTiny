@@ -10,6 +10,7 @@ using VTTiny.Base;
 using VTTiny.Components;
 using VTTiny.Extensions;
 using VTTiny.Plugins;
+using VTTiny.Scripting.Nodes;
 
 namespace VTTiny.Editor
 {
@@ -30,6 +31,11 @@ namespace VTTiny.Editor
         private static string[] KeyNameCache { get; set; } = null;
 
         /// <summary>
+        /// This serves as a cache for all of the node types.
+        /// </summary>
+        private static string[] NodeCache { get; set; } = null;
+
+        /// <summary>
         /// This serves as a cache for all of the keycodes that Raylib can use.
         /// </summary>
         private static KeyboardKey[] KeyCache { get; set; } = null;
@@ -43,6 +49,7 @@ namespace VTTiny.Editor
         {
             CollectComponents();
             CollectKeyCodes();
+            CollectNodes();
         }
 
         /// <summary>
@@ -72,6 +79,19 @@ namespace VTTiny.Editor
                                      .ToArray();
 
             ComponentTypeCache = components;
+        }
+
+        /// <summary>
+        /// Collects all of the types derived from the Node type, so we can later instantiate them.
+        /// </summary>
+        private static void CollectNodes()
+        {
+            var nodes = PluginManager.GetTypesInLoadedAssemblies()
+                .Where(type => type.IsSubclassOf(typeof(Node)) && !type.IsAbstract && type.IsClass)
+                .Select(type => type.FullName)
+                .ToArray();
+
+            NodeCache = nodes;
         }
 
         /// <summary>
@@ -174,6 +194,27 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
+        /// Creates a component list.
+        /// </summary>
+        /// <param name="nodeType">The type of the node, if it was added.</param>
+        /// <returns>Whether any of the nodes were attempted to be instantiated.</returns>
+        public static bool NodeList(out Type nodeType)
+        {
+            nodeType = default;
+
+            foreach (var typeName in NodeCache)
+            {
+                if (ImGui.MenuItem(typeName))
+                {
+                    nodeType = PluginManager.FindTypeInLoadedAssemblies(typeName);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Creates a component dropdown with an add button.
         /// </summary>
         /// <param name="componentType">The type of the component (if it was added).</param>
@@ -206,22 +247,19 @@ namespace VTTiny.Editor
             newSelectedActor = null;
 
             if (!ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
-            {
                 return false;
-            }
 
             if (ImGui.Selectable("None", currentSelectedActor == null))
             {
                 ImGui.EndCombo();
                 return true;
             }
-            //Inverting ifs to avoid big forks
+
             foreach (var actor in stage.GetActors())
             {
                 if (!ImGui.Selectable(actor.Name, actor == currentSelectedActor))
-                {
                     continue;
-                }
+                
                 ImGui.EndCombo();
                 newSelectedActor = actor;
                 return true;
@@ -364,9 +402,7 @@ namespace VTTiny.Editor
             foreach (var device in ListenableDeviceHelper.GetAllListenableDevices())
             {
                 if (!ImGui.Selectable(device.Name, device == currentDevice))
-                {
                     continue;
-                }
 
                 ImGui.EndCombo();
 

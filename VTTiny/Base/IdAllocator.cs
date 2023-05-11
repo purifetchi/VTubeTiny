@@ -10,7 +10,7 @@ namespace VTTiny.Base
         /// <summary>
         /// This contains all of the returned IDs we can allocate.
         /// </summary>
-        private Stack<int> _freeIds;
+        private readonly Stack<int> _freeIds;
 
         /// <summary>
         /// This contains the last used ID.
