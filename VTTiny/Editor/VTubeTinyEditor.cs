@@ -126,6 +126,7 @@ namespace VTTiny.Editor
         public void Initialize()
         {
             rlImGui.Setup();
+            ImNodes.CreateContext();
             ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
@@ -267,6 +268,7 @@ namespace VTTiny.Editor
         {
             _theme?.UnloadTheme(true);
             rlImGui.Shutdown();
+            ImNodes.DestroyContext();
             Raylib.ClearWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
         }
     }
