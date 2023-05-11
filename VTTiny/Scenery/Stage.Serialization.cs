@@ -43,7 +43,7 @@ namespace VTTiny.Scenery
                 Background = Background.PackageIntoConfig(),
                 Dimensions = Dimensions,
                 FPSLimit = TargetFPS,
-                BroadcastViaSpout = BroadcastViaSpout,
+                BroadcastViaSpout = BroadcastViaSpout
             };
 
             var actorList = new List<ActorConfig>();
@@ -52,6 +52,7 @@ namespace VTTiny.Scenery
 
             config.Actors = actorList;
             config.AssetDatabase = AssetDatabase.PackageIntoConfig();
+            config.StageGraph = StageGraph.PackageIntoConfig();
 
             return config;
         }

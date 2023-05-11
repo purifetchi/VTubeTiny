@@ -12,7 +12,7 @@ namespace VTTiny.Scripting;
 /// <summary>
 /// A visual scripting graph for VTubeTiny.
 /// </summary>
-public class StageGraph
+public partial class StageGraph
 {
     /// <summary>
     /// Provides a read only view into all of the nodes.
@@ -80,12 +80,23 @@ public class StageGraph
     /// Creates a node given its type.
     /// </summary>
     /// <param name="nodeType">The type of the node.</param>
-    /// <returns></returns>
+    /// <returns>The node.</returns>
     public Node AddNode(Type nodeType)
+    {
+        return AddNode(nodeType, Allocator.AllocateId());
+    }
+
+    /// <summary>
+    /// Creates a node given its type and id.
+    /// </summary>
+    /// <param name="nodeType">The type of the node.</param>
+    /// <param name="id">The id of the node.</param>
+    /// <returns>The node.</returns>
+    public Node AddNode(Type nodeType, int id)
     {
         var node = nodeType.Construct<Node>();
         node.Graph = this;
-        node.Id = Allocator.AllocateId();
+        node.Id = id;
         node.InitializePins();
         _nodes.Add(node);
 

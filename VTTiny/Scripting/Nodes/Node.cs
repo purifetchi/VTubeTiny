@@ -2,13 +2,15 @@
 using ImGuiNET;
 using VTTiny.Editor;
 using VTTiny.Scripting.Pins;
+using VTTiny.Serialization;
 
 namespace VTTiny.Scripting.Nodes;
 
 /// <summary>
 /// A stage graph node.
 /// </summary>
-public abstract partial class Node : IEditorGUIDrawable,
+public abstract partial class Node : TypedSerializedObject,
+    IEditorGUIDrawable,
     IHasRightClickContext
 {
     /// <summary>

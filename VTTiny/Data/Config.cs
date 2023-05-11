@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Raylib_cs;
+using VTTiny.Scripting.Serialization;
 
 namespace VTTiny.Data
 {
@@ -15,5 +15,6 @@ namespace VTTiny.Data
 
         public IList<ActorConfig> Actors { get; set; }
         public AssetDatabaseConfig AssetDatabase { get; set; }
+        public StageGraphConfig StageGraph { get; set; }
     }
 }

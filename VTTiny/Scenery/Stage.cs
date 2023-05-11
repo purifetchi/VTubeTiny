@@ -122,6 +122,7 @@ namespace VTTiny.Scenery
                 return this;
 
             AssetDatabase.LoadConfig(config);
+            StageGraph.LoadFromConfig(config.StageGraph);
 
             Background = Background.FromConfig(config.Background, AssetDatabase);
             SetTargetFPS(config.FPSLimit);
