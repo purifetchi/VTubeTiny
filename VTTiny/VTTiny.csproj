@@ -43,6 +43,10 @@
   <ItemGroup>
     <EditorResourceFiles Include="$(ProjectDir)Resources\**\*.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ImNodesBinaries Include="$(ProjectDir)External\ImNodes\runtimes\**\*.*" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\VTTiny.Plugin.Discord\VTTiny.Plugin.Discord.csproj" />
@@ -54,6 +58,14 @@
 
   <Target Name="CopyEditorResourcesToPublish" AfterTargets="Publish">
     <Copy SourceFiles="@(EditorResourceFiles)" DestinationFolder="$(PublishDir)res\%(RecursiveDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="CopyImNodesToBuild" BeforeTargets="Build">
+    <Copy SourceFiles="@(ImNodesBinaries)" DestinationFolder="$(OutputPath)\runtimes\%(RecursiveDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="CopyImNodesToPublish" AfterTargets="Publish">
+    <Copy SourceFiles="@(ImNodesBinaries)" DestinationFolder="$(OutputPath)\runtimes\%(RecursiveDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
   </Target>
 
   <Target Name="CopySpoutToBuild" BeforeTargets="Build" Condition="'$(IsWindows)'=='true'">
