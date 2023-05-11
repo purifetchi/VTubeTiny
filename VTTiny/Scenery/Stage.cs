@@ -5,6 +5,7 @@ using VTTiny.Assets.Management;
 using VTTiny.Data;
 using VTTiny.Editor;
 using VTTiny.Rendering;
+using VTTiny.Scripting;
 
 namespace VTTiny.Scenery
 {
@@ -68,6 +69,8 @@ namespace VTTiny.Scenery
         /// </summary>
         public IRenderingContext RenderingContext { get; private set; }
 
+        public StageGraph StageGraph { get; private set; }
+
         private List<StageActor> _actors;
         private Stopwatch _timer;
 
@@ -91,7 +94,7 @@ namespace VTTiny.Scenery
         public static Stage Blank(VTubeTiny vtubetiny)
         {
             var refreshRate = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
-            return new Stage
+            var stage = new Stage
             {
                 _actors = new(),
                 Background = Background.Default(),
@@ -102,6 +105,10 @@ namespace VTTiny.Scenery
                 BroadcastViaSpout = false,
                 AssetDatabase = new()
             };
+
+            stage.StageGraph = new(stage);
+
+            return stage;
         }
 
         /// <summary>
@@ -252,8 +259,16 @@ namespace VTTiny.Scenery
         /// </summary>
         internal void Update()
         {
+            // Update the stage graph first.
+            StageGraph.Update();
+
             foreach (var actor in _actors)
+            {
+                if (actor.HasParent)
+                    continue;
+
                 actor.Update();
+            }
 
             _lastUpdateTime = Time;
         }
@@ -268,6 +283,9 @@ namespace VTTiny.Scenery
 
             foreach (var actor in _actors)
             {
+                if (actor.HasParent)
+                    continue;
+
                 actor.Render();
 
                 if (RenderBoundingBoxes)

@@ -84,12 +84,24 @@ namespace VTTiny.Scenery
         {
             if (Paused)
             {
+                if (HasChildren)
+                {
+                    foreach (var child in _children)
+                        child.Update();
+                }
+
                 Transform.Update();
                 return;
             }
 
             foreach (var component in _components)
                 component.Update();
+
+            if (HasChildren)
+            {
+                foreach (var child in _children)
+                    child.Update();
+            }
         }
 
         /// <summary>
@@ -102,6 +114,12 @@ namespace VTTiny.Scenery
 
             foreach (var component in _renderables)
                 component.Render();
+
+            if (HasChildren)
+            {
+                foreach (var child in _children)
+                    child.Render();
+            }
         }
 
         /// <summary>
@@ -114,6 +132,12 @@ namespace VTTiny.Scenery
 
             foreach (var component in _renderables)
                 component.DrawBoundingBox();
+
+            if (HasChildren)
+            {
+                foreach (var child in _children)
+                    child.RenderBoundingBox();
+            }
         }
 
         /// <summary>
