@@ -35,10 +35,13 @@ namespace VTTiny.Editor.UI
             if (!Raylib.IsFileDropped() || !ImGui.IsWindowHovered())
                 return;
 
-            var path = Raylib.GetDroppedFiles()[0];
+            var paths = Raylib.GetDroppedFiles();
             Raylib.ClearDroppedFiles();
 
-            AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
+            foreach (var path in paths)
+            {
+                AssetHelper.LoadBasedOnExtension(path, Stage.AssetDatabase);
+            }
         }
 
         /// <summary>
@@ -62,8 +65,19 @@ namespace VTTiny.Editor.UI
             }
             else
             {
+                var style = ImGui.GetStyle();
+
+                var contentRegion = ImGui.GetContentRegionAvail().X + style.WindowPadding.X;
+                var assetPreviewMargins = style.CellPadding.X + (style.FramePadding.X * 2);
+
+                var maxItems = (int)System.MathF.Max(1, contentRegion / (Asset.ASSET_PREVIEW_SIZE + assetPreviewMargins));
+
+                var currentItems = 0;
+
                 foreach (var asset in Stage.AssetDatabase.GetAssets())
                 {
+                    currentItems++;
+
                     asset.RenderAssetPreview();
 
                     if (ImGui.IsItemClicked())
@@ -71,7 +85,10 @@ namespace VTTiny.Editor.UI
 
                     Editor.DoContextMenuFor(asset);
 
-                    ImGui.SameLine();
+                    if (currentItems % maxItems != 0)
+                    {
+                        ImGui.SameLine();
+                    }
                 }
             }
 

@@ -28,6 +28,8 @@ namespace VTTiny.Assets
         /// </summary>
         public AssetDatabase Database { get; set; }
 
+        public const int ASSET_PREVIEW_SIZE = 100;
+
         /// <summary>
         /// Constructs a reference to this asset.
         /// </summary>

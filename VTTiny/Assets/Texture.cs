@@ -125,7 +125,7 @@ namespace VTTiny.Assets
 
         public override void RenderAssetPreview()
         {
-            EditorGUI.ImageButton(this, 100, 100);
+            EditorGUI.ImageButton(this, ASSET_PREVIEW_SIZE, ASSET_PREVIEW_SIZE);
         }
 
         protected override void InternalRenderEditorGUI()
