@@ -80,6 +80,9 @@ namespace VTTiny.Editor.UI
 
                     asset.RenderAssetPreview();
 
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip(asset.Name);
+
                     if (ImGui.IsItemClicked())
                         SelectAsset(asset);
 
