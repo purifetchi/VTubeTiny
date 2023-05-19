@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using ImGuiNET;
 using Raylib_cs;
 using VTTiny.Assets;
@@ -278,15 +279,39 @@ namespace VTTiny.Editor
         /// <param name="currentAsset">The current asset.</param>
         /// <param name="newAsset">The new asset, if selected.</param>
         /// <returns>Whether we've selected a new asset.</returns>
-        public static bool AssetDropdown<T>(string label, AssetDatabase database, T currentAsset, out T newAsset) where T : Asset
+        public static bool AssetDropdown<T>(string label, AssetDatabase database, T currentAsset, out T newAsset) 
+            where T : Asset
         {
             newAsset = default;
 
             currentAsset?.RenderAssetPreview();
-            if (!ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}"))
+
+            var state = ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}");
+
+            // Handle this dropdown as a drag'n'drop target.
+            if (ImGui.BeginDragDropTarget())
             {
-                return false;
+                var payload = ImGui.AcceptDragDropPayload("Asset");
+                var id = -1;
+
+                unsafe
+                {
+                    // If the payload actually has data, read the id.
+                    if ((nint)payload.NativePtr != 0)
+                        id = Unsafe.Read<int>((void*)payload.Data);
+                }
+
+                ImGui.EndDragDropTarget();
+
+                if (id != -1)
+                {
+                    newAsset = database.GetAsset<T>(id);
+                    return true;
+                }
             }
+
+            if (!state)
+                return false;
 
             if (ImGui.Selectable("None", currentAsset == null))
             {
