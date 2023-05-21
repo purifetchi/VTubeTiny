@@ -34,6 +34,8 @@ namespace VTTiny.Assets.Management
                     return gifTexture;
 
                 case ".wav":
+                case ".mp3":
+                case ".ogg":
                     var sound = assetDatabase.CreateAsset<Sound>();
                     sound.LoadSoundFromFile(path);
                     sound.Name = name;
