@@ -28,6 +28,9 @@ namespace VTTiny.Assets
         /// </summary>
         public AssetDatabase Database { get; set; }
 
+        /// <summary>
+        /// The default asset preview size.
+        /// </summary>
         public const int ASSET_PREVIEW_SIZE = 100;
 
         /// <summary>
@@ -71,7 +74,11 @@ namespace VTTiny.Assets
         /// <summary>
         /// Renders the preview for this asset.
         /// </summary>
-        public virtual void RenderAssetPreview() { }
+        public virtual void RenderAssetPreview() 
+        {
+            // Draw a dummy asset preview for anything that doesn't want a rich one.
+            ImGui.Button(Name, new Vector2Int(ASSET_PREVIEW_SIZE, ASSET_PREVIEW_SIZE));
+        }
 
         /// <summary>
         /// Destroys this asset and frees all things associated with it.

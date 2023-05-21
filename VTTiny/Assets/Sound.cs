@@ -1,4 +1,5 @@
 ﻿using System;
+using ImGuiNET;
 using Raylib_cs;
 
 namespace VTTiny.Assets;
@@ -25,6 +26,9 @@ internal class Sound : Asset,
         _sound = Raylib.LoadSound(path);
     }
 
+    /// <summary>
+    /// Plays this sound file.
+    /// </summary>
     public void PlayOnce()
     {
         Raylib.PlaySoundMulti(_sound);
