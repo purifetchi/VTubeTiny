@@ -6,6 +6,7 @@ using VTTiny.Extensions;
 using VTTiny.Scenery;
 using VTTiny.Scripting.Nodes;
 using VTTiny.Scripting.Pins;
+using VTTiny.Scripting.Serialization;
 
 namespace VTTiny.Scripting;
 
@@ -92,12 +93,23 @@ public partial class StageGraph
     /// <param name="nodeType">The type of the node.</param>
     /// <param name="id">The id of the node.</param>
     /// <returns>The node.</returns>
-    public Node AddNode(Type nodeType, int id)
+    public Node AddNode(Type nodeType, int id, PinConfig pins = null)
     {
         var node = nodeType.Construct<Node>();
         node.Graph = this;
         node.Id = id;
         node.InitializePins();
+
+        // Adjust the pins.
+        if (pins is not null)
+        {
+            for (var i = 0; i < node.Inputs.Count; i++)
+                node.Inputs[i].Id = pins.InputPinIds[i];
+
+            for (var i = 0; i < node.Outputs.Count; i++)
+                node.Outputs[i].Id = pins.OutputPinIds[i];
+        }
+
         _nodes.Add(node);
 
         return node;

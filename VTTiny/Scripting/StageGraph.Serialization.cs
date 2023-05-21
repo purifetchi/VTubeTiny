@@ -14,8 +14,16 @@ public partial class StageGraph
     {
         return new StageGraphConfig
         {
-            Nodes = Nodes.Select(node => new NodeConfig { Id = node.Id, Config = node.PackageIntoConfig() })
-                         .ToList(),
+            Nodes = Nodes.Select(node => new NodeConfig 
+            { 
+                Id = node.Id, 
+                Config = node.PackageIntoConfig(), 
+                Pins = new PinConfig 
+                { 
+                    InputPinIds = node.Inputs.Select(input => input.Id).ToList(),
+                    OutputPinIds = node.Outputs.Select(output => output.Id).ToList()
+                }
+            }).ToList(),
             Links = _links.ToList()
         };
     }
@@ -31,7 +39,7 @@ public partial class StageGraph
             if (!nodeConfig.Config.TryResolveType<Node>(out var resolved))
                 continue;
 
-            AddNode(resolved, nodeConfig.Id)
+            AddNode(resolved, nodeConfig.Id, nodeConfig.Pins)
                 .InheritParametersFromConfig(nodeConfig.Config.Parameters);
         }
 

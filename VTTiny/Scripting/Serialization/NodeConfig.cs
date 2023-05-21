@@ -1,4 +1,5 @@
-﻿using VTTiny.Data;
+﻿using System.Numerics;
+using VTTiny.Data;
 
 namespace VTTiny.Scripting.Serialization;
 
@@ -16,4 +17,14 @@ public class NodeConfig
     /// The config of said node.
     /// </summary>
     public TypedObjectConfig Config { get; set; }
+
+    /// <summary>
+    /// The position of this node within the stage graph.
+    /// </summary>
+    public Vector2 Position { get; set; }
+
+    /// <summary>
+    /// The configs of the pins.
+    /// </summary>
+    public PinConfig Pins { get; set; }
 }

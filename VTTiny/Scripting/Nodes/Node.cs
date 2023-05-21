@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Numerics;
 using ImGuiNET;
 using VTTiny.Editor;
 using VTTiny.Scripting.Pins;
@@ -42,6 +43,11 @@ public abstract partial class Node : TypedSerializedObject,
     /// The color of this node.
     /// </summary>
     public ImColor NodeColor { get; init; }
+
+    /// <summary>
+    /// Position within the stage graph.
+    /// </summary>
+    public Vector2 Position { get; set; }
 
     /// <summary>
     /// Creates a new node.
