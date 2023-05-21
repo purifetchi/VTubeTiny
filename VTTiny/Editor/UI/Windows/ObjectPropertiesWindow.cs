@@ -22,6 +22,12 @@ internal class ObjectPropertiesWindow : EditorWindow
     /// <inheritdoc/>
     protected override void DrawUI()
     {
-        GuiObject?.RenderEditorGUI();
+        if (GuiObject is null)
+        {
+            EditorGUI.CenterText("No object selected.");
+            return;
+        }
+
+        GuiObject.RenderEditorGUI();
     }
 }

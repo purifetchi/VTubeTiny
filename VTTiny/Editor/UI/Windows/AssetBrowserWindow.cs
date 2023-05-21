@@ -121,7 +121,7 @@ namespace VTTiny.Editor.UI
                 if (ImGui.IsWindowHovered())
                     ImGui.SetTooltip("Drag and drop a file here to load it as an asset!");
 
-                ImGui.Text("No assets present.");
+                EditorGUI.CenterText("No assets present.");
             }
             else
             {

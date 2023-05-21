@@ -195,6 +195,17 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
+        /// Creates a text label in the center of the window.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        public static void CenterText(string text)
+        {
+            var center = (Vector2Int)((ImGui.GetWindowSize() - ImGui.CalcTextSize(text)) * 0.5f);
+            ImGui.SetCursorPos(center);
+            ImGui.Text(text);
+        }
+
+        /// <summary>
         /// Creates a component list.
         /// </summary>
         /// <param name="nodeType">The type of the node, if it was added.</param>
