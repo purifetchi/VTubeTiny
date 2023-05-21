@@ -121,10 +121,6 @@ namespace VTTiny.Editor.UI
 
             renderer.SetTexture(texture);
 
-            // Offset the mouse cursor by half of the texture's size, putting the actor's center
-            // at the position of the mouse.
-            mousePos -= new Vector2Int(texture.Width / 2, texture.Height / 2);
-
             actor.Transform.LocalPosition = mousePos;
         }
 

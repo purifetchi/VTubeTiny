@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Numerics;
+using System.Text.Json;
 using Raylib_cs;
 using VTTiny.Assets;
 using VTTiny.Components.Data;
@@ -29,6 +30,11 @@ namespace VTTiny.Components
         public float Scale { get; set; } = 1f;
 
         /// <summary>
+        /// The center of the texture.
+        /// </summary>
+        private Vector2 Center => new((Texture.Width * Scale) / 2f, (Texture.Height * Scale) / 2f);
+
+        /// <summary>
         /// Set the texture for this texture renderer.
         /// </summary>
         /// <param name="texture">The texture to set.</param>
@@ -37,22 +43,42 @@ namespace VTTiny.Components
             Texture = texture;
         }
 
+        /// <inheritdoc/>
         public override void Render()
         {
             if (Texture == null)
                 return;
 
-            Raylib.DrawTextureEx(Texture.BackingTexture, Parent.Transform.Position, Rotation, Scale, Tint);
+            var dest = new Rectangle(
+                Parent.Transform.Position.X, 
+                Parent.Transform.Position.Y, 
+                Texture.Width * Scale, 
+                Texture.Height * Scale);
+
+            Raylib.DrawTexturePro(
+                Texture.BackingTexture, 
+                Texture.SourceRect, 
+                dest, 
+                Center, 
+                Rotation, 
+                Tint);
         }
 
+        /// <inheritdoc/>
         public override Rectangle GetBoundingBox()
         {
             if (Texture == null)
                 return new Rectangle();
 
-            return new Rectangle(Parent.Transform.Position.X, Parent.Transform.Position.Y, Texture.Width * Scale, Texture.Height * Scale);
+            return new Rectangle(
+                Parent.Transform.Position.X - Center.X, 
+                Parent.Transform.Position.Y - Center.Y, 
+                Texture.Width * Scale, 
+                Texture.Height * Scale
+                );
         }
 
+        /// <inheritdoc/>
         public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
@@ -64,6 +90,7 @@ namespace VTTiny.Components
             SetTexture(config.Image?.Resolve(Parent.OwnerStage.AssetDatabase));
         }
 
+        /// <inheritdoc/>
         public override void RenderEditorGUI()
         {
             if (EditorGUI.AssetDropdown("Texture", Parent.OwnerStage.AssetDatabase, Texture, out Texture newTexture))
@@ -74,6 +101,7 @@ namespace VTTiny.Components
             Scale = EditorGUI.DragFloat("Scale", Scale, 0.005f);
         }
 
+        /// <inheritdoc/>
         protected override object PackageParametersIntoConfig()
         {
             return new TextureRendererConfig

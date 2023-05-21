@@ -99,6 +99,7 @@ namespace VTTiny.Assets
             AdvanceFrame();
         }
 
+        /// <inheritdoc/>
         public override void LoadTextureFromFile(string path)
         {
             Path = path;
@@ -108,8 +109,10 @@ namespace VTTiny.Assets
             _frameCount = frameCount[0];
 
             BackingTexture = Raylib.LoadTextureFromImage(_image);
+            SourceRect = new(0, 0, Width, Height);
         }
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -118,11 +121,13 @@ namespace VTTiny.Assets
                 Raylib.UnloadImage(_image);
         }
 
+        /// <inheritdoc/>
         protected override void GenerateMipmaps()
         {
             // Mipmaps are not supported on GIF textures.
         }
 
+        /// <inheritdoc/>
         protected override void InternalRenderEditorGUI()
         {
             base.InternalRenderEditorGUI();
@@ -131,6 +136,7 @@ namespace VTTiny.Assets
             EditorGUI.Text("Warning: GIF textures aren't ideal for performance.");
         }
 
+        /// <inheritdoc/>
         public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             base.InheritParametersFromConfig(parameters);
@@ -139,6 +145,7 @@ namespace VTTiny.Assets
             FrameDelay = config.FrameDelay;
         }
 
+        /// <inheritdoc/>
         protected override object PackageParametersIntoConfig()
         {
             return new GifTextureConfig

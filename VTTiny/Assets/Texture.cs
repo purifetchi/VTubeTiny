@@ -37,6 +37,11 @@ namespace VTTiny.Assets
         public uint TextureId => BackingTexture.id;
 
         /// <summary>
+        /// The source rectangle.
+        /// </summary>
+        public Rectangle SourceRect { get; protected set; }
+
+        /// <summary>
         /// The current filtering mode for this texture.
         /// </summary>
         public TextureFilter FilteringMode { get; private set; } = TextureFilter.TEXTURE_FILTER_POINT;
@@ -58,6 +63,8 @@ namespace VTTiny.Assets
         public virtual void LoadTextureFromFile(string path)
         {
             BackingTexture = Raylib.LoadTexture(path);
+
+            SourceRect = new(0, 0, Width, Height);
             Path = path;
         }
 
@@ -102,11 +109,13 @@ namespace VTTiny.Assets
             GC.SuppressFinalize(this);
         }
 
+        /// <inheritdoc/>
         public override void Destroy()
         {
             Dispose();
         }
 
+        /// <inheritdoc/>
         public override void InheritParametersFromConfig(JsonElement? parameters)
         {
             var config = JsonObjectToConfig<TextureConfig>(parameters);
@@ -114,6 +123,7 @@ namespace VTTiny.Assets
             SetTextureFilterMode(config.FilteringMode);
         }
 
+        /// <inheritdoc/>
         protected override object PackageParametersIntoConfig()
         {
             return new TextureConfig
@@ -123,11 +133,13 @@ namespace VTTiny.Assets
             };
         }
 
+        /// <inheritdoc/>
         public override void RenderAssetPreview()
         {
             EditorGUI.ImageButton(this, ASSET_PREVIEW_SIZE, ASSET_PREVIEW_SIZE);
         }
 
+        /// <inheritdoc/>
         protected override void InternalRenderEditorGUI()
         {
             var isSmooth = EditorGUI.Checkbox("Smooth Filtering", FilteringMode == TextureFilter.TEXTURE_FILTER_TRILINEAR);
