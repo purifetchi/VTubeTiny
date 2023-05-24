@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using VTTiny.Editor.UI;
 using VTTiny.Scripting.Nodes;
 using VTTiny.Scripting.Serialization;
 
@@ -24,7 +25,12 @@ public partial class StageGraph
                     OutputPinIds = node.Outputs.Select(output => output.Id).ToList()
                 }
             }).ToList(),
-            Links = _links.ToList()
+            Links = _links.ToList(),
+
+            LastAllocatorId = Allocator.LastUsedId,
+            EditorConfig = Stage.VTubeTiny.Editor?
+                               .GetWindow<StageGraphEditorWindow>()?
+                               .SaveEditorStateToString() ?? string.Empty
         };
     }
 
@@ -45,5 +51,7 @@ public partial class StageGraph
 
         foreach (var link in config.Links)
             CreateLink(link.StartAttribute, link.StartNode, link.EndAttribute, link.EndNode);
+
+        Allocator = new(config.LastAllocatorId);
     }
 }

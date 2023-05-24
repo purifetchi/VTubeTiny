@@ -13,9 +13,9 @@ namespace VTTiny.Base
         private readonly Stack<int> _freeIds;
 
         /// <summary>
-        /// This contains the last used ID.
+        /// The last used id.
         /// </summary>
-        private int _lastUsedId = -1;
+        public int LastUsedId { get; private set; } = -1;
 
         /// <summary>
         /// Create a new asset id allocator.
@@ -23,7 +23,7 @@ namespace VTTiny.Base
         public IdAllocator(int lastId = -1)
         {
             _freeIds = new();
-            _lastUsedId = lastId;
+            LastUsedId = lastId;
         }
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace VTTiny.Base
             if (_freeIds.TryPop(out int usedId))
                 return usedId;
 
-            _lastUsedId++;
-            return _lastUsedId;
+            LastUsedId++;
+            return LastUsedId;
         }
 
         /// <summary>

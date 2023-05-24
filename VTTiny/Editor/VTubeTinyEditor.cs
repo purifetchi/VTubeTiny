@@ -140,6 +140,9 @@ namespace VTTiny.Editor
             AddWindow(new AssetBrowserWindow(VTubeTiny.ActiveStage));
             AddWindow(new StageGraphEditorWindow());
 
+            GetWindow<ObjectPropertiesWindow>()
+                .GuiObject = VTubeTiny.ActiveStage;
+
             InitializeMainMenuBar();
 
             _wasEditorListModified = false;

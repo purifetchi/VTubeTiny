@@ -47,17 +47,15 @@ namespace VTTiny.Scenery
         /// <inheritdoc/>
         public void RenderEditorGUI()
         {
-            ImGui.Text("Stage settings");
-
-            Dimensions = EditorGUI.DragVector2("Scene dimensions", Dimensions);
+            Dimensions = EditorGUI.DragVector2("Dimensions", Dimensions);
             if (ImGui.IsItemDeactivatedAfterEdit())
                 ResizeStage(Dimensions);
-
-            Background.RenderEditorGUI(AssetDatabase);
 
             TargetFPS = EditorGUI.DragInt("Target FPS", TargetFPS);
             if (ImGui.IsItemDeactivatedAfterEdit())
                 SetTargetFPS(TargetFPS);
+
+            Background.RenderEditorGUI(AssetDatabase);
 
             RenderBoundingBoxes = EditorGUI.Checkbox("Render bounding boxes", RenderBoundingBoxes);
             var newBroadcastVal = EditorGUI.Checkbox("Enable Spout Broadcasting", BroadcastViaSpout);

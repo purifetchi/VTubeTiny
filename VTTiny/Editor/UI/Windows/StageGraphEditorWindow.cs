@@ -27,6 +27,24 @@ internal class StageGraphEditorWindow : EditorWindow,
     }
 
     /// <summary>
+    /// Saves the current editor state to a string that can be loaded on later.
+    /// </summary>
+    /// <returns>The editor state string.</returns>
+    public string SaveEditorStateToString()
+    {
+        return ImNodes.SaveCurrentEditorStateToIniString();
+    }
+
+    /// <summary>
+    /// Loads the editor state from an ini string.
+    /// </summary>
+    /// <param name="config">The ini string.</param>
+    public void LoadEditorStateFromString(string config)
+    {
+        ImNodes.LoadCurrentEditorStateFromIniString(config);
+    }
+
+    /// <summary>
     /// Draws a single node.
     /// </summary>
     /// <param name="node">The node.</param>
@@ -122,5 +140,6 @@ internal class StageGraphEditorWindow : EditorWindow,
     public void OnStageChange(Stage newStage)
     {
         _graph = newStage.StageGraph;
+        LoadEditorStateFromString(newStage.VTubeTiny.Config.StageGraph.EditorConfig);
     }
 }

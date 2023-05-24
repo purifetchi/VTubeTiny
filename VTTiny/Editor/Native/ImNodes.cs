@@ -339,4 +339,36 @@ public static class ImNodes
     {
         imnodes_MiniMap();
     }
+
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+    private static extern nint imnodes_SaveCurrentEditorStateToIniString(out nint size);
+
+    /// <summary>
+    /// Saves the current editor state to an ini string.
+    /// </summary>
+    /// <returns>The editor state.</returns>
+    public static string SaveCurrentEditorStateToIniString()
+    {
+        var ptr = imnodes_SaveCurrentEditorStateToIniString(out var size);
+        return Marshal.PtrToStringUTF8(ptr, (int)size);
+    }
+
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+    private static extern void imnodes_LoadCurrentEditorStateFromIniString(nint data, nint data_size);
+
+    /// <summary>
+    /// Loads the current editor state from an ini string.
+    /// </summary>
+    /// <param name="data">The ini config.</param>
+    public static void LoadCurrentEditorStateFromIniString(string data)
+    {
+        if (string.IsNullOrEmpty(data))
+            return;
+
+        var ptr = Marshal.StringToCoTaskMemUTF8(data);
+        var size = System.Text.Encoding.UTF8.GetByteCount(data);
+        imnodes_LoadCurrentEditorStateFromIniString(ptr, size);
+
+        Marshal.ZeroFreeCoTaskMemUTF8(ptr);
+    }
 }

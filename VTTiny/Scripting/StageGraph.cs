@@ -28,7 +28,7 @@ public partial class StageGraph
     /// <summary>
     /// The id allocator for nodes and pins.
     /// </summary>
-    public IdAllocator Allocator { get; init; }
+    public IdAllocator Allocator { get; private set; }
 
     /// <summary>
     /// The stage we're attached to.

@@ -16,4 +16,14 @@ public class StageGraphConfig
     /// The links.
     /// </summary>
     public List<Link> Links { get; set; }
+
+    /// <summary>
+    /// The editor config.
+    /// </summary>
+    public string EditorConfig { get; set; }
+
+    /// <summary>
+    /// The last allocator id.
+    /// </summary>
+    public int LastAllocatorId { get; set; }
 }
