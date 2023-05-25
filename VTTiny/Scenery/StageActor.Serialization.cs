@@ -44,6 +44,7 @@ namespace VTTiny.Scenery
                 Name = Name,
                 ParentActorName = ParentActor?.Name ?? string.Empty,
                 Position = Transform.LocalPosition,
+                Rotation = Transform.LocalRotation,
                 AllowRendering = AllowRendering
             };
 

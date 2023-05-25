@@ -20,11 +20,6 @@ namespace VTTiny.Components
         public Color Tint { get; set; } = Color.WHITE;
 
         /// <summary>
-        /// Rotation (in degrees) of the texture.
-        /// </summary>
-        public float Rotation { get; set; } = 0;
-
-        /// <summary>
         /// Scale of the texture.
         /// </summary>
         public float Scale { get; set; } = 1f;
@@ -60,7 +55,7 @@ namespace VTTiny.Components
                 Texture.SourceRect, 
                 dest, 
                 Center, 
-                Rotation, 
+                Parent.Transform.Rotation, 
                 Tint);
         }
 
@@ -84,7 +79,6 @@ namespace VTTiny.Components
             var config = JsonObjectToConfig<TextureRendererConfig>(parameters);
 
             Tint = config.Tint;
-            Rotation = config.Rotation;
             Scale = config.Scale;
 
             SetTexture(config.Image?.Resolve(Parent.OwnerStage.AssetDatabase));
@@ -97,7 +91,6 @@ namespace VTTiny.Components
                 SetTexture(newTexture);
 
             Tint = EditorGUI.ColorEdit("Tint", Tint);
-            Rotation = EditorGUI.DragFloat("Rotation", Rotation);
             Scale = EditorGUI.DragFloat("Scale", Scale, 0.005f);
         }
 
@@ -108,7 +101,6 @@ namespace VTTiny.Components
             {
                 Image = Texture?.ToAssetReference<Texture>(),
                 Tint = Tint,
-                Rotation = Rotation,
                 Scale = Scale
             };
         }
