@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
@@ -126,6 +127,7 @@ namespace VTTiny.Editor
         {
             rlImGui.Setup();
             ImNodes.CreateContext();
+
             ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
             ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
@@ -220,7 +222,6 @@ namespace VTTiny.Editor
             _theme?.PushFont();
 
             var dockId = ImGui.DockSpaceOverViewport();
-
             _menuBar.Render();
             foreach (var window in _windows)
             {

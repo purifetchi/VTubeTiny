@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using ImGuiNET;
 
 namespace VTTiny.Editor.Native;
@@ -124,7 +125,14 @@ public static class ImNodes
     public static void CreateContext()
     {
         Context = imnodes_CreateContext();
-        imnodes_SetImGuiContext(ImGuiNET.ImGui.GetCurrentContext());
+        imnodes_SetImGuiContext(ImGui.GetCurrentContext());
+        
+        unsafe
+        {
+            // Hook the ImGui ctrl held with the link detach modifier.
+            // We're doing it this way, since this is the way ImNodes tells you to wire it all up.
+            GetIO().NativePtr->LinkDetachWithModifierClick.Modifier = (bool*)&ImGui.GetIO().NativePtr->KeyCtrl;
+        }
     }
 
     [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
@@ -136,6 +144,18 @@ public static class ImNodes
     public static void DestroyContext()
     {
         imnodes_DestroyContext(Context);
+    }
+
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
+    private static extern nint imnodes_GetIO();
+
+    /// <summary>
+    /// Get the IO of ImNodes.
+    /// </summary>
+    /// <returns>The ImNodes IO.</returns>
+    public static ImNodesIO GetIO()
+    {
+        return new ImNodesIO(imnodes_GetIO());
     }
 
     [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
@@ -278,8 +298,8 @@ public static class ImNodes
     }
 
     [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool imnodes_IsLinkDestroyed(out int link_id);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static extern byte imnodes_IsLinkDestroyed(out int link_id);
 
     /// <summary>
     /// Checks if a link has been destroyed.
@@ -288,7 +308,9 @@ public static class ImNodes
     /// <returns>Whether it has been destroyed.</returns>
     public static bool IsLinkDestroyed(out int id)
     {
-        return imnodes_IsLinkDestroyed(out id);
+        // NOTE: We don't use UnmanagedType.Bool here only because it constantly returns true for some reason.
+        //       Using U1 and then checking ourselves seems to work, though.
+        return imnodes_IsLinkDestroyed(out id) == 1;
     }
 
     [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]

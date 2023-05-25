@@ -173,7 +173,7 @@ public partial class StageGraph
     /// <param name="id">The link</param>
     public void SevereLink(int id)
     {
-        if (id < _links.Count ||
+        if (id < 0 ||
             id >= _links.Count)
         {
             return;

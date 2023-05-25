@@ -134,7 +134,10 @@ internal class StageGraphEditorWindow : EditorWindow,
         }
 
         if (ImNodes.IsLinkDestroyed(out var linkId))
+        {
+            System.Console.WriteLine(linkId);
             _graph.SevereLink(linkId);
+        }
     }
 
     public void OnStageChange(Stage newStage)
