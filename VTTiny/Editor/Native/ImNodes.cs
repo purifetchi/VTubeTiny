@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using ImGuiNET;
 
 namespace VTTiny.Editor.Native;
@@ -203,7 +202,7 @@ public static class ImNodes
         imnodes_EndNodeEditor();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_BeginNodeTitleBar();
 
     /// <summary>
@@ -214,7 +213,7 @@ public static class ImNodes
         imnodes_BeginNodeTitleBar();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_EndNodeTitleBar();
 
     /// <summary>
@@ -225,7 +224,7 @@ public static class ImNodes
         imnodes_EndNodeTitleBar();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     public static extern void imnodes_BeginInputAttribute(int id, ImNodesPinShape shape);
 
     /// <summary>
@@ -236,7 +235,7 @@ public static class ImNodes
         imnodes_BeginInputAttribute(id, shape);
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     public static extern void imnodes_EndInputAttribute();
 
     /// <summary>
@@ -247,7 +246,7 @@ public static class ImNodes
         imnodes_EndInputAttribute();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_BeginOutputAttribute(int id, ImNodesPinShape shape);
 
     /// <summary>
@@ -258,7 +257,7 @@ public static class ImNodes
         imnodes_BeginOutputAttribute(id, shape);
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_EndOutputAttribute();
 
     /// <summary>
@@ -269,7 +268,7 @@ public static class ImNodes
         imnodes_EndOutputAttribute();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool imnodes_IsLinkCreated_IntPtr(out int started_at_node_id, out int started_at_attribute_id, out int ended_at_node_id, out int ended_at_attribute_id, out byte created_from_snap);
     
@@ -297,7 +296,7 @@ public static class ImNodes
         return true;
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static extern byte imnodes_IsLinkDestroyed(out int link_id);
 
@@ -313,7 +312,7 @@ public static class ImNodes
         return imnodes_IsLinkDestroyed(out id) == 1;
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_Link(int id, int start_attribute_id, int end_attribute_id);
 
     /// <summary>
@@ -327,7 +326,7 @@ public static class ImNodes
         imnodes_Link(id, start, end);
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_PushColorStyle(ImNodesCol styleVar, uint color);
 
     /// <summary>
@@ -340,7 +339,7 @@ public static class ImNodes
         imnodes_PushColorStyle(styleVar, ImGui.ColorConvertFloat4ToU32(color.Value));
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_PopColorStyle();
 
     /// <summary>
@@ -351,7 +350,7 @@ public static class ImNodes
         imnodes_PopColorStyle();
     }
 
-    [DllImport("cimnodes", CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(IMNODES_LIBRARY_NAME, CallingConvention = CallingConvention.Cdecl)]
     private static extern void imnodes_MiniMap();
 
     /// <summary>
