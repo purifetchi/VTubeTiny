@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using ImGuiNET;
 using Raylib_cs;
 using rlImGui_cs;
@@ -203,6 +204,41 @@ namespace VTTiny.Editor.UI
             _stageViewOffset += (Vector2Int)(Raylib.GetMouseDelta());
         }
 
+        /// <summary>
+        /// Handle the drag and dropping of assets onto the stage.
+        /// </summary>
+        private void HandleDragAndDropAssets()
+        {
+            if (!ImGui.BeginDragDropTarget())
+                return;
+
+            var payload = ImGui.AcceptDragDropPayload("Asset");
+            var id = -1;
+
+            unsafe
+            {
+                // If the payload actually has data, read the id.
+                if ((nint)payload.NativePtr != 0)
+                    id = Unsafe.Read<int>((void*)payload.Data);
+            }
+
+            ImGui.EndDragDropTarget();
+
+            if (id == -1)
+                return;
+
+            if (!TryGetPositionWithinStage(Raylib.GetMousePosition(), out Vector2Int mousePos))
+                return;
+
+            var texture = Stage.AssetDatabase.GetAsset<Texture>(id);
+            var actor = Stage.CreateActor(texture.Name);
+            var renderer = actor.AddComponent<TextureRendererComponent>();
+
+            renderer.SetTexture(texture);
+
+            actor.Transform.LocalPosition = mousePos;
+        }
+
         protected override void PreDrawUI()
         {
             HandleZoom();
@@ -233,7 +269,8 @@ namespace VTTiny.Editor.UI
             var center = (Vector2Int)((ImGui.GetWindowSize() - (System.Numerics.Vector2)size) * 0.5f);
             ImGui.SetCursorPos(center + _stageViewOffset);
             rlImGui.ImageRect(frameBuffer, (int)(size.X * _zoomFactor), (int)(size.Y * _zoomFactor), viewRect);
-
+            
+            HandleDragAndDropAssets();
             HandleDragAndDropImages();
             HandleActorDragging();
         }
