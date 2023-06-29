@@ -319,6 +319,7 @@ namespace VTTiny.Scenery
 
             if (newParent == null)
             {
+                Transform.LocalPosition = Transform.Position;
                 ParentActor = null;
                 return true;
             }
