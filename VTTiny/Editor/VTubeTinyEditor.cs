@@ -46,8 +46,13 @@ namespace VTTiny.Editor
         /// </summary>
         private IHasRightClickContext _currentRightClickContext;
 
+        /// <summary>
+        /// The window stack change queue.
+        /// </summary>
+        private Queue<WindowStackChange> _stackChangeQueue;
+
+        private bool _isRendering = false;
         private bool _didLayoutEditorDocks = false;
-        private bool _wasEditorListModified = false;
         private bool _drewContextMenuThisFrame = false;
 
         /// <summary>
@@ -58,6 +63,8 @@ namespace VTTiny.Editor
         {
             VTubeTiny = instance;
             RenderingContext = new GenericRaylibRenderingContext();
+
+            _stackChangeQueue = new();
             _windows = new();
             _menuBar = new(this);
         }
@@ -68,10 +75,12 @@ namespace VTTiny.Editor
         /// <param name="window">The window.</param>
         internal void AddWindow(EditorWindow window)
         {
-            _windows.Add(window);
-            window.Editor = this;
+            if (!_isRendering)
+                _windows.Add(window);
+            else
+                _stackChangeQueue.Enqueue(new(window, WindowStackChange.Type.Add));
 
-            _wasEditorListModified = true;
+            window.Editor = this;
         }
 
         /// <summary>
@@ -101,8 +110,12 @@ namespace VTTiny.Editor
             if (!_windows.Contains(window))
                 return false;
 
-            _wasEditorListModified = true;
-            return _windows.Remove(window);
+            if (!_isRendering)
+                return _windows.Remove(window);
+            else
+                _stackChangeQueue.Enqueue(new(window, WindowStackChange.Type.Remove));
+
+            return true;
         }
 
         /// <summary>
@@ -145,8 +158,6 @@ namespace VTTiny.Editor
                 .GuiObject = VTubeTiny.ActiveStage;
 
             InitializeMainMenuBar();
-
-            _wasEditorListModified = false;
         }
 
         /// <summary>
@@ -211,10 +222,30 @@ namespace VTTiny.Editor
         }
 
         /// <summary>
+        /// Processes a single window stack change event.
+        /// </summary>
+        /// <param name="change">The change.</param>
+        private void ProcessWindowStackChange(WindowStackChange change)
+        {
+            switch (change.ChangeType)
+            {
+                case WindowStackChange.Type.Add:
+                    _windows.Add(change.Window);
+                    break;
+
+                case WindowStackChange.Type.Remove:
+                    _windows.Remove(change.Window);
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Renders the editor.
         /// </summary>
         public void Render()
         {
+            _isRendering = true;
+
             RenderingContext.Begin(Color.BLANK);
             rlImGui.Begin();
 
@@ -222,16 +253,12 @@ namespace VTTiny.Editor
 
             var dockId = ImGui.DockSpaceOverViewport();
             _menuBar.Render();
+
             foreach (var window in _windows)
-            {
                 window.Render();
 
-                if (_wasEditorListModified)
-                {
-                    _wasEditorListModified = false;
-                    break;
-                }
-            }
+            while (_stackChangeQueue.TryDequeue(out var change))
+                ProcessWindowStackChange(change);
 
             if (_currentRightClickContext != null)
                 HandleContextMenu();
@@ -245,6 +272,8 @@ namespace VTTiny.Editor
             RenderingContext.End();
 
             _drewContextMenuThisFrame = false;
+
+            _isRendering = false;
         }
 
         /// <summary>
