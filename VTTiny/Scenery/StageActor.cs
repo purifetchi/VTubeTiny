@@ -311,8 +311,9 @@ namespace VTTiny.Scenery
         /// Tries reparenting an actor to a different actor.
         /// </summary>
         /// <param name="newParent">The new parent actor.</param>
+        /// <param name="transformPosition">Should we transform our current position to the position relative to the parent?</param>
         /// <returns>True if reparenting succeeded, false otherwise.</returns>
-        public bool TryReparent(StageActor newParent)
+        public bool TryReparent(StageActor newParent, bool transformPosition = false)
         {
             ParentActor?.RemoveChild(this);
 
@@ -335,6 +336,10 @@ namespace VTTiny.Scenery
 
             ParentActor = newParent;
             ParentActor.AddChild(this);
+
+            if (transformPosition)
+                Transform.LocalPosition = Transform.Position - ParentActor.Transform.Position;
+
             return true;
         }
 

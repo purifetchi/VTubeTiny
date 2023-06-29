@@ -24,7 +24,7 @@ namespace VTTiny.Scenery
         {
             // Reparent the actor to us.
             if (node is StageActor actor)
-                actor.TryReparent(this);
+                actor.TryReparent(this, true);
         }
 
         /// <inheritdoc/>
