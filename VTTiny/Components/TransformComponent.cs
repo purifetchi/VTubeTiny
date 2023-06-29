@@ -1,4 +1,5 @@
-﻿using VTTiny.Editor;
+﻿using System;
+using VTTiny.Editor;
 
 namespace VTTiny.Components
 {
@@ -34,8 +35,18 @@ namespace VTTiny.Components
                 return;
             }
 
+            const float DEG2RAD = MathF.PI / 180f;
+
+            (var sin, var cos) = MathF.SinCos(Parent.ParentActor.Transform.Rotation * DEG2RAD);
+
+            // Transform the point relative to the rotation of the parent.
+            var localPos = new Vector2Int(
+                (int)(LocalPosition.X * cos - LocalPosition.Y * sin),
+                (int)(LocalPosition.Y * cos + LocalPosition.X * sin)
+                );
+
             // If we have a parent, our position is the local position added to the parent transform position.
-            Position = LocalPosition + Parent.ParentActor.Transform.Position;
+            Position = localPos + Parent.ParentActor.Transform.Position;
             Rotation = LocalRotation + Parent.ParentActor.Transform.Rotation;
         }
 
