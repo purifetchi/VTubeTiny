@@ -1,33 +1,42 @@
 ﻿using Raylib_cs;
+using VTTiny.Assets;
 using VTTiny.Assets.Management;
+using VTTiny.Serialization;
 
-namespace VTTiny.Components.Animator.Data
+namespace VTTiny.Components.Animator.Data;
+
+/// <summary>
+/// The config for an animator state.
+/// </summary>
+internal class AnimatorStateConfig : ISerializedConfigFor<AnimatorState>
 {
-    internal class AnimatorStateConfig
+    public string Name { get; set; }
+
+    public bool IsDefaultState { get; set; } = false;
+
+    public KeyboardKey Key { get; set; } = KeyboardKey.KEY_NULL;
+
+    public AssetReference<Character>? Character { get; set; }
+
+    /// <inheritdoc/>
+    public ISerializedConfigFor<AnimatorState> From(AnimatorState obj)
     {
-        public string Name { get; set; }
+        Name = obj.Name;
+        IsDefaultState = obj.IsDefaultState;
+        Key = obj.Key;
 
-        public bool IsDefaultState { get; set; } = false;
+        Character = obj.Character?.ToAssetReference<Character>();
 
-        public KeyboardKey Key { get; set; } = KeyboardKey.KEY_NULL;
+        return this;
+    }
 
-        public AnimatorCharacterConfig CharacterConfig { get; set; }
+    /// <inheritdoc/>
+    public void Into(AnimatorState obj)
+    {
+        obj.Name = Name;
+        obj.IsDefaultState = IsDefaultState;
+        obj.Key = Key;
 
-        /// <summary>
-        /// Constructs an animator state from the config.
-        /// </summary>
-        /// <param name="database">The database to resolve from.</param>
-        /// <returns>The newly created animator state.</returns>
-        public AnimatorState ToAnimatorState(AssetDatabase database)
-        {
-            return new AnimatorState
-            {
-                Key = Key,
-                IsDefaultState = IsDefaultState,
-                Name = Name,
-
-                Character = CharacterConfig?.ToAnimatorCharacter(database)
-            };
-        }
+        obj.Character = Character?.Resolve(obj.Database);
     }
 }

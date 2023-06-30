@@ -10,14 +10,8 @@ namespace VTTiny.Components.Animator
         /// <returns>The config.</returns>
         internal AnimatorStateConfig PackageIntoConfig()
         {
-            return new AnimatorStateConfig
-            {
-                IsDefaultState = IsDefaultState,
-                Key = Key,
-                Name = Name,
-
-                CharacterConfig = Character?.PackageIntoConfig()
-            };
+            return (AnimatorStateConfig)new AnimatorStateConfig()
+                .From(this);
         }
     }
 }

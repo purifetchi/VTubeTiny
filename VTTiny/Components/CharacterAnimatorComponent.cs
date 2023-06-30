@@ -5,15 +5,16 @@ using ImGuiNET;
 using Raylib_cs;
 using VTTiny.Base;
 using VTTiny.Components.Animator;
-using VTTiny.Components.Animator.Data;
 using VTTiny.Components.Data;
 using VTTiny.Editor;
 
 namespace VTTiny.Components;
 
 [DependsOnComponent(typeof(TextureRendererComponent))]
-public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
+public class CharacterAnimatorComponent : Component, 
+    ISpeakingAwareComponent
 {
+    /// <inheritdoc/>
     public bool IsSpeaking { get; set; }
 
     /// <summary>
@@ -24,7 +25,7 @@ public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
     /// <summary>
     /// The currently operated on character.
     /// </summary>
-    private AnimatorCharacter _currentCharacter;
+    private CharacterAnimator _animator;
 
     /// <summary>
     /// The current renderer.
@@ -36,42 +37,53 @@ public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
     /// </summary>
     public void FindAndSetDefaultState()
     {
-        _currentCharacter = _states.Find(state => state.IsDefaultState)?.Character;
+        _animator.State = _states.First(state => state.IsDefaultState);
     }
 
+    /// <inheritdoc/>
     public override void Start()
     {
+        _animator = new();
         _states = new();
+
         _renderer = GetComponent<TextureRendererComponent>();
     }
 
+    /// <inheritdoc/>
     public override void Update()
     {
-        foreach (var state in _states.Where(state => Raylib.IsKeyPressed(state.Key)))
+        foreach (var state in _states)
         {
-            _currentCharacter = state.Character;
+            if (!Raylib.IsKeyPressed(state.Key))
+                continue;
+
+            _animator.State = state;
             break;
         }
 
-        if (_currentCharacter != null)
-        {
-            _currentCharacter.IsSpeaking = IsSpeaking;
-            _currentCharacter.Update(Parent.OwnerStage.Time);
-        }
+        _animator.IsSpeaking = IsSpeaking;
+        _animator.Update(Parent.OwnerStage.Time);
 
-        _renderer?.SetTexture(_currentCharacter?.GetCurrentStateTexture());
+        _renderer?.SetTexture(_animator.GetCurrentStateTexture());
     }
 
+    /// <inheritdoc/>
     public override void InheritParametersFromConfig(JsonElement? parameters)
     {
         var config = JsonObjectToConfig<CharacterAnimatorConfig>(parameters);
 
         foreach (var stateConfig in config.States)
-            _states.Add(stateConfig.ToAnimatorState(Parent.OwnerStage.AssetDatabase));
+        {
+            var state = new AnimatorState(Parent.OwnerStage.AssetDatabase);
+            stateConfig.Into(state);
+
+            _states.Add(state);
+        }
 
         FindAndSetDefaultState();
     }
 
+    /// <inheritdoc/>
     protected override object PackageParametersIntoConfig()
     {
         var stateConfigs = _states.Select(state => state.PackageIntoConfig()).ToList();
@@ -82,6 +94,7 @@ public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
         };
     }
 
+    /// <inheritdoc/>
     public override void RenderEditorGUI()
     {
         EditorGUI.Text("States");
@@ -89,11 +102,15 @@ public class CharacterAnimatorComponent : Component, ISpeakingAwareComponent
         foreach (var character in _states)
             character.DrawEditorGUI(Parent.OwnerStage);
 
-        if (!ImGui.Button("Add Character State")) return;
-        var state = new AnimatorState();
+        if (!ImGui.Button("Add Character State"))
+            return;
+
+        var state = new AnimatorState(Parent.OwnerStage.AssetDatabase);
         _states.Add(state);
 
-        if (_states.Count != 1) return;
+        if (_states.Count != 1)
+            return;
+
         state.IsDefaultState = true;
         FindAndSetDefaultState();
     }
