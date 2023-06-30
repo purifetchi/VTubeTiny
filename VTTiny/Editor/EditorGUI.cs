@@ -330,6 +330,17 @@ namespace VTTiny.Editor
                 return true;
             }
 
+            // If this asset allows the dropdown creation, create the "New" button.
+            if (typeof(T).IsAssignableTo(typeof(IAllowAssetDropdownCreation)))
+            {
+                if (ImGui.Selectable("New"))
+                {
+                    newAsset = database.CreateAsset<T>();
+                    ImGui.EndCombo();
+                    return true;
+                }
+            }
+
             foreach (var asset in database.GetAllAssetsOfType<T>())
             {
                 if (!ImGui.Selectable(asset.Name ?? asset.Id.ToString(), asset == currentAsset))
