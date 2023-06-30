@@ -258,7 +258,7 @@ namespace VTTiny.Editor
         {
             newSelectedActor = null;
 
-            if (!ImGui.BeginCombo(" ##ActorDropdown", $"{currentSelectedActor?.Name ?? "No actor selected."}"))
+            if (!ImGui.BeginCombo(" ##ActorDropdown", currentSelectedActor?.Name ?? "No actor selected."))
                 return false;
 
             if (ImGui.Selectable("None", currentSelectedActor == null))
@@ -291,13 +291,13 @@ namespace VTTiny.Editor
         /// <param name="newAsset">The new asset, if selected.</param>
         /// <returns>Whether we've selected a new asset.</returns>
         public static bool AssetDropdown<T>(string label, AssetDatabase database, T currentAsset, out T newAsset) 
-            where T : Asset
+            where T : Asset, new()
         {
             newAsset = default;
 
             currentAsset?.RenderAssetPreview();
 
-            var state = ImGui.BeginCombo($"{label}##AssetDropdown", $"{currentAsset?.Name ?? "No asset selected."}");
+            var state = ImGui.BeginCombo($"{label}##AssetDropdown", currentAsset?.Name ?? "No asset selected.");
 
             // Handle this dropdown as a drag'n'drop target.
             if (ImGui.BeginDragDropTarget())
@@ -423,8 +423,7 @@ namespace VTTiny.Editor
         {
             newDevice = default;
 
-            if (!ImGui.BeginCombo($"{label}##MicrophoneDropdown",
-                    $"{currentDevice?.Name ?? "No microphone selected."}"))
+            if (!ImGui.BeginCombo($"{label}##MicrophoneDropdown", currentDevice?.Name ?? "No microphone selected."))
             {
                 return false;
             }

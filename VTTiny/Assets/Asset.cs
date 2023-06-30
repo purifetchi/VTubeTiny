@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ImGuiNET;
 using VTTiny.Assets.Management;
 using VTTiny.Editor;
@@ -85,6 +86,19 @@ namespace VTTiny.Assets
         /// </summary>
         public virtual void Destroy() { }
 
+        /// <summary>
+        /// Does this asset resolve after this given asset.
+        /// </summary>
+        /// <param name="asset">The other asset.</param>
+        /// <returns>Whether it resolves after that asset.</returns>
+        public bool ResolvesAfter(Asset asset)
+        {
+            return GetType().GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IResolveAssetAfter<>))
+                .Any(i => i.GetGenericArguments()[0] == asset.GetType());
+        }
+
+        /// <inheritdoc/>
         protected override string GetNameForSerialization()
         {
             return Name;
