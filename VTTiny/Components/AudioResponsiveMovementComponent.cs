@@ -33,7 +33,7 @@ namespace VTTiny.Components
         /// <summary>
         /// If Object can wiggle
         /// </summary>
-        public bool CanWiggle { get; set; } = true;
+        public bool CanWiggle { get; set; } = false;
         
         /// <summary>
         /// Wiggle Amount
